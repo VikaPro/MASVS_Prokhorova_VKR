@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>SelectProject.qml</file>
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>Download.qml</file>
+        <file>LevelSec.qml</file>
+        <file>ReportTest.qml</file>
+        <file>OnlyApk.qml</file>
+        <file>ApkAndCode.qml</file>
+        <file>Top.qml</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>image/home.png</file>
+        <file>image/undo.png</file>
+    </qresource>
+</RCC>
