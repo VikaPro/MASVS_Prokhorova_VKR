@@ -8,13 +8,22 @@ ApplicationWindow {
     height: 480
     title: qsTr("MASVS")
 
-    signal downloadApk()
-    signal downloadSource()
-    signal decompileApk()
+    signal checkNameProject(string name);
+    signal downloadApk();
+    signal downloadSource();
+    signal decompileApk();
+    signal setListProject();
+    signal showReport(string name);
+    signal autoTest(string level);
 
     // главгная страница с выбором проекта (новый или существующий)
     SelectProject{
         id: selectProject
+    }
+
+    // страничка с вводом имени для нового проекта
+    NameProject{
+        id: nameProject
     }
 
     // страничка с загрузкой входных данных мобильного приложения
@@ -40,6 +49,21 @@ ApplicationWindow {
     // страничка с отчётом по уровню безопасности мобильного приложения
     ReportTest{
         id: reportTestWindow
+    }
+
+    // страничка со всеми существующими проектами
+    AllProjects{
+        id: allProjects
+    }
+
+    // страничка с отчётом по конкретному проекту
+    ReadReport{
+        id: readReport
+    }
+
+    // страничка с отображением процесса автоматического тестирования
+    PageAutoTest{
+        id: pageAutoTest
     }
 
 }

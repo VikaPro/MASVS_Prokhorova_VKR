@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.3
 
 Page {
 
@@ -20,33 +21,32 @@ Page {
     header: Top{
         Item {
             id: varItem
-            property string aText: "Загрузка APK и исходного кода"
+            property string aText: "ЗАГРУЗКА APK ФАЙЛА И ИСХОДНОГО КОДА"
             property var aPageFalse: apkAndCode
             property var aPageTrue: downloadWindow
         }
     }
 
+    ColumnLayout{
+        width: 0.8 * parent.width
+        anchors.centerIn: parent
+        spacing: 40
 
-    GridLayout{
-        anchors.fill: parent
-
-        ColumnLayout{
+        Label {
+            text: qsTr("You are on ApkAndCode.")
+            wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
-            spacing: 40
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredWidth: parent.width
+        }
 
-            Label {
-                text: qsTr("You are on ApkAndCode.")
-                Layout.alignment: Qt.AlignHCenter
+        Button{
+            text: "Подтвердить выбор файлов для анализа"
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                downloadSource();
             }
-
-            Button{
-                text: "Подтвердить выбор файлов для анализа"
-                Layout.alignment: Qt.AlignHCenter
-                onClicked: {
-                    downloadSource();
-                }
-            }
-
         }
     }
 }

@@ -14,7 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    selectproject.cpp
+    selectproject.cpp \
+    projectsmodel.cpp \
+    autotesting.cpp
 
 RESOURCES += qml.qrc
 
@@ -30,4 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    selectproject.h
+    selectproject.h \
+    projectsmodel.h \
+    autotesting.h

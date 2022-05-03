@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.3
 
 
 Rectangle{
@@ -40,7 +41,10 @@ Rectangle{
     Label {
         text: varItem.aText
         font.pointSize: 14
-        anchors.centerIn: parent
+        wrapMode: Text.WordWrap
+        anchors.fill: parent
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
     }
 
     Button{

@@ -14,41 +14,48 @@ Page {
         Label {
             text: "ГЛАВНОЕ ОКНО ПРОГРАММЫ - ВЫБОР ПРОЕКТА"
             font.pointSize: 14
-            anchors.centerIn: parent
+            wrapMode: Text.WordWrap
+            anchors.fill: parent
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
         }
-
     }
 
+    ColumnLayout{
+        width: 0.8 * parent.width
+        anchors.centerIn: parent
+        spacing: 40
 
-    GridLayout{
-        anchors.fill: parent
-
-        ColumnLayout{
+        Label {
+            text: qsTr("ДОБРО ПОЖАЛОВАТЬ В ПРИЛОЖЕНИЕ. МОЖНО КРАТКО ОПИСАТЬ ДЛЯ ЧЕГО ОНО.")
+            wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
-            spacing: 40
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredWidth: parent.width
+        }
 
-            Label {
-                text: qsTr("ДОБРО ПОЖАЛОВАТЬ В ПРИЛОЖЕНИЕ. МОЖНО КРАТКО ОПИСАТЬ ДЛЯ ЧЕГО ОНО.")
-                Layout.alignment: Qt.AlignHCenter
+        RowLayout{
+            Layout.alignment: Qt.AlignHCenter
+
+            Button{
+                text: "Протестировать новое приложение"
+                onClicked: {
+                    selectProject.visible = false
+                    nameProject.visible = true
+                }
+                highlighted: true
+                Material.accent: Material.Teal
             }
 
-            RowLayout{
-                Layout.alignment: Qt.AlignHCenter
-
-                Button{
-                    text: "Протестировать новое приложение"
-                    onClicked: {
-                        selectProject.visible = false
-                        downloadWindow.visible = true
-                    }
-                    highlighted: true
-                    Material.accent: Material.Teal
-                }
-
-                Button{
-                    text: "Открыть существующий проект"
-                    highlighted: true
-                    Material.background: Material.Teal
+            Button{
+                text: "Открыть существующий проект"
+                //highlighted: true
+                Material.background: Material.Teal
+                onClicked: {
+                    setListProject()
+                    selectProject.visible = false
+                    allProjects.visible = true
                 }
             }
         }

@@ -10,6 +10,10 @@
         <file>OnlyApk.qml</file>
         <file>ApkAndCode.qml</file>
         <file>Top.qml</file>
+        <file>NameProject.qml</file>
+        <file>AllProjects.qml</file>
+        <file>ReadReport.qml</file>
+        <file>PageAutoTest.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>image/home.png</file>

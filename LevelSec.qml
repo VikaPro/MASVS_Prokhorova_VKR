@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.3
 
 Page {
 
@@ -24,117 +25,98 @@ Page {
     header: Top{
         Item {
             id: varItem
-            property string aText: "Выбор уровня безопасности"
+            property string aText: "ВЫБОР УРОВНЯ БЕЗОПАСНОСТИ ПРИЛОЖЕНИЯ"
             property var aPageFalse: levelSec
             property var aPageTrue: onlyApk
+            property string aLevel: ""  // переменная для выбранного уровня безопасности
         }
     }
 
-    GridLayout{
-        anchors.fill: parent
+    ColumnLayout{
+        width: 0.9 * parent.width
+        anchors.centerIn: parent
+        spacing: 40
 
-        ColumnLayout{
+        Label {
+            id: info_level
+            text: qsTr("В стандарте MASVS представлены четыре возможные комбинации проерки приложения. Для получения дополнительной информации выберите один из уровней проверки, нажав на соответствующую кнопку")
+            wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredWidth: parent.width
+        }
+
+        RowLayout{
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillWidth: true
             spacing: 40
 
-            RowLayout{
+            Button{
+                text: "L1"
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
-                spacing: 40
-
-                ColumnLayout{
-                    id: l1
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 40
-
-                    Label {
-                        text: qsTr("Описание уровня.")
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    Button{
-                        text: "L1"
-                        Layout.alignment: Qt.AlignHCenter
-                        onClicked: {
-                            levSec.text = "Вы выбрали для тестирования приложения базовый уровень L1"
-                        }
-                    }
+                onClicked: {
+                    levSec.text = "Вы выбрали для тестирования приложения базовый уровень L1";
+                    info_level.text = "Описание уровня. L1";
+                    varItem.aLevel = "L1";
                 }
-
-                ColumnLayout{
-                    id: l2
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 40
-
-                    Label {
-                        text: qsTr("Описание уровня.")
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    Button{
-                        text: "L2"
-                        Layout.alignment: Qt.AlignHCenter
-                        onClicked: {
-                            levSec.text = "Вы выбрали для тестирования приложения усиленный уровень L2"
-                        }
-                    }
-                }
-
-                ColumnLayout{
-                    id: l1r
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 40
-
-                    Label {
-                        text: qsTr("Описание уровня.")
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    Button{
-                        text: "L1 + R"
-                        Layout.alignment: Qt.AlignHCenter
-                        onClicked: {
-                            levSec.text = "Вы выбрали для тестирования приложения комбинацию базового уровня L1 и дополнение R"
-                        }
-                    }
-                }
-
-                ColumnLayout{
-                    id: l2r
-                    Layout.alignment: Qt.AlignHCenter
-                    spacing: 40
-
-                    Label {
-                        text: qsTr("Описание уровня.")
-                        Layout.alignment: Qt.AlignHCenter
-                    }
-
-                    Button{
-                        text: "L2 + R"
-                        Layout.alignment: Qt.AlignHCenter
-                        onClicked: {
-                            levSec.text = "Вы выбрали для тестирования приложения комбинацию усиленного уровня L2 и дополнение R"
-                        }
-                    }
-                }
-            }
-
-            Label{
-                id: levSec
-                Layout.alignment: Qt.AlignHCenter
             }
 
             Button{
-                text: "Начать тестирование!"
+                text: "L2"
+                Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 onClicked: {
+                    levSec.text = "Вы выбрали для тестирования приложения усиленный уровень L2"
+                    info_level.text = "Описание уровня. L2"
+                    varItem.aLevel = "L2"
+                }
+            }
 
-                    if(levSec.text != ""){
-                        levelSec.visible = false
-                    }
+            Button{
+                text: "L1 + R"
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: {
+                    levSec.text = "Вы выбрали для тестирования приложения комбинацию базового уровня L1 и дополнение R"
+                    info_level.text = "Описание уровня. L1 + R"
+                    varItem.aLevel = "L1R"
+                }
+            }
 
-                    else{
-                        levSec.text = "ВЫБЕРИТЕ УРОВЕНЬ!!!"
-                    }
+            Button{
+                text: "L2 + R"
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignHCenter
+                onClicked: {
+                    levSec.text = "Вы выбрали для тестирования приложения комбинацию усиленного уровня L2 и дополнение R"
+                    info_level.text = "Описание уровня. L2 + R"
+                    varItem.aLevel = "L2R"
+                }
+            }
+        }
+
+        Label{
+            id: levSec
+            wrapMode: Text.WordWrap
+            Layout.alignment: Qt.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.fillWidth: true
+        }
+
+        Button{
+            text: "Начать тестирование!"
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                if(levSec.text != ""){
+                    levelSec.visible = false
+                    pageAutoTest.visible = true
+                    autoTest(varItem.aLevel);
+                }
+                else{
+                    levSec.text = "Пожалуйста, выберите желаемый уровень безопасности мобильного приложения."
                 }
             }
         }

@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.3
 
 Page {
 
@@ -9,8 +10,6 @@ Page {
 
         onDownloadedApk:{     // после загрузки файлов переходим к выбору уровня безопасности
             loadanimation.visible = true
-            //onlyApk.visible = false
-            //levelSec.visible = true
         }
 
         onEndDecompile:{     // после декомпиляции файла можем перейти к выбору уровня безопасности
@@ -26,45 +25,64 @@ Page {
     header: Top{
         Item {
             id: varItem
-            property string aText: "Загрузка APK"
+            property string aText: "ЗАГРУЗКА APK ФАЙЛА"
             property var aPageFalse: onlyApk
             property var aPageTrue: downloadWindow
         }
     }
 
 
-    GridLayout{
-        anchors.fill: parent
+    ColumnLayout{
+        width: 0.8 * parent.width
+        anchors.centerIn: parent
+        spacing: 40
 
-        ColumnLayout{
+        Label {
+            text: qsTr("You are on OnlyApk.")
+            wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
-            spacing: 40
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredWidth: parent.width
+        }
 
-            Label {
-                text: qsTr("You are on OnlyApk.")
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            Button{
-                text: "Подтвердить выбор файла для анализа"
-                Layout.alignment: Qt.AlignHCenter
-                onClicked: {
-                    decompileApk();
-                }
+        Button{
+            text: "Подтвердить выбор файла для анализа"
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                decompileApk();
             }
         }
     }
+
 
     Rectangle{
         id: loadanimation
         visible: false
         color: "#80CBC4"
         anchors.fill: parent
-        opacity: 0.5 // прозрачность
+        opacity: 0.9 // прозрачность
 
-        BusyIndicator {  //анимация загрузки
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+        ColumnLayout{
+            width: 0.9 * parent.width
+            anchors.centerIn: parent
+            spacing: 40
+
+            Label {
+                text: qsTr("Идёт декомпиляция файла APK. Это может занять несколько минут. Спасибо за терпение!")
+                font.bold: true
+                wrapMode: Text.WordWrap
+                font.pointSize: 14
+                Layout.alignment: Qt.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
+            }
+
+            BusyIndicator {  //анимация загрузки
+                Layout.alignment: Qt.AlignHCenter
+                Material.accent: "#313031"
+            }
         }
-    }
+    }        
 }
