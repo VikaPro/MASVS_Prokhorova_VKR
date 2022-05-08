@@ -3,8 +3,12 @@
 
 #include "selectproject.h"
 
+#include "permissionmodel.h"
+
 #include <QObject>
 #include <QDebug>
+#include <QFile>
+#include <QAbstractItemModel>
 
 class AutoTesting : public QObject
 {
@@ -13,9 +17,14 @@ class AutoTesting : public QObject
 public:
     explicit AutoTesting(QObject *parent = nullptr);
 
+    PermissionModel * permission_model;
+
     QString number;
     QString description;
     QString result;
+
+    //QFile file;
+    //QTextStream str_file;
 
 public slots:
 
@@ -27,11 +36,13 @@ public slots:
     void autoTestLevel1();
     void autoTestLevel2();
 
-    // удалить, костыльная функция для таймера
-    void deleteFun();
+    // попробовать удалить эту функцию, если реально
+    void autoTestEnd();
 
-    // можно потом удалить, если найду другое решение
-    //void allEndAutoTest();
+    void writeReportAuto(QString number, QString description, QString result);
+
+    // функция задержки отправки сигналов о завершении проверки
+    void emitLater(const char *signalOrSlot);
 
     // требования для уровня L1
     void data2CheckInternal();
@@ -52,6 +63,9 @@ public slots:
     void net3VerifiesX509();
 
     void os1MinPermissions();
+    // дополнительная функци для 6.1, т.к. здесь вмешивается пользователь
+    void resultMinPermissions(QString result);
+
     void os3CustomURL();
     void os5DisabledJava();
     void os6OnlyHTTPS();
@@ -77,6 +91,8 @@ public slots:
     void os9ScreenOverlay();
 
 
+
+
 signals:
     // сообщаем программе, что конкретный тест завершен
     void endOneTest(QString number, QString description, QString result);
@@ -85,9 +101,56 @@ signals:
     // сообщаем программе, сколько будет автотестов для progressbar
     void colAutoTest(int col);
     // сообщаем программе, что автоматические проверки для 1 уровня завершены
-    //void endAutoLevel1();
+    void endAutoLevel1();
     // сообщаем программе, что автоматические проверки для 2 уровня завершены
-    //void endAutoLevel2();
+    void endAutoLevel2();
+    // Отображаем в графику полученные разрешения для требования 6.1
+    void checkPermission();
+
+    // Сигналы, необходимые для последовательного выполнения тестов
+    // Сигналы для 1 уровня
+
+    void endData2CheckInternal();
+    void endData3CheckLog();
+    void endData5KeyboardCache();
+    void endData6CheckIPC();
+    void endData7CheckInterface();
+
+    void endCrypto1Symmetrical();
+    void endCrypto2ProvenAlgorithms();
+    void endCrypto4WeakAlgorithms();
+    void endCrypto6RandomGenerator();
+
+    void endAuth1LoginPass();
+    void endAuth5PassPolicy();
+
+    void endNet1CryptoTLS();
+    void endNet3VerifiesX509();
+
+    void endOs1MinPermissions();
+    void endOs3CustomURL();
+    void endOs5DisabledJava();
+    void endOs6OnlyHTTPS();
+
+    void endCode1ValidCert();
+    void endCode2BuildRelease();
+    void endCode3DebugSymbols();
+    void endCode4DeveloperCode();
+    void endCode5ThirdPartyLib();
+    void endCode6ExceptionHandling();
+    //void endCode9SecurityTools();
+
+    // Сигналы для 2 уровня
+
+    void endArch9CheckUpdate();
+
+    void endData8CheckBackup();
+    void endData9BackgroundMode();
+    void endData11InstallPincode();
+
+    void endNet6CheckLibrary();
+
+    //void endOs9ScreenOverlay();
 
 
 protected:

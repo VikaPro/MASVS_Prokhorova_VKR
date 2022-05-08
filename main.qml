@@ -16,6 +16,8 @@ ApplicationWindow {
     signal showReport(string name);
     signal autoTest(string level);
 
+    signal resultMinPermissions(string result);
+
     // главгная страница с выбором проекта (новый или существующий)
     SelectProject{
         id: selectProject
@@ -64,6 +66,16 @@ ApplicationWindow {
     // страничка с отображением процесса автоматического тестирования
     PageAutoTest{
         id: pageAutoTest
+    }
+
+    // страничка с шаблоном для каждой ручной проверки, проводимой пользователем
+    PageUserTest{
+        id: pageUserTest
+    }
+
+    // страничка с шаблоном для каждой ручной проверки, проводимой пользователем
+    PermissionPage{
+        id: permissionPage
     }
 
 }

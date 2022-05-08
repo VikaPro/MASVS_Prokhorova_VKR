@@ -6,6 +6,7 @@
 #include "projectsmodel.h"
 
 #include "autotesting.h"
+#include "permissionmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -26,6 +27,8 @@ int main(int argc, char *argv[])
     context->setContextProperty("_auto", &auto_test);
 
     context->setContextProperty("_projects", select.projects_model);
+
+    context->setContextProperty("_permission", auto_test.permission_model);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
@@ -57,6 +60,9 @@ int main(int argc, char *argv[])
     // другой файл
     QObject::connect(engine.rootObjects().first(), SIGNAL(autoTest(QString)),
             &auto_test, SLOT(autoTest(QString)));
+
+    QObject::connect(engine.rootObjects().first(), SIGNAL( resultMinPermissions(QString)),
+            &auto_test, SLOT( resultMinPermissions(QString)));
 
     // потом удалить
     /*QObject::connect(engine.rootObjects().first(), SIGNAL(endTimerTest(QString, QString, QString)),

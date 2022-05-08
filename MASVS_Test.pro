@@ -16,7 +16,8 @@ SOURCES += \
         main.cpp \
     selectproject.cpp \
     projectsmodel.cpp \
-    autotesting.cpp
+    autotesting.cpp \
+    permissionmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     selectproject.h \
     projectsmodel.h \
-    autotesting.h
+    autotesting.h \
+    permissionmodel.h

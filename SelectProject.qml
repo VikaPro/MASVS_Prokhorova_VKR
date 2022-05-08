@@ -6,20 +6,14 @@ import QtQuick.Controls.Material 2.3
 Page {
     anchors.fill: parent
 
-    header: Rectangle{
-        id:header
-        color: "#80CBC4"
-        height: 50
+    header: TopEasy{
 
-        Label {
-            text: "ГЛАВНОЕ ОКНО ПРОГРАММЫ - ВЫБОР ПРОЕКТА"
-            font.pointSize: 14
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+        Item {
+            id: varItemEasy
+            property string aTextEasy: "ГЛАВНОЕ ОКНО ПРОГРАММЫ - ВЫБОР ПРОЕКТА"
         }
     }
+
 
     ColumnLayout{
         width: 0.8 * parent.width

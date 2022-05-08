@@ -24,7 +24,13 @@ Page {
         onEndAutoTest:{     // после прохождения всех автоматических тестирований появляется кнопка для продолжения
             next_button.visible = true
         }
+
+        onCheckPermission:{     // разрешения необходимо проверить пользователем
+            pageAutoTest.visible = false
+            permissionPage.visible = true
+        }
     }
+
 
     visible: false
     anchors.fill: parent
@@ -36,9 +42,11 @@ Page {
 
         Label {
             text: "АВТОМАТИЗИРОВАННЫЕ ТЕСТЫ ПО СТАНДАРТУ MASVS"
-            font.pointSize: 14
+            font.pointSize: 12
             wrapMode: Text.WordWrap
             anchors.fill: parent
+            Material.foreground: "#313031"
+            font.weight: Font.DemiBold
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
@@ -126,6 +134,10 @@ Page {
             visible: false
             text: "ВСЁ"
             Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                pageAutoTest.visible = false
+                pageUserTest.visible = true
+            }
         }
     }
 }

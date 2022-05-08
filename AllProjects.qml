@@ -55,9 +55,11 @@ Page {
 
         Label {
             text: "СПИСОК СУЩЕСТВУЮЩИХ ПРОЕКТОВ"
-            font.pointSize: 14
+            font.pointSize: 12
             wrapMode: Text.WordWrap
             anchors.fill: parent
+            Material.foreground: "#313031"
+            font.weight: Font.DemiBold
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }

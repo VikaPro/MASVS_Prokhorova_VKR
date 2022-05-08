@@ -58,7 +58,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения базовый уровень L1";
-                    info_level.text = "Описание уровня. L1";
+                    info_level.text = "Первый уровень (L1) - подходит для базового обеспечения безопасности приложений, не усложняя процесс разработки";
                     varItem.aLevel = "L1";
                 }
             }
@@ -69,7 +69,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения усиленный уровень L2"
-                    info_level.text = "Описание уровня. L2"
+                    info_level.text = "Второй уровень (L2) - подходит для приложений, обрабатывающих ПДн пользователей и другие чувствительные данные"
                     varItem.aLevel = "L2"
                 }
             }
@@ -80,7 +80,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения комбинацию базового уровня L1 и дополнение R"
-                    info_level.text = "Описание уровня. L1 + R"
+                    info_level.text = "Первый уровень совместно с третьим (L1 + R) - подходит для приложений, представляющих интеллектуальную ценность, например для игр"
                     varItem.aLevel = "L1R"
                 }
             }
@@ -91,7 +91,7 @@ Page {
                 Layout.alignment: Qt.AlignHCenter
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения комбинацию усиленного уровня L2 и дополнение R"
-                    info_level.text = "Описание уровня. L2 + R"
+                    info_level.text = "Второй уровень совместно с третьим (L2 + R) - подходит для защиты приложений даже на укорененных с помощью Root или Jailbreak устройствах"
                     varItem.aLevel = "L2R"
                 }
             }

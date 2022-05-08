@@ -14,9 +14,13 @@
         <file>AllProjects.qml</file>
         <file>ReadReport.qml</file>
         <file>PageAutoTest.qml</file>
+        <file>PageUserTest.qml</file>
+        <file>PermissionPage.qml</file>
+        <file>TopEasy.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>image/home.png</file>
         <file>image/undo.png</file>
+        <file>image/end.png</file>
     </qresource>
 </RCC>
