@@ -35,45 +35,135 @@ void SelectProject::nameNewProject(QString name){
     dir.mkpath(path);
 
     // Файл, в котором будет храниться основная информация для программы
-    QFile file(path + "/" + name + "_qt.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text
+    QFile file_conf(path + "/" + name + "_qt.txt");
+    file_conf.open(QIODevice::WriteOnly | QIODevice::Text
               | QIODevice::Append );
-    QTextStream a(&file);
-    a.setCodec("UTF-8");
-    a << name << endl;      // записываем название проекта
-    a << dateStr << endl;   // записываем дату создания
-    a << dateStr << endl;   // записываем дату изменения, которая на момент создания совпадает с верхней
+    QTextStream str(&file_conf);
+    str.setCodec("UTF-8");
 
-    file.close();
+    str << "Project name: " << name << endl;      // записываем название проекта
+    str << "Creation date: " << dateStr << endl;   // записываем дату создания
+    str << "Modified date: " << dateStr << endl;   // записываем дату изменения, которая на момент создания совпадает с верхней
+
+    file_conf.close();
 
     nameProject = name;     // присваиваем глобальной переменной название текущего проекта
 }
 
-void SelectProject::downloadApk(){
-    QString typeFile = "apk";
-    qDebug() << "Загрузка файла";
-    emit selectLevel(typeFile);
+void SelectProject::downloadApk(QString apk){
+    // Удаляем ненужные символы из пути к файлу, которые прислала графика
+    apk.remove("file:///");
+
+
+    QFile file_conf("C:/MASVS/" + nameProject + "/" + nameProject + "_qt.txt");
+    file_conf.open(QIODevice::ReadWrite | QIODevice::Text);
+              //| QIODevice::Append );
+    QTextStream stream(&file_conf);
+    stream.setCodec("UTF-8");
+
+    // Записываем в файл проекта, какой стиль входных данных был выбран
+    // Если ранее стоял другой тип, значит перезаписываем это значение на текущее
+    QString type_input = "Только APK";
+
+    // Затем записываем в конфиг проекта, какой файл apk мы взяли для анализа, чтобы имя не потерялось потом
+    // Для этого проверяем, не стояло ли там уже какое-либо значение,
+    // если строка заполнена, то удаляем её содержимое и пишем новое
+    QString str;
+    while(!stream.atEnd()){
+        QString line = stream.readLine();
+        if(line.contains("Input data: ") || line.contains("APK path: ")){
+            qDebug() << "Перезаписываем следующие значения в проекте" << line;
+        }
+        else{
+            str.append(line + "\n");
+        }
+    }
+
+    file_conf.resize(0);
+    stream << str;
+    stream << "Input data: " << type_input << endl; // записываем тип входных данных в конфиг файла
+    stream << "APK path: " << apk << endl;          // записываем новый путь к файлу apk в конец конфига проекта
+    file_conf.close();
+
+    /*
+    // если декомпилироваться будет долго, то можно будет это реализовать, а пока не нужно
+    // присваиваем полученное значение глобальной переменной
+    new_apk = apk;
+    qDebug() << "Выбранный файл apk: " << apk;
+    qDebug() << "Новый файл apk: " << new_apk;
+    qDebug() << "Старый старый файл apk: " << old_apk;
+
+    // если декомпилироваться будет долго, то можно будет это реализовать, а пока не нужно
+    // Если файл в целевой директории уже существует,то сначала удаляем его:
+    if (QFile::exists("/path/copy-of-file")){
+    QFile::remove("/path/copy-of-file");
+    }*/
+
+
+    // Проверяем, что в каталоге не лежит никаких лишних файлов, помимо основного файла проекта,
+    // если такие есть, то удаляем их, потому что они относятся к старому выбору пользователя
+    QString path = "C:/MASVS/" + nameProject;
+    QString conf = nameProject + "_qt.txt";
+    QDir dir(path);
+
+    QStringList	listProject = dir.entryList(QDir::Files);
+
+    for (int i = 0;  i < listProject.size(); i++){
+        if(listProject[i] != conf){                         // если это не главный файл проекта
+            QFile::remove(path + "/" + listProject[i]);     // то удаляем его
+        }
+    }
+
+    // Затем копируем выбранный файл apk внутрь нашего проекта
+    // Переименовываем для простоты использования
+    QString  file_apk = "C:/MASVS/" + nameProject + "/" + nameProject + "_apk.apk";
+    QFile::copy(apk, file_apk);
+
+    // вызываем функцию декомпиляции файла apk
+    decompileApk();
+
+    // перед концом объявляем, что этот файл будет "старым", если пользователь передумает с выбором
+    //old_apk = new_apk;
+    //qDebug() << "Новый старый файл apk: " << old_apk;
+
+    // если файл успешно декомпилирован, то оповещаем графику, что мы успешно загрузили apk и можно продолжить
+    connect(this, SIGNAL(endDecompile()), this, SIGNAL(downloadedApk()));
+
+    // в случае неудачи декомпиляции оповещаем графику, что с файлом проблемы, нужно его изменить
+    connect(this, SIGNAL(errorDecompile()), this, SIGNAL(errorApk()));
+
+    // этот сигнал нужен, чтобы страничка с уровнями понимала, куда ей "вернуться"
+    emit selectLevel("apk");
 }
 
 void SelectProject::downloadSource(){
-    emit downloadedSource();    // оповещаем графику, что мы загрузили файл apk с исходниками
-    QString typeFile = "source";
-    qDebug() << "Загрузка исходников";
-    emit selectLevel(typeFile);
+
+    // оповещаем графику, что мы успешно загрузили файл apk с исходниками
+    emit downloadedSource();
+
+    // этот сигнал нужен, чтобы страничка с уровнями понимала, куда ей "вернуться"
+    emit selectLevel("source");
 }
 
 void SelectProject::decompileApk(){
-    emit downloadedApk();       // оповещаем графику, что мы загрузили только файл apk
+    emit startDecompile();  // этот сигнал отправляем в графику
 
-    // потом убрать
-    QTimer::singleShot(5000, this, SLOT(endTimer()));
+    // Здесь будем проверять, успешно ли прошла распаковка.
+    // Потом удалить
+    bool sucess_decompile = true;
+    if (sucess_decompile == true){
+        // потом убрать таймер, хотя, если будет грузится быстро, то можно и оставить
+        // сигнал отправляем не графику, а сюда же в класс, в функцию выше
+        QTimer::singleShot(5000, this, SIGNAL(endDecompile()));
+    }
 
-    //emit endDecompile();
+    else{
+        // потом убрать таймер, хотя, если будет грузится быстро, то можно и оставить
+        // сигнал отправляем не графику, а сюда же в класс, в функцию выше
+        QTimer::singleShot(5000, this, SIGNAL(errorDecompile()));
+    }
 }
 
-void SelectProject::endTimer(){
-    emit endDecompile();
-}
 
 void SelectProject::setListProject(){ 
 
@@ -140,9 +230,4 @@ void SelectProject::showReport(QString name){
     qDebug() << "Вывожу отчёт по проекту: " << name;
     emit readReport();     // отображаем отчёт по конкретному проекту
 }
-
-
-//void SelectProject::downloadFile(){
-    //emit selectLevel();         // после загрузки файлов можно выбирать уровень безопасности
-//}
 

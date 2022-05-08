@@ -14,6 +14,11 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    // Задаём, чтобы модуль не выводил ошибок, произвольные данные
+    app.setOrganizationName("MASVS"); //для QFileDialog "Если приложение запускается с помощью пользовательской
+    app.setOrganizationDomain("masvs.com");    //функции C++ main (), рекомендуется задать имя, организацию и домен
+                                                //для управления расположением параметров приложения."
+
     QQmlApplicationEngine engine;
 
     QQmlContext *context = engine.rootContext();
@@ -40,15 +45,12 @@ int main(int argc, char *argv[])
             &select, SLOT(checkNameProject(QString)));
 
     //
-    QObject::connect(engine.rootObjects().first(), SIGNAL(downloadApk()),
-            &select, SLOT(downloadApk()));
+    QObject::connect(engine.rootObjects().first(), SIGNAL(downloadApk(QString)),
+            &select, SLOT(downloadApk(QString)));
 
     //
     QObject::connect(engine.rootObjects().first(), SIGNAL(downloadSource()),
             &select, SLOT(downloadSource()));
-
-    QObject::connect(engine.rootObjects().first(), SIGNAL(decompileApk()),
-            &select, SLOT(decompileApk()));
 
     QObject::connect(engine.rootObjects().first(), SIGNAL(setListProject()),
             &select, SLOT(setListProject()));
@@ -56,17 +58,12 @@ int main(int argc, char *argv[])
     QObject::connect(engine.rootObjects().first(), SIGNAL(showReport(QString)),
             &select, SLOT(showReport(QString)));
 
-
-    // другой файл
+    // другой класс
     QObject::connect(engine.rootObjects().first(), SIGNAL(autoTest(QString)),
             &auto_test, SLOT(autoTest(QString)));
 
     QObject::connect(engine.rootObjects().first(), SIGNAL( resultMinPermissions(QString)),
             &auto_test, SLOT( resultMinPermissions(QString)));
-
-    // потом удалить
-    /*QObject::connect(engine.rootObjects().first(), SIGNAL(endTimerTest(QString, QString, QString)),
-            &auto_test, SLOT(endTimerTest(QString, QString, QString)));*/
 
     return app.exec();
 }

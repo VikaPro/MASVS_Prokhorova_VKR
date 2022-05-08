@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.3
+import QtGraphicalEffects 1.12
 
 
 Rectangle{
@@ -9,7 +10,8 @@ Rectangle{
     color: "#80CBC4"
     height: 50
 
-    Button{
+    // кнопка "Назад"
+    MouseArea{
         id:undo_tab
         width: 40
         height: 40
@@ -17,26 +19,38 @@ Rectangle{
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 20
 
+        // изменение цвета иконки при наведении
+        hoverEnabled: true
+        onEntered: {
+            image_undo.source = "qrc:/image/image/undo_light.png"
+        }
+        onExited: {
+            image_undo.source = "qrc:/image/image/undo.png"
+        }
+
+        // вдавливание кнопки не делаем, т.к. не успевает отобразиться
         onClicked: {
-            push_undo.start()
             varItem.aPageFalse.visible = false
             varItem.aPageTrue.visible = true
         }
 
-        background: Image {
+        Image {
+            id: image_undo
             anchors.fill: parent
             source: "qrc:/image/image/undo.png"
         }
 
-        ScaleAnimator{
-            id: push_undo
-            target: undo_tab
-            from: 0.7
-            to: 1.0
-            duration: 1
-            running: false
+        DropShadow {
+            anchors.fill: image_undo
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8.0
+            samples: 17
+            color: "#80000000"  // чёрный прозрачный
+            source: image_undo
         }
     }
+
 
     Label {
         text: varItem.aText
@@ -49,32 +63,44 @@ Rectangle{
         horizontalAlignment: Text.AlignHCenter
     }
 
-    Button{
-        id:home_tab
+    // кнопка "Назад"
+    MouseArea{
+        id: home_tab
         width: 40
         height: 40
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 20
 
+        // изменение цвета иконки при наведении
+        hoverEnabled: true
+        onEntered: {
+            image_home.source = "qrc:/image/image/home_light.png"
+        }
+        onExited: {
+            image_home.source = "qrc:/image/image/home.png"
+        }
+
+        // вдавливание кнопки не делаем, т.к. не успевает отобразиться
         onClicked: {
-            push_home.start()
             varItem.aPageFalse.visible = false
             selectProject.visible = true
         }
 
-        background: Image {
+        Image {
+            id: image_home
             anchors.fill: parent
             source: "qrc:/image/image/home.png"
         }
 
-        ScaleAnimator{
-            id: push_home
-            target: home_tab
-            from: 0.7
-            to: 1.0
-            duration: 120
-            running: false
+        DropShadow {
+            anchors.fill: image_home
+            horizontalOffset: 3
+            verticalOffset: 3
+            radius: 8.0
+            samples: 17
+            color: "#80000000"  // чёрный прозрачный
+            source: image_home
         }
     }
 }

@@ -149,7 +149,7 @@ void AutoTesting::autoTest(QString level){
 // Функция задержки на n секунд отправки сигналов о завершении каждой проверки, поможет пользователю успеть увидеть результат
 // Делаем в отдельной функции, чтобы время всех задержек можно было отредактировать одной строкой
 void AutoTesting::emitLater(const char *signalOrSlot){
-    QTimer::singleShot(1000, this, signalOrSlot);
+    QTimer::singleShot(300, this, signalOrSlot);
 }
 
 // Функция, в которой мы говорим, что все автоматические тесты закончиись. Нельзя сигнал сделать слотом?
@@ -613,7 +613,7 @@ void AutoTesting::data8CheckBackup(){
             QString backup_result;
 
             QStringRef agent_backup = xml.attributes().value("android:fullBackupOnly");
-            QString str_agent_backup = backup.toString();
+            QString str_agent_backup = agent_backup.toString();
             qDebug() << "Агентный Backup: " << str_agent_backup;
             QString agent_result;
 
@@ -643,7 +643,9 @@ void AutoTesting::data8CheckBackup(){
             else{
                 result = "НЕ ВЫПОЛНЕНО";
             }
+            qDebug() << "Тест на бэкап: " << result;
         }
+
         xml.readNext();
     }
 

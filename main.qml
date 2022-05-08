@@ -9,9 +9,8 @@ ApplicationWindow {
     title: qsTr("MASVS")
 
     signal checkNameProject(string name);
-    signal downloadApk();
+    signal downloadApk(string apk);
     signal downloadSource();
-    signal decompileApk();
     signal setListProject();
     signal showReport(string name);
     signal autoTest(string level);

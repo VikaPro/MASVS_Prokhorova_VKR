@@ -19,8 +19,11 @@
         <file>TopEasy.qml</file>
     </qresource>
     <qresource prefix="/image">
-        <file>image/home.png</file>
-        <file>image/undo.png</file>
         <file>image/end.png</file>
+        <file>image/end_light.png</file>
+        <file>image/home.png</file>
+        <file>image/home_light.png</file>
+        <file>image/undo.png</file>
+        <file>image/undo_light.png</file>
     </qresource>
 </RCC>

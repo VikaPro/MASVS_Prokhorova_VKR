@@ -38,7 +38,7 @@ Page {
         spacing: 40
 
         Label {
-            text: qsTr("Данное поле обязательно для заполнения. Хорошей практикой является присвоение проекту осмысленного имени для дальнейшего упрощения и ускорения работы с анализом приложений.")
+            text: qsTr("Данное поле обязательно для заполнения. \nХорошей практикой является присвоение проекту осмысленного имени для дальнейшего упрощения и ускорения работы с анализом приложений")
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
             verticalAlignment: Text.AlignVCenter
@@ -66,7 +66,6 @@ Page {
                 background: Rectangle{
                     anchors.fill: parent
                     color: "#80CBC4"
-                    opacity: 0.8 //немножко прозрачный
                     radius: 5;
                 }
             }
@@ -87,10 +86,13 @@ Page {
 
             onClicked: {
                 if (name_area.text == ""){
-                    errorName.text = "Пожалуйста, введите название для нового проекта."
+                    errorName.text = "Пожалуйста, введите название для нового проекта"
                 }
                 else{
                     checkNameProject(name_area.text)
+                    // нужно поместить в другое место
+                    //errorName.text = ""     // очишаем окна вывода
+                    name_area.text = ""     // очишаем окна ввода
                 }
             }
         }
