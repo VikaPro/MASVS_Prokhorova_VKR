@@ -6,12 +6,24 @@
 
 QString nameProject;
 
+
 SelectProject::SelectProject(QObject *QMLObject) : viewer(QMLObject)
 {
     projects_model = new ProjectsModel();       // модель для существующих проектов
+    reports_model = new ReportsModel();             // модель для отчёта по проекту
+
 }
 
+
 void SelectProject::checkNameProject(QString name){
+    // Проверяем, соответсвует ли данное название правилам ФС
+    // Тут пойдёт проверка и сигнал в QML, если не подходит типо
+    // emit errorName(name) и завершаем функцию
+
+    //************************НЕРЕАЛИЗОВАННОЕ********************************************//
+
+
+
     // Проверяем, есть ли каталог проекта с таким же именем
     bool project_exists = QDir("C:/MASVS/" + name).exists();
     if (project_exists == true){
@@ -35,15 +47,16 @@ void SelectProject::nameNewProject(QString name){
     dir.mkpath(path);
 
     // Файл, в котором будет храниться основная информация для программы
-    QFile file_conf(path + "/" + name + "_qt.txt");
+    // Конфигурационный файл с именем «название_проекта.conf»
+    QFile file_conf(path + "/" + name + ".conf");
     file_conf.open(QIODevice::WriteOnly | QIODevice::Text
               | QIODevice::Append );
     QTextStream str(&file_conf);
     str.setCodec("UTF-8");
 
-    str << "Project name: " << name << endl;      // записываем название проекта
-    str << "Creation date: " << dateStr << endl;   // записываем дату создания
-    str << "Modified date: " << dateStr << endl;   // записываем дату изменения, которая на момент создания совпадает с верхней
+    str << "Project name: " << name << endl;        // записываем название проекта
+    str << "Creation date: " << dateStr << endl;    // записываем дату создания
+    str << "Modified date: " << dateStr << endl;    // записываем дату изменения, которая на момент создания совпадает с верхней
 
     file_conf.close();
 
@@ -54,8 +67,8 @@ void SelectProject::downloadApk(QString apk){
     // Удаляем ненужные символы из пути к файлу, которые прислала графика
     apk.remove("file:///");
 
-
-    QFile file_conf("C:/MASVS/" + nameProject + "/" + nameProject + "_qt.txt");
+    // Записываем в конфигурационный файл с именем «название_проекта.conf»
+    QFile file_conf("C:/MASVS/" + nameProject + "/" + nameProject + ".conf");
     file_conf.open(QIODevice::ReadWrite | QIODevice::Text);
               //| QIODevice::Append );
     QTextStream stream(&file_conf);
@@ -65,14 +78,14 @@ void SelectProject::downloadApk(QString apk){
     // Если ранее стоял другой тип, значит перезаписываем это значение на текущее
     QString type_input = "Только APK";
 
-    // Затем записываем в конфиг проекта, какой файл apk мы взяли для анализа, чтобы имя не потерялось потом
+    // Затем записываем в конфиг проекта, какой файл apk мы взяли для анализа, чтобы имя потом не потерялось
     // Для этого проверяем, не стояло ли там уже какое-либо значение,
     // если строка заполнена, то удаляем её содержимое и пишем новое
     QString str;
     while(!stream.atEnd()){
         QString line = stream.readLine();
         if(line.contains("Input data: ") || line.contains("APK path: ")){
-            qDebug() << "Перезаписываем следующие значения в проекте" << line;
+            qDebug() << "Перезаписываем следующие значения в конфиге проекта: " << line;
         }
         else{
             str.append(line + "\n");
@@ -103,7 +116,7 @@ void SelectProject::downloadApk(QString apk){
     // Проверяем, что в каталоге не лежит никаких лишних файлов, помимо основного файла проекта,
     // если такие есть, то удаляем их, потому что они относятся к старому выбору пользователя
     QString path = "C:/MASVS/" + nameProject;
-    QString conf = nameProject + "_qt.txt";
+    QString conf = nameProject + ".conf";
     QDir dir(path);
 
     QStringList	listProject = dir.entryList(QDir::Files);
@@ -115,8 +128,8 @@ void SelectProject::downloadApk(QString apk){
     }
 
     // Затем копируем выбранный файл apk внутрь нашего проекта
-    // Переименовываем для простоты использования
-    QString  file_apk = "C:/MASVS/" + nameProject + "/" + nameProject + "_apk.apk";
+    // Переименовываем для простоты использования в «название_проекта.apk»
+    QString  file_apk = "C:/MASVS/" + nameProject + "/" + nameProject + ".apk";
     QFile::copy(apk, file_apk);
 
     // вызываем функцию декомпиляции файла apk
@@ -165,7 +178,24 @@ void SelectProject::decompileApk(){
 }
 
 
-void SelectProject::setListProject(){ 
+void SelectProject::writeLevel(QString level){
+    // Записываем в файл конфигурации, по какому уровню будем проверять приложение
+    QString path("C:/MASVS/" + nameProject);
+    QFile file_conf(path + "/" + nameProject + ".conf");
+    file_conf.open(QIODevice::WriteOnly | QIODevice::Text
+              | QIODevice::Append );
+    QTextStream stream(&file_conf);
+    stream.setCodec("UTF-8");
+
+    stream << "Security level: " << level << endl;    // записываем уровень безопасности
+
+    file_conf.close();
+}
+
+
+void SelectProject::setListProject(){
+    // сначала очищаем предыдущее содержимое модели,если она не пустая
+    projects_model->clearR();
 
     QDir dir("C:/MASVS/");
 
@@ -180,7 +210,7 @@ void SelectProject::setListProject(){
 
     for(int i = 0; i < listProject.size(); i++ ){
         // Проверяем, что у проекта есть отчёт, иначе не выводим его в список проектов
-        QString report_file = "C:/MASVS/" + listProject[i] + "/" + listProject[i] + "_report.txt";
+        QString report_file = "C:/MASVS/" + listProject[i] + "/" + listProject[i] + ".report";
         bool report_exists = QFile(report_file).exists();
 
         // подобные проекты необходимо удалять, они могут появится при незаконченном анализе приложения
@@ -190,7 +220,7 @@ void SelectProject::setListProject(){
 
         // выводим проект в качестве карточки в общий список
         else{
-            qDebug() << "Круто, выводим: " << listProject[i];
+            qDebug() << "Отлично, выводим: " << listProject[i];
             readProject(listProject[i]);
         }
     }
@@ -200,12 +230,11 @@ void SelectProject::setListProject(){
 
 
 void SelectProject::readProject(QString name){
-    QString project_file = "C:/MASVS/" + name + "/" + name + "_qt.txt";
+
+    QString project_file = "C:/MASVS/" + name + "/" + name + ".conf";
     QFile file(project_file);
 
     file.open(QIODevice::ReadOnly);
-    QTextStream log(&file);
-    log.setCodec("UTF-8");
 
     QStringList strList;
 
@@ -216,18 +245,76 @@ void SelectProject::readProject(QString name){
         strList.append(line);               // добавляем строку в список
     }
 
-    QString create_date = strList[1];
+    QString create_date = strList[1].remove("Creation date: ");
+    QString edit_date = strList[2].remove("Modified date: ");
+    QString input_data = strList[3].remove("Input data: ");
+    QString path_apk = strList[4].remove("APK path: ");
+    QString level = strList[5].remove("Security level: ");
 
-    QString edit_date = strList[2];
+    projects_model->addItem(ProjectObject(name, create_date, edit_date, input_data, path_apk, level));
 
-    projects_model->addItem(ProjectObject(name, create_date, edit_date));
+    file.close();
+}
+
+
+void SelectProject::showReport(QString name){
+    // сначала очищаем предыдущее содержимое модели,если она не пустая
+    reports_model->clearR();
+
+    // а затем считываем построчно отчёт выбранного проекта, парсим и добавляем в модель
+    qDebug() << "Вывожу отчёт по проекту: " << name;
+    // Записываем в файл конфигурации, по какому уровню будем проверять приложение
+    QString path("C:/MASVS/" + name);
+    QFile file(path + "/" + name + ".report");
+    file.open(QIODevice::ReadOnly);
+
+    QStringList strList;
+
+    int a = 0;
+    while(!file.atEnd())
+    {
+        strList << file.readLine();
+
+        QString one_str = strList[a];
+
+        int x = 0;
+        int y = 0;
+
+        QString Str1 = "***NUMBER: ";
+        x = one_str.indexOf(Str1);
+        x += Str1.length();
+        y = one_str.indexOf(" ***DESCRIPTION:", x);
+        QString number = one_str.mid(x, y-x);
+
+        qDebug() << number;
+
+        QString Str2 = "***DESCRIPTION: ";
+        x = one_str.indexOf(Str2);
+        x += Str2.length();
+        y = one_str.indexOf(" ***RESULT:", x);
+        QString description = one_str.mid(x, y-x);
+
+        qDebug() << description;
+
+        QString Str3 = "***RESULT: ";
+        x = one_str.indexOf(Str3);
+        x += Str3.length();
+        y = one_str.indexOf(" ***FUNCTION:", x);
+        QString result = one_str.mid(x, y-x);
+
+        QString Str4 = "***FUNCTION: ";
+        x = one_str.indexOf(Str4);
+        x += Str4.length();
+        y = one_str.indexOf("\r\n", x);
+        QString function = one_str.mid(x, y-x);
+
+        // добавляем элемент в модель с отчётом по всем спискам требований
+        reports_model->addItem(ReportObject(number, description, result, function));
+        a++;
+    }
 
     file.close();
 
-}
-
-void SelectProject::showReport(QString name){
-    qDebug() << "Вывожу отчёт по проекту: " << name;
     emit readReport();     // отображаем отчёт по конкретному проекту
 }
 

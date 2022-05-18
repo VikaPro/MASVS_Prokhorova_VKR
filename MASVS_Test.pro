@@ -1,4 +1,6 @@
-QT += quick
+QT += quick \
+        printsupport # для отчёта pdf
+
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -17,7 +19,9 @@ SOURCES += \
     selectproject.cpp \
     projectsmodel.cpp \
     autotesting.cpp \
-    permissionmodel.cpp
+    permissionmodel.cpp \
+    reportsmodel.cpp \
+    usertesting.cpp
 
 RESOURCES += qml.qrc
 
@@ -36,4 +40,6 @@ HEADERS += \
     selectproject.h \
     projectsmodel.h \
     autotesting.h \
-    permissionmodel.h
+    permissionmodel.h \
+    reportsmodel.h \
+    usertesting.h

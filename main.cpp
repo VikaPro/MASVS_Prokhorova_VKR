@@ -3,9 +3,11 @@
 #include <QQmlContext>
 
 #include "selectproject.h"
-#include "projectsmodel.h"
-
 #include "autotesting.h"
+#include "usertesting.h"
+
+#include "projectsmodel.h"
+#include "reportsmodel.h"
 #include "permissionmodel.h"
 
 int main(int argc, char *argv[])
@@ -27,9 +29,15 @@ int main(int argc, char *argv[])
 
     AutoTesting auto_test;
 
+    UserTesting user_test;
+
     context->setContextProperty("_select", &select);
 
     context->setContextProperty("_auto", &auto_test);
+
+    context->setContextProperty("_user", &user_test);
+
+    context->setContextProperty("_report", select.reports_model);
 
     context->setContextProperty("_projects", select.projects_model);
 
@@ -38,7 +46,6 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
-
 
     //
     QObject::connect(engine.rootObjects().first(), SIGNAL(checkNameProject(QString)),
@@ -52,6 +59,9 @@ int main(int argc, char *argv[])
     QObject::connect(engine.rootObjects().first(), SIGNAL(downloadSource()),
             &select, SLOT(downloadSource()));
 
+    QObject::connect(engine.rootObjects().first(), SIGNAL(writeLevel(QString)),
+            &select, SLOT(writeLevel(QString)));
+
     QObject::connect(engine.rootObjects().first(), SIGNAL(setListProject()),
             &select, SLOT(setListProject()));
 
@@ -64,6 +74,16 @@ int main(int argc, char *argv[])
 
     QObject::connect(engine.rootObjects().first(), SIGNAL( resultMinPermissions(QString)),
             &auto_test, SLOT( resultMinPermissions(QString)));
+
+    // ещё один класс
+    QObject::connect(engine.rootObjects().first(), SIGNAL(userTest()),
+            &user_test, SLOT(userTest()));
+
+    QObject::connect(engine.rootObjects().first(), SIGNAL(resultUser(QString, QString, QString, int)),
+            &user_test, SLOT(resultUser(QString, QString, QString, int)));
+
+    QObject::connect(engine.rootObjects().first(), SIGNAL(incompleteChecks(int)),
+            &user_test, SLOT(incompleteChecks(int)));
 
     return app.exec();
 }

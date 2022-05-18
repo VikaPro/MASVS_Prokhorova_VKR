@@ -76,7 +76,6 @@ Page {
                 push_home.start()
                 allProjects.visible = false
                 selectProject.visible = true
-                _projects.clearR();            // очищаем модель с проектами воизбежание дублирования
             }
 
             background: Image {
@@ -120,21 +119,23 @@ Page {
 
             GridLayout{
                 anchors.fill: parent
-                columns: 4
+                columns: 6
                 rows: 1
 
                 Label{  // название проекта
                     text: "ПРОЕКТ"
+                    font.pointSize: 9
                     Layout.column: 0
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.3 * parent.width
+                    Layout.preferredWidth: 0.25 * parent.width
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
                 Label{  // дата создания проекта
                     text: "СОЗДАН"
+                    font.pointSize: 9
                     Layout.column: 1
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
@@ -145,6 +146,7 @@ Page {
 
                 Label{  // дата изменения проекта
                     text: "ИЗМЕНЕН"
+                    font.pointSize: 9
                     Layout.column: 2
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
@@ -153,8 +155,9 @@ Page {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
-                Label{
-                    text: "MASVS"
+                Label{  // тип входных данных
+                    text: "ТИП ДАННЫХ"
+                    font.pointSize: 9
                     Layout.column: 3
                     wrapMode: Text.WordWrap
                     verticalAlignment: Text.AlignVCenter
@@ -163,18 +166,40 @@ Page {
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
+                Label{  // выбранный уровень безопасности для анализа
+                    text: "УРОВЕНЬ"
+                    font.pointSize: 9
+                    Layout.column: 4
+                    wrapMode: Text.WordWrap
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: 0.1 * parent.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Label{  // выбранный уровень безопасности для анализа
+                    text: "MASVS"
+                    font.pointSize: 9
+                    Layout.column: 5
+                    wrapMode: Text.WordWrap
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: 60
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
             }
         }
 
+
+        // список с карточками для всех проектов
         ListView{
             id: listView
             Layout.alignment: Qt.AlignHCenter
             Layout.fillHeight: true
             Layout.preferredWidth: 0.9 * parent.width
             Layout.bottomMargin: 10
-            Layout.topMargin: 10
-            spacing: 20
-            model: _projects //модель со всеми существующими проектами
+            spacing: 10
+            model: _projects // модель со всеми существующими проектами
 
             //карточка с параметрами
             delegate: Rectangle{
@@ -194,21 +219,23 @@ Page {
 
                 GridLayout{
                     anchors.fill: parent
-                    columns: 4
+                    columns: 6
                     rows: 1
 
                     Label{  // название проекта
                         text: name
+                        font.pointSize: 10
                         Layout.column: 0
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        Layout.preferredWidth: 0.3 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
 
                     Label{  // дата создания проекта
                         text: create_date
+                        font.pointSize: 10
                         Layout.column: 1
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
@@ -219,6 +246,7 @@ Page {
 
                     Label{  // дата изменения проекта
                         text: edit_date
+                        font.pointSize: 10
                         Layout.column: 2
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
@@ -227,11 +255,34 @@ Page {
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
 
+                    Label{  // тип входных данных
+                        text: input_data
+                        font.pointSize: 10
+                        Layout.column: 3
+                        wrapMode: Text.WordWrap
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.preferredWidth: 0.15 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+
+                    Label{  // выбранный уровень безопасности для анализа
+                        text: level
+                        font.pointSize: 10
+                        Layout.column: 4
+                        wrapMode: Text.WordWrap
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.preferredWidth: 0.1 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+
                     Button{
                         text: "Отчёт"
-                        Layout.column: 3
+                        font.pointSize: 9
+                        Layout.column: 5
+                        Layout.preferredWidth: 60
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredWidth: 0.15 * parent.width
                         onClicked: {
                             showReport(name);
                         }

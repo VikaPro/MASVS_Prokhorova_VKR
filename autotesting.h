@@ -2,13 +2,14 @@
 #define AUTOTESTING_H
 
 #include "selectproject.h"
-
 #include "permissionmodel.h"
 
 #include <QObject>
 #include <QDebug>
 #include <QFile>
 #include <QAbstractItemModel>
+
+extern QString levelProject; // глобальная переменная для уровня безопасности текущего проекта
 
 class AutoTesting : public QObject
 {
@@ -22,6 +23,7 @@ public:
     QString number;
     QString description;
     QString result;
+    QString function;
 
     //QFile file;
     //QTextStream str_file;
@@ -31,15 +33,7 @@ public slots:
     // Запускаем автоматические тесты для анализа безопасности приложения
     void autoTest(QString level);
 
-
-    // Все эти функции потом будут вынесены в другой файл
-    void autoTestLevel1();
-    void autoTestLevel2();
-
-    // попробовать удалить эту функцию, если реально
-    void autoTestEnd();
-
-    void writeReportAuto(QString number, QString description, QString result);
+    void writeReportAuto(QString number, QString description, QString result, QString function);
 
     // функция задержки отправки сигналов о завершении проверки
     void emitLater(const char *signalOrSlot);
@@ -91,11 +85,9 @@ public slots:
     void os9ScreenOverlay();
 
 
-
-
 signals:
     // сообщаем программе, что конкретный тест завершен
-    void endOneTest(QString number, QString description, QString result);
+    void endOneTest(QString number, QString description, QString result, QString function);
     // сообщаем программе, что все автоматизированные тесты пройдены
     void endAutoTest();
     // сообщаем программе, сколько будет автотестов для progressbar

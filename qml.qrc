@@ -6,7 +6,6 @@
         <file>qtquickcontrols2.conf</file>
         <file>Download.qml</file>
         <file>LevelSec.qml</file>
-        <file>ReportTest.qml</file>
         <file>OnlyApk.qml</file>
         <file>ApkAndCode.qml</file>
         <file>Top.qml</file>
@@ -25,5 +24,6 @@
         <file>image/home_light.png</file>
         <file>image/undo.png</file>
         <file>image/undo_light.png</file>
+        <file>image/owasp.png</file>
     </qresource>
 </RCC>

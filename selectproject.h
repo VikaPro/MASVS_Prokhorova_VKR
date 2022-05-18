@@ -6,8 +6,10 @@
 #include <QTimer>
 
 #include "projectsmodel.h"
+#include "reportsmodel.h"
 
 extern QString nameProject; // глобальная переменная для названия текущего проекта
+
 
 class SelectProject : public QObject
 {
@@ -17,6 +19,7 @@ public:
     explicit SelectProject(QObject *parent = nullptr);
 
     ProjectsModel * projects_model;
+    ReportsModel * reports_model;
 
     // Если декомпиляция будет долгой, то вернём этот метод
     // переменные необходимы для возможности удаления файлов из проекта
@@ -35,6 +38,8 @@ public slots:
     void downloadSource();
     // Декомпилируем файл APK, если у нас нет исходного кода
     void decompileApk();
+    // Записываем, по какому уровню проверяем приложени
+    void writeLevel(QString level);
     // Получаем список существующих проектов
     void setListProject();
     // Считываем информацию о существующем проекте из его файлов

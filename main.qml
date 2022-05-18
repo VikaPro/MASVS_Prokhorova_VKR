@@ -11,9 +11,14 @@ ApplicationWindow {
     signal checkNameProject(string name);
     signal downloadApk(string apk);
     signal downloadSource();
+    signal writeLevel(string level);
     signal setListProject();
     signal showReport(string name);
     signal autoTest(string level);
+    signal userTest();
+    signal incompleteChecks(int index);
+
+    signal resultUser(string number, string description, string result, int index)
 
     signal resultMinPermissions(string result);
 
@@ -47,10 +52,6 @@ ApplicationWindow {
         id: levelSec
     }
 
-    // страничка с отчётом по уровню безопасности мобильного приложения
-    ReportTest{
-        id: reportTestWindow
-    }
 
     // страничка со всеми существующими проектами
     AllProjects{

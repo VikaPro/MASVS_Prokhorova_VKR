@@ -5,15 +5,23 @@ import QtQuick.Controls.Material 2.3
 
 Rectangle{
     id:header
-    color: "#80CBC4"
     height: 50
+    gradient: Gradient {
+        GradientStop {
+            position: 0.00;
+            color: "#80CBC4"
+        }
+        GradientStop {
+            position: 1.00;
+            color: "#313031"
+        }
+    }
 
     Label {
         text: varItemEasy.aTextEasy
         font.pointSize: 12
         wrapMode: Text.WordWrap
         anchors.fill: parent
-        Material.foreground: "#313031"
         font.weight: Font.DemiBold
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter

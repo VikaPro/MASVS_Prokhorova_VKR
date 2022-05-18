@@ -81,7 +81,7 @@ Page {
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения комбинацию базового уровня L1 и дополнение R"
                     info_level.text = "Первый уровень совместно с третьим (L1 + R) - подходит для приложений, представляющих интеллектуальную ценность, например для игр"
-                    varItem.aLevel = "L1R"
+                    varItem.aLevel = "L1 + R"
                 }
             }
 
@@ -92,7 +92,7 @@ Page {
                 onClicked: {
                     levSec.text = "Вы выбрали для тестирования приложения комбинацию усиленного уровня L2 и дополнение R"
                     info_level.text = "Второй уровень совместно с третьим (L2 + R) - подходит для защиты приложений даже на укорененных с помощью Root или Jailbreak устройствах"
-                    varItem.aLevel = "L2R"
+                    varItem.aLevel = "L2 + R"
                 }
             }
         }
@@ -113,7 +113,8 @@ Page {
                 if(levSec.text != ""){
                     levelSec.visible = false
                     pageAutoTest.visible = true
-                    autoTest(varItem.aLevel);
+                    writeLevel(varItem.aLevel); // записываем уровень безопасности в файл
+                    autoTest(varItem.aLevel);   // запускаем автоматические тесты
                 }
                 else{
                     levSec.text = "Пожалуйста, выберите желаемый уровень безопасности мобильного приложения."

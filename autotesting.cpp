@@ -7,6 +7,7 @@
 
 #include <QQmlContext>
 
+QString levelProject;
 
 AutoTesting::AutoTesting(QObject *QMLObject) : viewer(QMLObject)
 {
@@ -115,30 +116,46 @@ AutoTesting::AutoTesting(QObject *QMLObject) : viewer(QMLObject)
 void AutoTesting::autoTest(QString level){        
     qDebug() << "Сейчас будут автотесты по уровню: " << level;
 
+    levelProject = level;   //присваиваем значение глобальной переменной
+
     if (level == "L1"){
         emit colAutoTest(24);
-        autoTestLevel1();
-        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(autoTestEnd()));
+
+        // запускаем первый авто-тест для 1 уровня
+        data2CheckInternal();   // Требование 2.2
+
+        connect(this, SIGNAL(endAutoLevel1()), this, SIGNAL(endAutoTest()));    // посылаем сигнал об окончании в qml
     }
 
     else if (level == "L2"){
         emit colAutoTest(30);
-        autoTestLevel1();
-        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(autoTestLevel2()));
-        connect(this, SIGNAL(endAutoLevel2()), this, SLOT(autoTestEnd()));
+
+        // запускаем первый авто-тест для 1 уровня
+        data2CheckInternal();   // Требование 2.2
+
+        // запускаем первый авто-тест для 2 уровня
+        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(arch9CheckUpdate())); // Требование 1.9
+        connect(this, SIGNAL(endAutoLevel2()), this, SIGNAL(endAutoTest()));    // посылаем сигнал об окончании в qml
     }
 
-    else if (level == "L1R"){
+    else if (level == "L1 + R"){
         emit colAutoTest(24);
-        autoTestLevel1();
-        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(autoTestEnd()));
+
+        // запускаем первый авто-тест для 1 уровня
+        data2CheckInternal();   // Требование 2.2
+
+        connect(this, SIGNAL(endAutoLevel1()), this, SIGNAL(endAutoTest()));    // посылаем сигнал об окончании в qml
     }
 
-    else if (level == "L2R"){
+    else if (level == "L2 + R"){
         emit colAutoTest(30);
-        autoTestLevel1();
-        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(autoTestLevel2()));
-        connect(this, SIGNAL(endAutoLevel2()), this, SLOT(autoTestEnd()));
+
+        // запускаем первый авто-тест для 1 уровня
+        data2CheckInternal();   // Требование 2.2
+
+        // запускаем первый авто-тест для 2 уровня
+        connect(this, SIGNAL(endAutoLevel1()), this, SLOT(arch9CheckUpdate())); // Требование 1.9
+        connect(this, SIGNAL(endAutoLevel2()), this, SIGNAL(endAutoTest()));    // посылаем сигнал об окончании в qml
     }
 
     else{
@@ -152,36 +169,10 @@ void AutoTesting::emitLater(const char *signalOrSlot){
     QTimer::singleShot(300, this, signalOrSlot);
 }
 
-// Функция, в которой мы говорим, что все автоматические тесты закончиись. Нельзя сигнал сделать слотом?
-void AutoTesting::autoTestEnd(){
-    qDebug() << "Скажу всем, что я уже всё сделал!!!";
-    //file.close();
-    emit endAutoTest();
-}
-
-// потом все эти функции вынести в отдельный файл с созданием класса
-void AutoTesting::autoTestLevel1(){
-    qDebug() << "*** Нахожусь в проверках для уровня 1 и тестирую проект: " << nameProject;
-
-    // Требование 2.2
-    data2CheckInternal();
-    // остальные проверки для 1 уровня вызываются по сигналам (см. выше AutoTesting::AutoTesting)
-}
-
-
-void AutoTesting::autoTestLevel2(){
-    qDebug() << "*** Нахожусь в проверках для уровня 2 и тестирую проект: " << nameProject;
-
-    // Требование 1.9
-    arch9CheckUpdate();
-    // остальные проверки для 2 уровня вызываются по сигналам (см. выше AutoTesting::AutoTesting)
-
-}
-
 // Функция записи описания и результата проверки в файл
 // Попробовать сделать глобально, чтобы каждый раз не открывать файл по новой
-void AutoTesting::writeReportAuto(QString number, QString description, QString result){
-    QFile file("C:/MASVS/" + nameProject + "/" + nameProject + "_report.txt");
+void AutoTesting::writeReportAuto(QString number, QString description, QString result, QString function){
+    QFile file("C:/MASVS/" + nameProject + "/" + nameProject + ".report");
     file.open(QIODevice::WriteOnly | QIODevice::Text
               | QIODevice::Append );
 
@@ -189,12 +180,13 @@ void AutoTesting::writeReportAuto(QString number, QString description, QString r
     str_file.setCodec("UTF-8");
 
     // сигнал в графику
-    emit endOneTest(number, description, result);
+    emit endOneTest(number, description, result, function);
 
     // записываем результат теста в новую строку
-    str_file << "***NUMBER: " << number << " ***DESCRIPTION: " << description << " ***RESULT: " << result << endl;
+    str_file << "***NUMBER: " << number << " ***DESCRIPTION: " << description << " ***RESULT: " << result << " ***FUNCTION: " << function << endl;
 
     file.close();
+
 }
 
 // Требование 2.2
@@ -202,9 +194,10 @@ void AutoTesting::data2CheckInternal(){
     number = "2.2";
     description = "Чувствительные данные хранятся только во внутреннем хранилище приложения, либо в системном хранилище авторизационных данных";
     result = "ВЫПОЛНЕНО";
+    function = "data2CheckInternal()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData2CheckInternal()));
@@ -215,14 +208,14 @@ void AutoTesting::data3CheckLog(){
     number = "2.3";
     description = "Чувствительные данные не попадают в логи приложения";
     result = "ВЫПОЛНЕНО";
+    function = "data3CheckLog()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData3CheckLog()));
 }
-
 
 
 // Требование 2.5
@@ -230,9 +223,10 @@ void AutoTesting::data5KeyboardCache(){
     number = "2.5";
     description = "Кэш клавиатуры выключен для полей ввода чувствительных данных";
     result = "ВЫПОЛНЕНО";
+    function = "data5KeyboardCache()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData5KeyboardCache()));
@@ -243,9 +237,10 @@ void AutoTesting::data6CheckIPC(){
     number = "2.6";
     description = "Чувствительные данные недоступны для механизмов межпроцессного взаимодействия (IPC)";
     result = "ВЫПОЛНЕНО";
+    function = "data6CheckIPC()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData6CheckIPC()));
@@ -256,9 +251,10 @@ void AutoTesting::data7CheckInterface(){
     number = "2.7";
     description = "Никакие чувствительные данные, такие как пароли или пин-коды, не видны через пользовательский интерфейс";
     result = "ВЫПОЛНЕНО";
+    function = "data7CheckInterface()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData7CheckInterface()));
@@ -269,9 +265,10 @@ void AutoTesting::crypto1Symmetrical(){
     number = "3.1";
     description = "Приложение не использует симметричное шифрование с жестко закодированными ключами в качестве единственного метода шифрования";
     result = "ВЫПОЛНЕНО";
+    function = "crypto1Symmetrical()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCrypto1Symmetrical()));
@@ -282,9 +279,10 @@ void AutoTesting::crypto2ProvenAlgorithms(){
     number = "3.2";
     description = "Приложение использует проверенные реализации криптографических алгоритмов";
     result = "ВЫПОЛНЕНО";
+    function = "crypto2ProvenAlgorithms()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCrypto2ProvenAlgorithms()));
@@ -295,9 +293,10 @@ void AutoTesting::crypto4WeakAlgorithms(){
     number = "3.4";
     description = "Приложение не использует устаревшие и слабые криптографические протоколы и алгоритмы";
     result = "ВЫПОЛНЕНО";
+    function = "crypto4WeakAlgorithms()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCrypto4WeakAlgorithms()));
@@ -308,9 +307,10 @@ void AutoTesting::crypto6RandomGenerator(){
     number = "3.6";
     description = "Все случайные значения генерируются с использованием безопасного генератора случайных чисел";
     result = "ВЫПОЛНЕНО";
+    function = "crypto6RandomGenerator()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCrypto6RandomGenerator()));
@@ -321,9 +321,10 @@ void AutoTesting::auth1LoginPass(){
     number = "4.1";
     description = "Если приложение предоставляет пользователям доступ к удалённым сервисам, на бэкенде должна быть реализована аутентификация, например, по логину и паролю";
     result = "ВЫПОЛНЕНО";
+    function = "auth1LoginPass()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endAuth1LoginPass()));
@@ -334,9 +335,10 @@ void AutoTesting::auth5PassPolicy(){
     number = "4.5";
     description = "На сервере реализована парольная политика";
     result = "ВЫПОЛНЕНО";
+    function = "auth5PassPolicy()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endAuth5PassPolicy()));
@@ -347,9 +349,10 @@ void AutoTesting::net1CryptoTLS(){
     number = "5.1";
     description = "Данные, передаваемые по сети, шифруются с использованием TLS. Безопасный канал используется для всех сервисов приложения";
     result = "ВЫПОЛНЕНО";
+    function = "net1CryptoTLS()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endNet1CryptoTLS()));
@@ -360,9 +363,10 @@ void AutoTesting::net3VerifiesX509(){
     number = "5.3";
     description = "Приложение верифицирует X.509 сертификаты сервера во время установления защищённого канала. Принимаются только сертификаты, подписанные доверенным удостоверяющим центром (CA)";
     result = "ВЫПОЛНЕНО";
+    function = "net3VerifiesX509()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endNet3VerifiesX509()));
@@ -417,9 +421,10 @@ void AutoTesting::resultMinPermissions(QString result){
     number = "6.1";
     description = "Приложение запрашивает минимально необходимый набор разрешений";
     qDebug() << "Os1MinPermissions: " << result;
+    function = "resultMinPermissions(QString result)";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endOs1MinPermissions()));
@@ -430,9 +435,10 @@ void AutoTesting::os3CustomURL(){
     number = "6.3";
     description = "Приложение не экспортирует чувствительные данные через кастомные URL-схемы, если эти механизмы не защищены должным образом";
     result = "ВЫПОЛНЕНО";
+    function = "os3CustomURL()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endOs3CustomURL()));
@@ -443,9 +449,10 @@ void AutoTesting::os5DisabledJava(){
     number = "6.5";
     description = "JavaScript отключен в компонентах WebView, если в нём нет необходимости";
     result = "ВЫПОЛНЕНО";
+    function = "os5DisabledJava()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endOs5DisabledJava()));
@@ -456,9 +463,10 @@ void AutoTesting::os6OnlyHTTPS(){
     number = "6.6";
     description = "WebViews сконфигурирован с поддержкой минимального набора протоколов (в идеале только https). Поддержка потенциально опасных URL-схем (таких как: file, tel и app-id) отключена";
     result = "ВЫПОЛНЕНО";
+    function = "os6OnlyHTTPS()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endOs6OnlyHTTPS()));
@@ -469,9 +477,10 @@ void AutoTesting::code1ValidCert(){
     number = "7.1";
     description = "Приложение подписано валидным сертификатом";
     result = "ВЫПОЛНЕНО";
+    function = "code1ValidCert()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode1ValidCert()));
@@ -481,6 +490,7 @@ void AutoTesting::code1ValidCert(){
 void AutoTesting::code2BuildRelease(){
     number = "7.2";
     description = "Приложение было собрано в release режиме с настройками, подходящими для релизной сборки (например, без атрибута debuggable)";
+    function = "code2BuildRelease()";
 
     QFile inputFile("C:/Users/vikiz/Desktop/AndroidManifest.xml");
     inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -507,7 +517,7 @@ void AutoTesting::code2BuildRelease(){
     }
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode2BuildRelease()));
@@ -518,9 +528,10 @@ void AutoTesting::code3DebugSymbols(){
     number = "7.3";
     description = "Отладочные символы удалены из нативных бинарных файлов";
     result = "ВЫПОЛНЕНО";
+    function = "code3DebugSymbols()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode3DebugSymbols()));
@@ -531,9 +542,10 @@ void AutoTesting::code4DeveloperCode(){
     number = "7.4";
     description = "Kод отладки и вспомогательный для разработки код (например, тестовый код, бэкдоры, скрытые настройки) были удалены. Приложение не логирует подробные ошибки и отладочные сообщения";
     result = "ВЫПОЛНЕНО";
+    function = "code4DeveloperCode()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode4DeveloperCode()));
@@ -544,9 +556,10 @@ void AutoTesting::code5ThirdPartyLib(){
     number = "7.5";
     description = "Все сторонние компоненты, используемые мобильным приложением (библиотеки и фреймворки), идентифицированы и проверены на наличие известных уязвимостей";
     result = "ВЫПОЛНЕНО";
+    function = "code5ThirdPartyLib()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode5ThirdPartyLib()));
@@ -557,9 +570,10 @@ void AutoTesting::code6ExceptionHandling(){
     number = "7.6";
     description = "Приложение обрабатывает возможные исключения";
     result = "ВЫПОЛНЕНО";
+    function = "code6ExceptionHandling()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode6ExceptionHandling()));
@@ -570,9 +584,10 @@ void AutoTesting::code9SecurityTools(){
     number = "7.9";
     description = "Активированы все стандартные функции безопасности, предусмотренные инструментами разработчика (такие как минификация байт-кода, защита стека, поддержка PIE и ARC)";
     result = "ВЫПОЛНЕНО";
+    function = "code9SecurityTools()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endAutoLevel1()));
@@ -586,9 +601,10 @@ void AutoTesting::arch9CheckUpdate(){
     number = "1.9";
     description = "Существует механизм принудительных обновлений мобильного приложения";
     result = "ВЫПОЛНЕНО";
+    function = "arch9CheckUpdate()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endArch9CheckUpdate()));
@@ -598,6 +614,8 @@ void AutoTesting::arch9CheckUpdate(){
 void AutoTesting::data8CheckBackup(){
     number = "2.8";
     description = "Никакие чувствительные данные не попадают в бэкапы, создаваемые операционной системой";
+    function = "data8CheckBackup()";
+
     QFile inputFile("C:/Users/vikiz/Desktop/AndroidManifest.xml");
     inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream inputStream(&inputFile);
@@ -650,7 +668,7 @@ void AutoTesting::data8CheckBackup(){
     }
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData8CheckBackup()));
@@ -661,9 +679,10 @@ void AutoTesting::data9BackgroundMode(){
     number = "2.9";
     description = "Приложение скрывает чувствительные данные с экрана, когда находится в фоновом режиме";
     result = "ВЫПОЛНЕНО";
+    function = "data9BackgroundMode()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData9BackgroundMode()));
@@ -674,9 +693,10 @@ void AutoTesting::data11InstallPincode(){
     number = "2.11";
     description = "Приложение требует от пользователя минимальную настройку доступа к устройству, такую, как установку пин-кода на устройство";
     result = "ВЫПОЛНЕНО";
+    function = "data11InstallPincode()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endData11InstallPincode()));
@@ -687,9 +707,10 @@ void AutoTesting::net6CheckLibrary(){
     number = "5.6";
     description = "Приложение использует только актуальные версии библиотек для подключения к сети и обеспечения безопасного соединения";
     result = "ВЫПОЛНЕНО";
+    function = "net6CheckLibrary()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endNet6CheckLibrary()));
@@ -700,9 +721,10 @@ void AutoTesting::os9ScreenOverlay(){
     number = "6.9";
     description = "Приложение защищает себя от атак наложения экрана";
     result = "ВЫПОЛНЕНО";
+    function = "os9ScreenOverlay()";
 
     // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result);
+    writeReportAuto(number, description, result, function);
 
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endAutoLevel2()));

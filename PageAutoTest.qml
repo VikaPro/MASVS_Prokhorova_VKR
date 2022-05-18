@@ -31,7 +31,6 @@ Page {
         }
     }
 
-
     visible: false
     anchors.fill: parent
 
@@ -132,11 +131,12 @@ Page {
         Button{
             id: next_button
             visible: false
-            text: "ВСЁ"
+            text: "Продолжить тестирование"
             Layout.alignment: Qt.AlignHCenter
             onClicked: {
                 pageAutoTest.visible = false
                 pageUserTest.visible = true
+                userTest();    // запускаем функцию с ручными проверками
             }
         }
     }
