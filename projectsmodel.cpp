@@ -8,13 +8,16 @@ ProjectObject::ProjectObject(const QString &p_name,
                              const QString &p_edit_date,
                              const QString &p_input_data,
                              const QString &p_path_apk,
-                             const QString &p_level)
+                             const QString &p_level,
+                             const QString &p_percent)
     : m_name(p_name),
       m_create_date(p_create_date),
       m_edit_date(p_edit_date),
       m_input_data(p_input_data),
       m_path_apk(p_path_apk),
-      m_level(p_level)
+      m_level(p_level),
+      m_percent(p_percent)
+
 {
 }
 
@@ -66,6 +69,9 @@ QVariant ProjectsModel::data(const QModelIndex & index, int role) const
     else if (role == level)
         return itemToReturn.getLevel();
 
+    else if (role == percent)
+        return itemToReturn.getPercent();
+
     return QVariant();
 }
 
@@ -80,6 +86,7 @@ QHash<int, QByteArray> ProjectsModel::roleNames() const
     roles[input_data] = "input_data";
     roles[path_apk] = "path_apk";
     roles[level] = "level";
+    roles[percent] = "percent";
 
     return roles;
 }
@@ -126,4 +133,9 @@ QString ProjectObject::getPathAPK() const
 QString ProjectObject::getLevel() const
 {
     return m_level;         // уровень безопасности для анализа
+}
+
+QString ProjectObject::getPercent() const
+{
+    return m_percent;         // уровень безопасности для анализа
 }

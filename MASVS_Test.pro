@@ -43,3 +43,5 @@ HEADERS += \
     permissionmodel.h \
     reportsmodel.h \
     usertesting.h
+
+DISTFILES +=

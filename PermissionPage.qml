@@ -16,19 +16,52 @@ Page {
         }
     }
 
+    // Зелёный цвет для результата ВЫПОЛНЕНО
+    // тёмный зелёный цвет
+    Gradient {
+        id: green_normal_Gradient
+        GradientStop { position: 0.0; color: "#57FF88" }
+        GradientStop { position: 1.0; color: "#1DAF49" }
+    }
+    // светлый зелёный цвет
+    Gradient {
+        id: green_hovered_Gradient
+        GradientStop { position: 0.0; color: "#B8FFCD" }
+        GradientStop { position: 1.0; color: "#57D17A" }
+    }
+
+    // Красный цвет для результата НЕ ВЫПОЛНЕНО
+    // тёмный красный цвет
+    Gradient {
+        id: red_normal_Gradient
+        GradientStop { position: 0.0; color: "#FF5793" }
+        GradientStop { position: 1.0; color: "#AF1D4E" }
+    }
+    // светлый красный цвет
+    Gradient {
+        id: red_hovered_Gradient
+        GradientStop { position: 0.0; color: "#FFB8D0" }
+        GradientStop { position: 1.0; color: "#D15781" }
+    }
+
     ColumnLayout{
         anchors.fill: parent
-        spacing: 30
+        spacing: 5
 
         Label {
+            color: "#ffffff"
+            font.pointSize: 11
+            Layout.topMargin: 20
             text: "Приложение запрашивает следующие разрешения. Пожалуйста, оцените самостоятельно, является ли данный набор минимально необходимым. Если хотя бы одно из опасных разрешений логически не подходит, то вы должны отметить требование как невыполненное"
+            lineHeight: 1.1
             wrapMode: Text.WordWrap
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //font.weight: Font.DemiBold
+            //font.capitalization: Font.AllUppercase
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
             Layout.preferredWidth: 0.9 * parent.width
-            //Layout.fillHeight: true
-            Layout.topMargin: 20
+            Layout.preferredHeight: 0.3 * parent.height
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 
         ListView{
@@ -36,7 +69,8 @@ Page {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             Layout.fillHeight: true
             Layout.preferredWidth: 0.9 * parent.width
-            spacing: 20
+            spacing: 2
+            clip: true
             model: _permission //модель со всеми существующими разрешениями
 
             //карточка с параметрами
@@ -44,21 +78,21 @@ Page {
                 width: parent.width
                 height: 40
                 radius: 5
+                opacity: 0.9
                 gradient: Gradient {
                     GradientStop {
-
                         position: 0.00;
-                        color:
-                            if(level == "normal"){
-                                color: "#80CBC4"
-                            }
-                            else{
-                                color: "#E15BA0"
-                            }
+                        color: "#ffffff"
                     }
                     GradientStop {
                         position: 1.00;
-                        color: "#000000"
+                        color:
+                            if(level == "обычное"){
+                                color: "#B5E0B2"
+                            }
+                            else{
+                                color: "#E0B2BA"
+                            }
                     }
                 }
 
@@ -90,38 +124,71 @@ Page {
             }
         }
 
+        // две кнопки с выбором
         RowLayout{
-            Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: 0.2 * parent.height
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.bottomMargin: 20
             spacing: 20
 
-            // Добавить события для кнопки
+            // Кнопка с присвоением требованию значения ВЫПОЛНЕНО
             Button{
-                id: but1
+                id: but_yes
                 text: "ВЫПОЛНЕНО"
-                Layout.alignment: Qt.AlignHCenter
-                Material.background: Material.Green
-                Material.foreground: "#313031"
+                Layout.preferredWidth: 110
+                Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+
+                background: Rectangle {
+                    radius: 5
+                    implicitHeight: 40
+                    gradient: but_yes.hovered ? green_hovered_Gradient :
+                                                green_normal_Gradient
+                }
+
+                // результат можно менять только у пользовательских проверок
                 onClicked: {
-                    resultMinPermissions(but1.text);
+                    pushanimation1.start()
+                    resultMinPermissions(but_yes.text);
                     permissionPage.visible = false;
                     pageAutoTest.visible = true;
                 }
+
+                ScaleAnimator{
+                    id: pushanimation1
+                    target: but_yes
+                    from: 0.9
+                    to: 1.0
+                }
             }
 
-            // Добавить события для кнопки
+            // Кнопка с присвоением требованию значения НЕ ВЫПОЛНЕНО
             Button{
-                id: but2
+                id: but_not
                 text: "НЕ ВЫПОЛНЕНО"
-                Layout.alignment: Qt.AlignHCenter
-                Material.background: Material.Red
-                Material.foreground: "#313031"
+                Layout.preferredWidth: 120
+                Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+
+                background: Rectangle {
+                    radius: 5
+                    implicitHeight: 40
+                    gradient: but_not.hovered ? red_hovered_Gradient :
+                                                red_normal_Gradient
+                }
+
+                // результат можно менять только у пользовательских проверок
                 onClicked: {
-                    resultMinPermissions(but2.text);
+                    pushanimation2.start()
+                    resultMinPermissions("НЕ_ВЫПОЛНЕНО");
                     permissionPage.visible = false;
                     pageAutoTest.visible = true;
+                }
+
+                ScaleAnimator{
+                    id: pushanimation2
+                    target: but_not
+                    from: 0.9
+                    to: 1.0
                 }
             }
         }

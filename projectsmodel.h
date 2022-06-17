@@ -12,7 +12,8 @@ public:
                   const QString &p_edit_date,
                   const QString &p_input_data,
                   const QString &p_path_apk,
-                  const QString &p_level);
+                  const QString &p_level,
+                  const QString &p_percent);
 
     QString getName() const;
     QString getCreateDate() const;
@@ -20,6 +21,7 @@ public:
     QString getInputData() const;
     QString getPathAPK() const;
     QString getLevel() const;
+    QString getPercent() const;
 
 private:
     QString m_name;
@@ -28,6 +30,7 @@ private:
     QString m_input_data;
     QString m_path_apk;
     QString m_level;
+    QString m_percent;
 };
 
 class ProjectsModel : public QAbstractListModel
@@ -41,7 +44,8 @@ public:
         edit_date,
         input_data,
         path_apk,
-        level
+        level,
+        percent
     };
 
     ProjectsModel(QObject *parent = nullptr);

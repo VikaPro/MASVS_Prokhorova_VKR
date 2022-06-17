@@ -17,226 +17,64 @@ Page {
     visible: false
     anchors.fill: parent
 
-    // делаем отдельную шапку, т.к. модель с проектами необходимо очищать
-    header:Rectangle{
-        id:header
-        color: "#80CBC4"
-        height: 50
-
-        Button{
-            id:undo_tab
-            width: 40
-            height: 40
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 20
-
-            onClicked: {
-                push_undo.start()
-                allProjects.visible = false
-                selectProject.visible = true
-                _projects.clearR();            // очищаем модель с проектами воизбежание дублирования
-            }
-
-            background: Image {
-                anchors.fill: parent
-                source: "qrc:/image/image/undo.png"
-            }
-
-            ScaleAnimator{
-                id: push_undo
-                target: undo_tab
-                from: 0.7
-                to: 1.0
-                duration: 1
-                running: false
-            }
-        }
-
-        Label {
-            text: "СПИСОК СУЩЕСТВУЮЩИХ ПРОЕКТОВ"
-            font.pointSize: 12
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-            Material.foreground: "#313031"
-            font.weight: Font.DemiBold
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-        }
-
-        Button{
-            id:home_tab
-            width: 40
-            height: 40
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: 20
-
-            onClicked: {
-                push_home.start()
-                allProjects.visible = false
-                selectProject.visible = true
-            }
-
-            background: Image {
-                anchors.fill: parent
-                source: "qrc:/image/image/home.png"
-            }
-
-            ScaleAnimator{
-                id: push_home
-                target: home_tab
-                from: 0.7
-                to: 1.0
-                duration: 120
-                running: false
-            }
+    header: Top{
+        Item {
+            id: varItem
+            property string aText: "СПИСОК СУЩЕСТВУЮЩИХ ПРОЕКТОВ"
+            property var aPageFalse: allProjects
+            property var aPageTrue: selectProject
         }
     }
 
-
     ColumnLayout{
         anchors.fill: parent
-        spacing: 10
-
-        // общий заголовок для всех карточек с проектами
-        Rectangle{
-            Layout.alignment: Qt.AlignHCenter
-            Layout.preferredHeight: 50
-            Layout.preferredWidth: 0.9 * parent.width
-            Layout.topMargin: 10
-            radius: 5
-            gradient: Gradient {
-                GradientStop {
-                    color: "#000000"
-                    position: 0.00;
-                }
-                GradientStop {
-                    position: 1.00;
-                    color: "#80CBC4"
-                }
-            }
-
-            GridLayout{
-                anchors.fill: parent
-                columns: 6
-                rows: 1
-
-                Label{  // название проекта
-                    text: "ПРОЕКТ"
-                    font.pointSize: 9
-                    Layout.column: 0
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.25 * parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label{  // дата создания проекта
-                    text: "СОЗДАН"
-                    font.pointSize: 9
-                    Layout.column: 1
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.15 * parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label{  // дата изменения проекта
-                    text: "ИЗМЕНЕН"
-                    font.pointSize: 9
-                    Layout.column: 2
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.15 * parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label{  // тип входных данных
-                    text: "ТИП ДАННЫХ"
-                    font.pointSize: 9
-                    Layout.column: 3
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.15 * parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label{  // выбранный уровень безопасности для анализа
-                    text: "УРОВЕНЬ"
-                    font.pointSize: 9
-                    Layout.column: 4
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 0.1 * parent.width
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label{  // выбранный уровень безопасности для анализа
-                    text: "MASVS"
-                    font.pointSize: 9
-                    Layout.column: 5
-                    wrapMode: Text.WordWrap
-                    verticalAlignment: Text.AlignVCenter
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.preferredWidth: 60
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-            }
-        }
-
 
         // список с карточками для всех проектов
         ListView{
             id: listView
             Layout.alignment: Qt.AlignHCenter
             Layout.fillHeight: true
-            Layout.preferredWidth: 0.9 * parent.width
+            Layout.preferredWidth: 0.95 * parent.width
             Layout.bottomMargin: 10
-            spacing: 10
+            spacing: 4
             model: _projects // модель со всеми существующими проектами
 
-            //карточка с параметрами
-            delegate: Rectangle{
+
+            // Заголовок к списку с проектами
+            headerPositioning: ListView.OverlayHeader
+            header: Rectangle{
                 width: parent.width
                 height: 50
-                radius: 5
-                gradient: Gradient {
-                    GradientStop {
-                        color: "#80CBC4"
-                        position: 0.00;
-                    }
-                    GradientStop {
-                        position: 1.00;
-                        color: "#000000"
-                    }
-                }
+                anchors.horizontalCenter: parent.horizontalCenter
+                color: "#1C1C1C"
+                z: 2    // выводим на передний план
 
                 GridLayout{
-                    anchors.fill: parent
-                    columns: 6
                     rows: 1
+                    columns: 6
+                    columnSpacing: 0
+                    anchors.fill: parent
 
                     Label{  // название проекта
-                        text: name
-                        font.pointSize: 10
+                        text: "ПРОЕКТ"
+                        color: "#ffffff"
+                        font.pointSize: 9
                         Layout.column: 0
+                        font.weight: Font.Bold
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
+                        Layout.leftMargin: 0.005 * parent.width
                         Layout.preferredWidth: 0.25 * parent.width
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
 
                     Label{  // дата создания проекта
-                        text: create_date
-                        font.pointSize: 10
+                        text: "СОЗДАН"
+                        color: "#ffffff"
+                        font.pointSize: 9
                         Layout.column: 1
+                        font.weight: Font.Bold
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -245,9 +83,11 @@ Page {
                     }
 
                     Label{  // дата изменения проекта
-                        text: edit_date
-                        font.pointSize: 10
+                        text: "ИЗМЕНЕН"
+                        color: "#ffffff"
+                        font.pointSize: 9
                         Layout.column: 2
+                        font.weight: Font.Bold
                         wrapMode: Text.WordWrap
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
@@ -256,35 +96,287 @@ Page {
                     }
 
                     Label{  // тип входных данных
-                        text: input_data
-                        font.pointSize: 10
+                        text: "ДАННЫЕ"
+                        color: "#ffffff"
+                        font.pointSize: 9
                         Layout.column: 3
+                        font.weight: Font.Bold
                         wrapMode: Text.WordWrap
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.preferredWidth: 0.17 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+
+                    Label{  // выбранный уровень безопасности для анализа
+                        text: "УРОВЕНЬ"
+                        color: "#ffffff"
+                        font.pointSize: 9
+                        Layout.column: 4
+                        font.weight: Font.Bold
+                        wrapMode: Text.WordWrap
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.preferredWidth: 0.14 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+
+                    Label{  // выбранный уровень безопасности для анализа
+                        text: "MASVS"
+                        color: "#ffffff"
+                        font.pointSize: 9
+                        Layout.column: 5
+                        font.weight: Font.Bold
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.rightMargin: 0.005 * parent.width
+                        Layout.preferredWidth: 0.12 * parent.width
+                        Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                    }
+                }
+            }
+
+            //карточка с параметрами
+            delegate: Rectangle{
+                width: parent.width
+                height: 60
+                radius: 5
+                opacity: 0.9
+
+                gradient: Gradient {
+                    GradientStop { position: 0.00; color: "#ffffff"}
+                    GradientStop { position: 1.00; color: "#E6E6FA"}
+                }
+
+                GridLayout{
+                    rows: 2
+                    columns: 6
+                    columnSpacing: 0
+                    anchors.fill: parent
+
+                    Label{  // название проекта
+                        text: name
+                        Layout.row: 0
+                        Layout.column: 0
+                        font.pointSize: 10
+                        Layout.topMargin: 5
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.leftMargin: 0.005 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        elide: Text.ElideMiddle // если название слишком большое, то в центре будет троеточие
+                    }
+
+                    Label{  // проценты
+                        text: percent
+                        Layout.row: 1
+                        Layout.column: 0
+                        font.pointSize: 10
+                        Layout.bottomMargin: 5
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignHCenter
+                        Layout.leftMargin: 0.005 * parent.width
+                        Layout.preferredWidth: 0.25 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    }
+
+                    Label{  // путь к исходному файлу
+                        text: "Путь к APK: " + path_apk
+                        Layout.row: 1
+                        Layout.column: 1
+                        Layout.columnSpan: 4
+                        font.pointSize: 10
+                        Layout.bottomMargin: 5
+                        verticalAlignment: Text.AlignVCenter
+                        horizontalAlignment: Text.AlignLeft
+                        Layout.preferredWidth: 0.57 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        elide: Text.ElideMiddle // если название слишком большое, то в центре будет троеточие
+                    }
+
+                    Label{  // дата создания проекта
+                        text: create_date
+                        Layout.row: 0
+                        Layout.column: 1
+                        font.pointSize: 10
+                        Layout.topMargin: 5
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
                         Layout.preferredWidth: 0.15 * parent.width
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
 
-                    Label{  // выбранный уровень безопасности для анализа
-                        text: level
+                    Label{  // дата изменения проекта
+                        text: edit_date
+                        Layout.row: 0
+                        Layout.column: 2
                         font.pointSize: 10
-                        Layout.column: 4
-                        wrapMode: Text.WordWrap
+                        Layout.topMargin: 5
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        Layout.preferredWidth: 0.1 * parent.width
+                        Layout.preferredWidth: 0.15 * parent.width
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
 
+                    // тип входных данных
+
+                    // only Apk
+                    RowLayout{
+                        id: row_apk
+                        spacing: 0
+                        Layout.row: 0
+                        Layout.column: 3
+                        Layout.topMargin: 5
+                        Layout.preferredWidth: 0.17 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                        visible: {
+                            if (input_data == "Только APK"){
+                                row_apk.visible = true
+                            }
+                            else{
+                                row_apk.visible = false
+                            }
+                        }
+
+                        Rectangle{
+                            id: apk_label
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 20
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            color: "#FFD51A"
+                            radius: 3
+
+                            Label{
+                                text: "APK"
+                                font.pointSize: 8
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+
+                    // Apk and Code
+                    RowLayout{
+                        id: row_apk_code
+                        spacing: 3
+                        Layout.row: 0
+                        Layout.column: 3
+                        Layout.topMargin: 5
+                        Layout.preferredWidth: 0.17 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                        visible: {
+                            if (input_data != "Только APK"){
+                                row_apk_code.visible = true
+                            }
+                            else{
+                                row_apk_code.visible = false
+                            }
+                        }
+
+                        Rectangle{
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 20
+                            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                            color: "#FFD51A"
+                            radius: 3
+
+                            Label{
+                                text: "APK"
+                                font.pointSize: 8
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+
+                        Rectangle{
+                            id: code_label
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: 20
+                            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                            color: "#64FCAA"
+                            radius: 3
+
+                            Label{
+                                text: "CODE"
+                                font.pointSize: 8
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+
+                    // выбранный уровень безопасности для анализа
+                    RowLayout{
+                        spacing: 3
+                        Layout.row: 0
+                        Layout.column: 4
+                        Layout.topMargin: 5
+                        Layout.preferredWidth: 0.14 * parent.width
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                        Rectangle{
+                            id: level_label
+                            Layout.preferredWidth: 44
+                            Layout.preferredHeight: 20
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            color: "#99E1FF"
+                            radius: 3
+
+                            Label{
+                                text: level
+                                font.pointSize: 8
+                                anchors.fill: parent
+                                verticalAlignment: Text.AlignVCenter
+                                horizontalAlignment: Text.AlignHCenter
+                            }
+                        }
+                    }
+
                     Button{
-                        text: "Отчёт"
-                        font.pointSize: 9
+                        id: button
+                        text: "ОТЧЁТ"
+                        Layout.row: 0
                         Layout.column: 5
-                        Layout.preferredWidth: 60
-                        Layout.alignment: Qt.AlignHCenter
+                        Layout.rowSpan: 2
+                        font.pointSize: 9
+                        Layout.rightMargin: 0.005 * parent.width
+                        Layout.preferredWidth: 0.12 * parent.width
+                        Material.foreground: "#ffffff"  // цвет текста
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                        background: Rectangle {
+                            Gradient {
+                                id: normalGradient
+                                GradientStop { position: 0.0; color: "#3B3B3B" }
+                                GradientStop { position: 1.0; color: "#1C1C1C" }
+                            }
+                            Gradient {
+                                id: hoveredGradient
+                                GradientStop { position: 0.0; color: "#5C5C5C" }
+                                GradientStop { position: 1.0; color: "#3B3B3B" }
+                            }
+                            implicitHeight: 40
+                            gradient: button.hovered ? hoveredGradient :
+                                      normalGradient
+                            radius: 5
+                        }
+
+
                         onClicked: {
+                            pushanimation.start()
                             showReport(name);
+                        }
+
+                        ScaleAnimator{
+                            id: pushanimation
+                            target: button
+                            from: 0.9
+                            to: 1.0
                         }
                     }
                 }

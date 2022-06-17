@@ -6,6 +6,8 @@
 #include <QFile>
 
 #include "autotesting.h"
+#include "selectproject.h"
+//#include "reportsmodel.h"
 
 
 class UserTesting : public QObject
@@ -19,6 +21,11 @@ public:
     QStringList numbers;
     QStringList descriptions;
     //QString result;
+
+    SelectProject select;
+
+    // удалить
+    //ReportsModel * reports_model;
 
 public slots:
 
@@ -41,6 +48,8 @@ signals:
     void showUserCard(QString number, QString description, int index);
     // сообщаем программе, сколько будет ручных тестов для progressbar
     void colUserTest(int col);
+    // сообщаем программе, что все проверки закончены, отчёт сформирован - можно отображать
+    void allTestEnd();
 
 protected:
     QObject *viewer;  // связь функций C++ с qml-страничками

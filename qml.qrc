@@ -16,14 +16,23 @@
         <file>PageUserTest.qml</file>
         <file>PermissionPage.qml</file>
         <file>TopEasy.qml</file>
+        <file>TopUser.qml</file>
     </qresource>
     <qresource prefix="/image">
+        <file>image/owasp.png</file>
+        <file>image/list_project.png</file>
+        <file>image/new_project.png</file>
         <file>image/end.png</file>
         <file>image/end_light.png</file>
         <file>image/home.png</file>
         <file>image/home_light.png</file>
         <file>image/undo.png</file>
         <file>image/undo_light.png</file>
-        <file>image/owasp.png</file>
+        <file>image/apk_src.png</file>
+        <file>image/only_apk.png</file>
+        <file>image/open_folder.png</file>
+        <file>image/dir_code.png</file>
+        <file>image/dir_project.png</file>
+        <file>image/file_apk.png</file>
     </qresource>
 </RCC>

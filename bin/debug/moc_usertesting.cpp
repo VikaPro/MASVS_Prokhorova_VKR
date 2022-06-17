@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_UserTesting_t {
-    QByteArrayData data[13];
-    char stringdata0[119];
+    QByteArrayData data[14];
+    char stringdata0[130];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -40,17 +40,18 @@ QT_MOC_LITERAL(4, 33, 11), // "description"
 QT_MOC_LITERAL(5, 45, 5), // "index"
 QT_MOC_LITERAL(6, 51, 11), // "colUserTest"
 QT_MOC_LITERAL(7, 63, 3), // "col"
-QT_MOC_LITERAL(8, 67, 8), // "userTest"
-QT_MOC_LITERAL(9, 76, 7), // "oneCard"
-QT_MOC_LITERAL(10, 84, 10), // "resultUser"
-QT_MOC_LITERAL(11, 95, 6), // "result"
-QT_MOC_LITERAL(12, 102, 16) // "incompleteChecks"
+QT_MOC_LITERAL(8, 67, 10), // "allTestEnd"
+QT_MOC_LITERAL(9, 78, 8), // "userTest"
+QT_MOC_LITERAL(10, 87, 7), // "oneCard"
+QT_MOC_LITERAL(11, 95, 10), // "resultUser"
+QT_MOC_LITERAL(12, 106, 6), // "result"
+QT_MOC_LITERAL(13, 113, 16) // "incompleteChecks"
 
     },
     "UserTesting\0showUserCard\0\0number\0"
     "description\0index\0colUserTest\0col\0"
-    "userTest\0oneCard\0resultUser\0result\0"
-    "incompleteChecks"
+    "allTestEnd\0userTest\0oneCard\0resultUser\0"
+    "result\0incompleteChecks"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,31 +61,33 @@ static const uint qt_meta_data_UserTesting[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   44,    2, 0x06 /* Public */,
-       6,    1,   51,    2, 0x06 /* Public */,
+       1,    3,   49,    2, 0x06 /* Public */,
+       6,    1,   56,    2, 0x06 /* Public */,
+       8,    0,   59,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    0,   54,    2, 0x0a /* Public */,
-       9,    1,   55,    2, 0x0a /* Public */,
-      10,    4,   58,    2, 0x0a /* Public */,
-      12,    1,   67,    2, 0x0a /* Public */,
+       9,    0,   60,    2, 0x0a /* Public */,
+      10,    1,   61,    2, 0x0a /* Public */,
+      11,    4,   64,    2, 0x0a /* Public */,
+      13,    1,   73,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,    5,
     QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    5,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,   11,    5,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,   12,    5,
     QMetaType::Void, QMetaType::Int,    5,
 
        0        // eod
@@ -98,10 +101,11 @@ void UserTesting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->showUserCard((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
         case 1: _t->colUserTest((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->userTest(); break;
-        case 3: _t->oneCard((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->resultUser((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
-        case 5: _t->incompleteChecks((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->allTestEnd(); break;
+        case 3: _t->userTest(); break;
+        case 4: _t->oneCard((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->resultUser((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 6: _t->incompleteChecks((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -117,6 +121,13 @@ void UserTesting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
             using _t = void (UserTesting::*)(int );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&UserTesting::colUserTest)) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (UserTesting::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&UserTesting::allTestEnd)) {
+                *result = 2;
                 return;
             }
         }
@@ -152,13 +163,13 @@ int UserTesting::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }
@@ -175,6 +186,12 @@ void UserTesting::colUserTest(int _t1)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void UserTesting::allTestEnd()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

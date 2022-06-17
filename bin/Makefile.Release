@@ -199,28 +199,37 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release\qrc_qml.cpp
 release\qrc_qml.cpp: ..\qml.qrc \
 		C:\Qt\5.13.0\msvc2017_64\bin\rcc.exe \
-		..\PageUserTest.qml \
-		..\SelectProject.qml \
-		..\Download.qml \
 		..\LevelSec.qml \
-		..\AllProjects.qml \
-		..\TopEasy.qml \
 		..\ApkAndCode.qml \
-		..\ReadReport.qml \
-		..\NameProject.qml \
+		..\Top.qml \
 		..\PageAutoTest.qml \
-		..\PermissionPage.qml \
 		..\qtquickcontrols2.conf \
+		..\Download.qml \
+		..\AllProjects.qml \
+		..\PermissionPage.qml \
+		..\PageUserTest.qml \
+		..\TopEasy.qml \
 		..\main.qml \
 		..\main.qml \
 		..\OnlyApk.qml \
-		..\Top.qml \
+		..\ReadReport.qml \
+		..\TopUser.qml \
+		..\NameProject.qml \
+		..\SelectProject.qml \
 		..\image\owasp.png \
 		..\image\home.png \
+		..\image\dir_project.png \
+		..\image\new_project.png \
+		..\image\open_folder.png \
 		..\image\end_light.png \
 		..\image\undo.png \
+		..\image\list_project.png \
 		..\image\home_light.png \
+		..\image\dir_code.png \
 		..\image\undo_light.png \
+		..\image\apk_src.png \
+		..\image\only_apk.png \
+		..\image\file_apk.png \
 		..\image\end.png
 	C:\Qt\5.13.0\msvc2017_64\bin\rcc.exe -name qml ..\qml.qrc -o release\qrc_qml.cpp
 
@@ -1206,7 +1215,12 @@ release\reportsmodel.obj: ..\reportsmodel.cpp ..\reportsmodel.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qcontiguouscache.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qsharedpointer.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qsharedpointer_impl.h \
+		..\selectproject.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QDebug \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QTimer \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qtimer.h \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qbasictimer.h \
+		..\projectsmodel.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QFile \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfile.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfiledevice.h \

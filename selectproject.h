@@ -35,7 +35,7 @@ public slots:
     // Загружаем файл Apk
     void downloadApk(QString apk);
     // Загружаем файл Apk совместно с исходным кодом
-    void downloadSource();
+    void downloadSource(QString apk, QString apk_dir, QString src);
     // Декомпилируем файл APK, если у нас нет исходного кода
     void decompileApk();
     // Записываем, по какому уровню проверяем приложени
@@ -44,8 +44,11 @@ public slots:
     void setListProject();
     // Считываем информацию о существующем проекте из его файлов
     void readProject(QString name);
+    // Сначала подсчитываем уровень соответсвия в процентах
+    void checkPercent(QString name);
     // Выводим отчёт по существующему проекту
     void showReport(QString name);
+
 
 signals:
     // просим пользователя изменить имя, т.к. проект с таким именем уже существует
@@ -56,6 +59,9 @@ signals:
     void downloadedApk();
     // оповещаем графику, что с декомпиляуией файла Apk возникли проблемы
     void errorApk();
+    // оповещаем графику, что в каталогах пользователя чего-то не хватает
+    void errorSource(QString error);
+
     // оповещаем графику, что файл Apk совместно с исходным кодом успешно загружены
     void downloadedSource();
     // вызываем выбор уровня безопасности после загрузки файлов
@@ -70,6 +76,9 @@ signals:
     void showProjects();
     // сообщаем программе, что отчёт по проекту успешно считан и его можно отобразить
     void readReport();
+    // в заголовке страницы с отчётом отображаем название проекта
+    void sendName(QString name);
+    void sendPercent(int col, int yesP, int notP, int unknowP);
 
 protected:
     QObject *viewer;  // связь функций C++ с qml-страничками

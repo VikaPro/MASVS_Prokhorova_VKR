@@ -10,18 +10,18 @@ public:
     ReportObject(const QString &p_number,
                  const QString &p_description,
                  const QString &p_result,
-                 const QString &p_function);
+                 const QString &p_func);
 
     QString getNumber() const;
     QString getDescription() const;
     QString getResult() const;
-    QString getFunction() const;
+    QString getFunc() const;
 
 private:
     QString m_number;
     QString m_description;
     QString m_result;
-    QString m_function;
+    QString m_func;
 };
 
 class ReportsModel : public QAbstractListModel
@@ -33,7 +33,7 @@ public:
         number = Qt::UserRole + 1,
         description,
         result,
-        function
+        func
     };
 
     ReportsModel(QObject *parent = nullptr);
@@ -63,7 +63,8 @@ signals:
     // сигнал об окончании печати документа PDF
     void endExportPDF();
 
-
+    // в заголовке страницы с отчётом отображаем название проекта
+    void sendName(QString name);
 
 
 protected:

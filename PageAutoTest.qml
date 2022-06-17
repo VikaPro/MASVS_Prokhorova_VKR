@@ -17,12 +17,19 @@ Page {
         onEndOneTest:{     // после завершения каждого теста выводим результат на экран
             number_label.text = "Требование MASVS № " + number;
             description_label.text = description;
+            if (result == "ВЫПОЛНЕНО"){
+                result_label.color = "#02BB3D";
+            }
+            else{
+                result_label.color = "#BB0233";
+                result_label.text = "НЕ ВЫПОЛНЕНО"
+            }
             result_label.text = result;
             prog_bar.value++;           // после каждого теста значение увеличивается
         }
 
         onEndAutoTest:{     // после прохождения всех автоматических тестирований появляется кнопка для продолжения
-            next_button.visible = true
+            but_confirm.enabled = true
         }
 
         onCheckPermission:{     // разрешения необходимо проверить пользователем
@@ -34,84 +41,96 @@ Page {
     visible: false
     anchors.fill: parent
 
-    header: Rectangle{
-        id:header
-        color: "#80CBC4"
-        height: 50
-
-        Label {
-            text: "АВТОМАТИЗИРОВАННЫЕ ТЕСТЫ ПО СТАНДАРТУ MASVS"
-            font.pointSize: 12
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-            Material.foreground: "#313031"
-            font.weight: Font.DemiBold
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+    header: TopEasy{
+        Item {
+            id: varItemEasy
+            property string aTextEasy: "АВТОМАТИЗИРОВАННЫЕ ТЕСТЫ ПО СТАНДАРТУ MASVS"
         }
     }
 
-
     ColumnLayout{
         width: 0.8 * parent.width
+        height: parent.height
         anchors.centerIn: parent
-        spacing: 40
 
-        Label {
-            id: number_label
-            font.bold: true
-            wrapMode: Text.WordWrap
-            Layout.alignment: Qt.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
+        Rectangle{
+            color: "#ffffff"
+            opacity: 0.9
+            radius: 5
+            Layout.topMargin: 20
+            Layout.preferredHeight: 0.6 * parent.height
             Layout.preferredWidth: parent.width
-        }
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-        Label {
-            id: description_label
-            text: "Информация о статусе тестирования будет отображаться здесь"
-            wrapMode: Text.WordWrap
-            Layout.alignment: Qt.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            Layout.preferredWidth: parent.width
-        }
+            ColumnLayout{
+                width: 0.9 * parent.width
+                height: 0.9 * parent.height
+                anchors.centerIn: parent
 
-        Label {
-            id: result_label
-            font.bold: true
-            wrapMode: Text.WordWrap
-            Layout.alignment: Qt.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            Layout.preferredWidth: parent.width
+                Label {
+                    id: number_label
+                    font.bold: true
+                    lineHeight: 1.1
+                    font.pointSize: 12
+                    wrapMode: Text.WordWrap
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                }
+
+                Label {
+                    id: description_label
+                    lineHeight: 1.1
+                    font.pointSize: 10
+                    text: "Информация о статусе тестирования будет отображаться здесь"
+                    wrapMode: Text.WordWrap
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                }
+
+                Label {
+                    id: result_label
+                    lineHeight: 1.1
+                    font.pointSize: 12
+                    font.bold: true
+                    color: "#02BB3D"   // по умолчанию поставим зелёный цвет - выполнено
+                    wrapMode: Text.WordWrap
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.preferredWidth: parent.width
+                }
+            }
         }
 
         RowLayout{
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: 0.1 * parent.height
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
 
             ProgressBar{
                 id: prog_bar
                 value: 0
                 from: 0
                 to: 24
-                Material.accent: Material.Teal
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.preferredWidth: 0.6 * pageAutoTest.width
-                Layout.preferredHeight:15
 
-                background: Rectangle {           //это фоновая строка до прогрузки
+                Layout.alignment: Qt.AlignHCenter| Qt.AlignTop
+                Layout.fillWidth: true
+                Layout.preferredHeight: 15
+
+                background: Rectangle {           //это фоновая строка до первого теста
                     color: "#ffffff"
-                    opacity: 0.4
+                    opacity: 0.6
                     radius: 5
                 }
 
-                Rectangle {     //показывает,сколько уже воспроизвелось
+                Rectangle {     //показывает, сколько требований уже прошло
                     width: prog_bar.visualPosition * parent.width
                     height: 15
-                    color: "#80CBC4"
+                    color: "#53BDE9"
                     radius: 5
                 }
             }
@@ -119,24 +138,55 @@ Page {
             Label {
                 text: prog_bar.value + "/" + prog_bar.to
                 font.pointSize: 10
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                color: "#ffffff"
+                Layout.alignment: Qt.AlignRight | Qt.AlignTop
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
-                Layout.preferredWidth: 0.1 * pageAutoTest.width
                 Layout.preferredHeight: 15
             }
         }
 
-        // Добавить события для кнопки
         Button{
-            id: next_button
-            visible: false
+            id: but_confirm
+            enabled: false
             text: "Продолжить тестирование"
-            Layout.alignment: Qt.AlignHCenter
+            Layout.bottomMargin: 20
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+            background: Rectangle {
+                Gradient {
+                    id: normalGradient
+                    GradientStop { position: 0.0; color: "#57CDFF" }
+                    GradientStop { position: 1.0; color: "#1D84AF" }
+                }
+                Gradient {
+                    id: hoveredGradient
+                    GradientStop { position: 0.0; color: "#B8EAFF" }
+                    GradientStop { position: 1.0; color: "#57ADD1" }
+                }
+                Gradient {
+                    id: disabledGradient
+                    GradientStop { position: 0.0; color: "#E2EDF3" }
+                    GradientStop { position: 1.0; color: "#B0BFC4" }
+                }
+                implicitHeight: 40
+                gradient: but_confirm.hovered ? hoveredGradient :
+                          but_confirm.enabled ? normalGradient :
+                          disabledGradient
+                radius: 5
+            }
+
             onClicked: {
+                pushanimation.start()
                 pageAutoTest.visible = false
                 pageUserTest.visible = true
                 userTest();    // запускаем функцию с ручными проверками
+            }
+
+            ScaleAnimator{
+                id: pushanimation
+                target: but_confirm
+                from: 0.9
+                to: 1.0
             }
         }
     }

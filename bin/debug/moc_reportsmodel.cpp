@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ReportsModel_t {
-    QByteArrayData data[9];
-    char stringdata0[87];
+    QByteArrayData data[11];
+    char stringdata0[101];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,16 +36,18 @@ QT_MOC_LITERAL(0, 0, 12), // "ReportsModel"
 QT_MOC_LITERAL(1, 13, 12), // "endExportCSV"
 QT_MOC_LITERAL(2, 26, 0), // ""
 QT_MOC_LITERAL(3, 27, 12), // "endExportPDF"
-QT_MOC_LITERAL(4, 40, 6), // "clearR"
-QT_MOC_LITERAL(5, 47, 9), // "exportCSV"
-QT_MOC_LITERAL(6, 57, 8), // "fileName"
-QT_MOC_LITERAL(7, 66, 9), // "exportPDF"
-QT_MOC_LITERAL(8, 76, 10) // "createHTML"
+QT_MOC_LITERAL(4, 40, 8), // "sendName"
+QT_MOC_LITERAL(5, 49, 4), // "name"
+QT_MOC_LITERAL(6, 54, 6), // "clearR"
+QT_MOC_LITERAL(7, 61, 9), // "exportCSV"
+QT_MOC_LITERAL(8, 71, 8), // "fileName"
+QT_MOC_LITERAL(9, 80, 9), // "exportPDF"
+QT_MOC_LITERAL(10, 90, 10) // "createHTML"
 
     },
     "ReportsModel\0endExportCSV\0\0endExportPDF\0"
-    "clearR\0exportCSV\0fileName\0exportPDF\0"
-    "createHTML"
+    "sendName\0name\0clearR\0exportCSV\0fileName\0"
+    "exportPDF\0createHTML"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,31 +57,33 @@ static const uint qt_meta_data_ReportsModel[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       6,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   44,    2, 0x06 /* Public */,
-       3,    0,   45,    2, 0x06 /* Public */,
+       1,    0,   49,    2, 0x06 /* Public */,
+       3,    0,   50,    2, 0x06 /* Public */,
+       4,    1,   51,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   46,    2, 0x0a /* Public */,
-       5,    1,   47,    2, 0x0a /* Public */,
-       7,    1,   50,    2, 0x0a /* Public */,
-       8,    0,   53,    2, 0x0a /* Public */,
+       6,    0,   54,    2, 0x0a /* Public */,
+       7,    1,   55,    2, 0x0a /* Public */,
+       9,    1,   58,    2, 0x0a /* Public */,
+      10,    0,   61,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    5,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,    6,
-    QMetaType::Void, QMetaType::QString,    6,
+    QMetaType::Void, QMetaType::QString,    8,
+    QMetaType::Void, QMetaType::QString,    8,
     QMetaType::QString,
 
        0        // eod
@@ -93,10 +97,11 @@ void ReportsModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         switch (_id) {
         case 0: _t->endExportCSV(); break;
         case 1: _t->endExportPDF(); break;
-        case 2: _t->clearR(); break;
-        case 3: _t->exportCSV((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 4: _t->exportPDF((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 5: { QString _r = _t->createHTML();
+        case 2: _t->sendName((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 3: _t->clearR(); break;
+        case 4: _t->exportCSV((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 5: _t->exportPDF((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 6: { QString _r = _t->createHTML();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -113,6 +118,13 @@ void ReportsModel::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
             using _t = void (ReportsModel::*)();
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ReportsModel::endExportPDF)) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (ReportsModel::*)(QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&ReportsModel::sendName)) {
+                *result = 2;
                 return;
             }
         }
@@ -148,13 +160,13 @@ int ReportsModel::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 6)
+        if (_id < 7)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 6;
+        _id -= 7;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 6)
+        if (_id < 7)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 6;
+        _id -= 7;
     }
     return _id;
 }
@@ -169,6 +181,13 @@ void ReportsModel::endExportCSV()
 void ReportsModel::endExportPDF()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
+}
+
+// SIGNAL 2
+void ReportsModel::sendName(QString _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

@@ -6,11 +6,13 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
+    minimumWidth: 520
+    minimumHeight: 390
     title: qsTr("MASVS")
 
     signal checkNameProject(string name);
     signal downloadApk(string apk);
-    signal downloadSource();
+    signal downloadSource(string apk, string apk_dir, string src);
     signal writeLevel(string level);
     signal setListProject();
     signal showReport(string name);

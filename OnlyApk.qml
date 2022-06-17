@@ -10,22 +10,17 @@ Page {
         target: _select     // все эти сигналы находятся в selectproject
 
         onStartDecompile:{                   // после загрузки файла идёт его декомпиляция
-            loadanimation.visible = true
-            header.visible = false          // убираем, чтобы пользователь во время декомпиляции не мог уйти "назад"
+            popup.open()
         }
 
         onDownloadedApk:{     // после загрузки и декомпиляции файла можем перейти к выбору уровня безопасности
-            loadanimation.visible = false
+            popup.close()
             onlyApk.visible = false
             levelSec.visible = true
-            header.visible = true       // возвращаем, чтобы пользователь мог вернуться и выбрать другой тип входных данных
-            check_file.text = "Вы выбрали для анализа приложение: " + dialog.fileUrl + "\n \nВнимание!!! Файл APK был успешно декомпилирован. \nЕсли вы хотите изменить свой выбор, то ранее записанный файл и его распакованный вид будут удалены из директории данного проекта"
         }
 
         onErrorApk:{    // в случае невозможности декомпилировать файл apk
-            loadanimation.visible = false
-            header.visible = true
-            check_file.text = "Невозможно декомпилирвать выбранный файл: " + dialog.fileUrl + "\n \nПожалуйста, повторите попытку, изменив входные данные или выбрав другой тип загрузки на предыдущем шаге программы"
+            check_file.text = "Невозможно декомпилирвать выбранный файл: " + dialog.fileUrl + "\nПожалуйста, повторите попытку, изменив входные данные или выбрав другой тип загрузки на предыдущем шаге программы"
         }
     }
 
@@ -40,8 +35,8 @@ Page {
             // при нажатии "открыть" получаем url файла типа "file:///путь/имя"
             // если файл не выбран, то кнопка для продолжения процесса не появится
             if (dialog.fileUrl != ""){
-                check_file.text = "Вы выбрали для анализа приложение: " + dialog.fileUrl + "\n \nВы можете изменить своё решение, повторив попытку"
-                but_confirm.visible = true  // кнопка для перехода к следующей странице
+                check_file.text = "Выбранный файл для анализа: " + dialog.fileUrl + "\nВы можете изменить своё решение, повторив попытку"
+                but_confirm.enabled = true  // активируем кнопку для перехода к следующей странице
             }
         }
     }
@@ -60,70 +55,171 @@ Page {
 
 
     ColumnLayout{
-        width: 0.8 * parent.width
+        height: parent.height
+        width: 0.9 * parent.width
         anchors.centerIn: parent
-        spacing: 40
 
+        Label {
+            id: check_file
+            text: "На данном этапе необходимо выбрать APK файл мобильного приложения, которое вы хотите анализировать. Декомпиляция файла может занять некоторое время"
+            color: "#ffffff"
+            lineHeight: 1.1
+            Layout.topMargin: 10
+            font.pointSize: 12
+            wrapMode: Text.WordWrap
+            //font.capitalization: Font.AllUppercase
+            verticalAlignment: Text.AlignBottom
+            horizontalAlignment: Text.AlignHCenter
+            Layout.preferredWidth: parent.width
+            Layout.preferredHeight: 0.25 * parent.height
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
 
-        Button{
+        // Большая кнопка "ВЫБРАТЬ ФАЙЛ ДЛЯ АНАЛИЗА ПРИЛОЖЕНИЯ"
+        MouseArea{
             id: but_explorer
-            text: "Выбрать файл для анализа через проводник"
-            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: 0.5 * parent.width
+            Layout.preferredHeight: 0.4 * parent.height
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            // фон для карточки
+            Rectangle{
+                anchors.fill: parent
+                radius: 10
+                gradient: Gradient {
+                    GradientStop {
+                        id: grad1_all
+                        position: 0.00;
+                        color: "#99E1FF"
+                    }
+                    GradientStop {
+                        id: grad2_all
+                        position: 1.00;
+                        color: "#57ADD1"
+                    }
+                }
+            }
+
+            ColumnLayout{
+                anchors.fill: parent
+
+                // Картинка нескольких файлов
+                Image {
+                    id: image_folder
+                    Layout.maximumWidth: 256
+                    Layout.maximumHeight: 256
+                    Layout.preferredWidth: image_folder.height
+                    Layout.preferredHeight:  0.5 * parent.height
+                    Layout.topMargin: 0.05 * parent.height
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    source: "qrc:/image/image/open_folder.png"
+                }
+
+                Label {
+                    text: "ВЫБРАТЬ ФАЙЛ ДЛЯ АНАЛИЗА ПРИЛОЖЕНИЯ"
+                    font.pointSize: 10
+                    font.weight: Font.DemiBold
+                    wrapMode: Text.WordWrap
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.bottomMargin: 0.05 * parent.height
+                    Layout.preferredWidth: 0.9 * parent.width
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+            }
+
+            // изменение цвета карточки при наведении
+            hoverEnabled: true
+            onEntered: {
+                grad1_all.color = "#D7F3FE"
+                grad2_all.color = "#99E1FF"
+            }
+            onExited: {
+                grad1_all.color = "#99E1FF"
+                grad2_all.color = "#57ADD1"
+            }
             onClicked: {
                 dialog.open()       // открываем проводник
             }
         }
 
-        Label {
-            id: check_file
-            text: ""
-            wrapMode: Text.WordWrap
-            Layout.alignment: Qt.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            Layout.preferredWidth: parent.width
-        }
-
         Button{
             id: but_confirm
-            visible: false
-            text: "Подтвердить выбор файла для анализа"
-            Layout.alignment: Qt.AlignHCenter
+            enabled: false
+            text: "ПОДТВЕРДИТЬ"
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            background: Rectangle {
+                Gradient {
+                    id: normalGradient
+                    GradientStop { position: 0.0; color: "#57CDFF" }
+                    GradientStop { position: 1.0; color: "#1D84AF" }
+                }
+                Gradient {
+                    id: hoveredGradient
+                    GradientStop { position: 0.0; color: "#B8EAFF" }
+                    GradientStop { position: 1.0; color: "#57ADD1" }
+                }
+                Gradient {
+                    id: disabledGradient
+                    GradientStop { position: 0.0; color: "#E2EDF3" }
+                    GradientStop { position: 1.0; color: "#B0BFC4" }
+                }
+                implicitHeight: 40
+                gradient: but_confirm.hovered ? hoveredGradient :
+                          but_confirm.enabled ? normalGradient :
+                          disabledGradient
+                radius: 5
+            }
+
             onClicked: {
+                pushanimation.start()
                 downloadApk(dialog.fileUrl);
+            }
+
+            ScaleAnimator{
+                id: pushanimation
+                target: but_confirm
+                from: 0.9
+                to: 1.0
             }
         }
     }
 
 
-    Rectangle{
-        id: loadanimation
-        visible: false
-        color: "#80CBC4"
-        anchors.fill: parent
-        opacity: 0.9 // прозрачность
+    // всплывающее окно
+    Popup {
+        id: popup
+        width: 520
+        height: 340
+        anchors.centerIn: parent
+        opacity: 0.5
+        modal: true
+        focus: true
+        closePolicy: Popup.NoAutoClose
 
         ColumnLayout{
-            width: 0.9 * parent.width
+            width: parent.width
+            height: parent.height
             anchors.centerIn: parent
-            spacing: 40
 
-            Label {
-                text: qsTr("Идёт декомпиляция файла APK. Это может занять несколько минут. Спасибо за терпение!")
-                font.bold: true
+            Label{
+                text: qsTr("Идёт декомпиляция файла APK \nЭто может занять некоторое время \nСпасибо за терпение!")
+                lineHeight: 1.1
+                color: "#ffffff"
+                font.pointSize: 12
                 wrapMode: Text.WordWrap
-                color: "#313031"
-                font.pointSize: 14
-                Layout.alignment: Qt.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
+                Layout.preferredHeight: 0.5 * parent.height
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
             }
 
-            BusyIndicator {  //анимация загрузки
-                Layout.alignment: Qt.AlignHCenter
-                Material.accent: "#313031"
+            BusyIndicator{  //анимация загрузки
+                Layout.preferredWidth: 80
+                Layout.preferredHeight: 80
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             }
         }
-    }        
+    }
 }

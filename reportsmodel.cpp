@@ -1,4 +1,5 @@
 #include "reportsmodel.h"
+#include "selectproject.h"
 
 #include <QDebug>
 #include <QFile>
@@ -7,21 +8,21 @@
 #include <QPrinter>
 #include <QTextDocument>
 
+
 ReportObject::ReportObject(const QString &p_number,
                            const QString &p_description,
                            const QString &p_result,
-                           const QString &p_function)
+                           const QString &p_func)
     : m_number(p_number),
       m_description(p_description),
       m_result(p_result),
-      m_function(p_function)
+      m_func(p_func)
 {
 }
 
 ReportsModel::ReportsModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-
 }
 
 void ReportsModel::addItem(const ReportObject &newItem){
@@ -54,8 +55,8 @@ QVariant ReportsModel::data(const QModelIndex & index, int role) const{
     else if (role == result)
         return itemToReturn.getResult();
 
-    else if (role == function)
-        return itemToReturn.getFunction();
+    else if (role == func)
+        return itemToReturn.getFunc();
 
     return QVariant();
 }
@@ -67,13 +68,14 @@ QHash<int, QByteArray> ReportsModel::roleNames() const{
     roles[number] = "number";
     roles[description] = "description";
     roles[result] = "result";
-    roles[function] = "function";
+    roles[func] = "func";
 
     return roles;
 }
 
 
 void ReportsModel::clearR(){
+
     // благодаря beginInsertRows() и endInsertRows()
     // QML реагирует на изменения модели
 
@@ -98,8 +100,8 @@ QString ReportObject::getResult() const{
     return m_result;        // результат проверки
 }
 
-QString ReportObject::getFunction() const{
-    return m_function;      // функция проверки
+QString ReportObject::getFunc() const{
+    return m_func;      // функция проверки
 }
 
 
@@ -116,7 +118,7 @@ void ReportsModel::exportCSV(QString fileName){
         QStringList stringList; // Вспомогательный объект QSqtringList, который сформирует строку
 
         // В самом начале записываем заголовок
-        QString headers = "№;Требование;Результат;Функция\n";
+        QString headers = "MASVS;Требование;Результат;Функция\n";
         textStream << headers;
 
         for(int row = 0; row < this->rowCount(); row++){
@@ -126,7 +128,15 @@ void ReportsModel::exportCSV(QString fileName){
             // На месте нуля стоял параметр column, но тогда записывал только 1 столбец
             for (int column = 0; column < 4; column++){
                 // Записываем в stringList каждый элемент таблицы
-                stringList << this->data(this->index(row, 0), Qt::UserRole + 1 + column).toString();
+
+                // Для номера требования добавляем символ, чтобы csv не переводила в формат даты
+                if (column == 0){
+                    stringList << "№ " + this->data(this->index(row, 0), Qt::UserRole + 1 + column).toString();
+                }
+
+                else{
+                    stringList << this->data(this->index(row, 0), Qt::UserRole + 1 + column).toString();
+                }
 
                 // Удалить
                 qDebug() << stringList;
@@ -140,12 +150,34 @@ void ReportsModel::exportCSV(QString fileName){
     }
 
     // сигнал об окончании записи отчёта в файл csv
-    emit endExportCSV();
+    //emit endExportCSV();
 }
 
 
 // переводим данные из модели в формат HTML, добавляя теги
 QString ReportsModel::createHTML(){
+    // Считываем данные из файла конфигурации, чтобы указать в шапке отчёта
+    QString project_file = "C:/MASVS/" + nameProject + "/" + nameProject + ".conf";
+    QFile file(project_file);
+
+    file.open(QIODevice::ReadOnly);
+
+    QStringList strList;
+
+    while(!file.atEnd())
+    {
+        QString line = file.readLine();     // считываем новую строку
+        line = line.trimmed();              // удаляем символы переноса строки \r\n
+        strList.append(line);               // добавляем строку в список
+    }
+
+    QString create_date = strList[1].remove("Creation date: ");
+    QString edit_date = strList[2].remove("Modified date: ");
+    QString input_data = strList[3].remove("Input data: ");
+    //QString path_apk = strList[4].remove("APK path: ");
+    QString level = strList[5].remove("Security level: ");
+
+    file.close();
 
     // узнаём текущую дату, чтобы тоже указать в отчёте
     QDate now = QDate::currentDate();
@@ -178,7 +210,7 @@ QString ReportsModel::createHTML(){
                 if (data == "ВЫПОЛНЕНО"){
                     oneStr = "<td class='Col3' bgcolor='#c6ffc2'>" + data;  // зелёный цвет
                 }
-                else if (data == "НЕ ВЫПОЛНЕНО"){
+                else if (data == "НЕ_ВЫПОЛНЕНО"){
                     oneStr = "<td class='Col3' bgcolor='#ffc2c2'>" + data;  // красный цвет
                 }
                 else if (data == "НЕИЗВЕСТНО"){
@@ -199,12 +231,15 @@ QString ReportsModel::createHTML(){
         ".Col3 { width: 20%; text-align: center; vertical-align: middle;}"
         "TH { font-size: 12px; background: #314078; color: #ffffff; text-align: center; }"
         "TH, TD { padding: 10px; border: 1px solid #ffffff; }"
+        "img { width: 100%; max-width: 150px;}"
     "</style>"
 
     "<body>"
-        "<div align=right><img width='100px' height='50px' src='qrc:/image/image/owasp.png'></div>"
-        "<div align=left> Проект: Название проекта <br> Дата создания проекта: 01-01-2022 <br>"
-                            "Дата изменения проекта: 30-01-2022 <br> Тип входных данных: Только APK <br> Уровень проверки безопасности: L1 </div>"
+        "<img src='qrc:/image/image/owasp.png'>"
+        // заполняем заголовок данными из конфигурации проекта
+        "<div align=left> Проект: " + nameProject + "<br> Дата создания проекта: " + create_date +
+                        "<br> Дата изменения проекта: " + edit_date +
+                        "<br> Тип входных данных: " + input_data + "<br> Уровень проверки безопасности: " + level +
         "<h1 align=center> <br> ОТЧЁТ О СООТВЕТСТВИИ ПРИЛОЖЕНИЯ ТРЕБОВАНИЯМ СТАНДАРТА MASVS <br> </h1>"
 
         "<table>"
@@ -212,7 +247,7 @@ QString ReportsModel::createHTML(){
             + allStr + // в эту таблицу с каждой строки добавляются требования из отчёта
         "</table>"
 
-        "<div align=right> <br>Дата создания отчёта:" + dateStr + "</div>"  // текущая дата
+        "<div align=right> <br>Дата создания отчёта: " + dateStr + "</div>"  // текущая дата
     "</body> </html>";
 
     return html;
@@ -240,7 +275,7 @@ void ReportsModel::exportPDF(QString fileName){
     document.print(&printer);                           // запускаем функцию печати отчёта в файл
 
     // сделать сигнал именно по окончанию печати, а не просто в конце функции
-    emit endExportPDF();
+    //emit endExportPDF();
 }
 
 

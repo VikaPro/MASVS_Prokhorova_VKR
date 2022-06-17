@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
             &select, SLOT(downloadApk(QString)));
 
     //
-    QObject::connect(engine.rootObjects().first(), SIGNAL(downloadSource()),
-            &select, SLOT(downloadSource()));
+    QObject::connect(engine.rootObjects().first(), SIGNAL(downloadSource(QString, QString, QString)),
+            &select, SLOT(downloadSource(QString, QString, QString)));
 
     QObject::connect(engine.rootObjects().first(), SIGNAL(writeLevel(QString)),
             &select, SLOT(writeLevel(QString)));
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
             &auto_test, SLOT(autoTest(QString)));
 
     QObject::connect(engine.rootObjects().first(), SIGNAL( resultMinPermissions(QString)),
-            &auto_test, SLOT( resultMinPermissions(QString)));
+            &auto_test, SLOT(resultMinPermissions(QString)));
 
     // ещё один класс
     QObject::connect(engine.rootObjects().first(), SIGNAL(userTest()),

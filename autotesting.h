@@ -23,7 +23,7 @@ public:
     QString number;
     QString description;
     QString result;
-    QString function;
+    QString func;
 
     //QFile file;
     //QTextStream str_file;
@@ -33,7 +33,7 @@ public slots:
     // Запускаем автоматические тесты для анализа безопасности приложения
     void autoTest(QString level);
 
-    void writeReportAuto(QString number, QString description, QString result, QString function);
+    void writeReportAuto(QString number, QString description, QString result, QString func);
 
     // функция задержки отправки сигналов о завершении проверки
     void emitLater(const char *signalOrSlot);
@@ -87,7 +87,7 @@ public slots:
 
 signals:
     // сообщаем программе, что конкретный тест завершен
-    void endOneTest(QString number, QString description, QString result, QString function);
+    void endOneTest(QString number, QString description, QString result, QString func);
     // сообщаем программе, что все автоматизированные тесты пройдены
     void endAutoTest();
     // сообщаем программе, сколько будет автотестов для progressbar
