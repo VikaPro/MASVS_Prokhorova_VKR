@@ -360,7 +360,6 @@ void SelectProject::checkPercent(QString name){
         else{
             yesP++;
         }
-
         col++;
     }
 
@@ -395,7 +394,7 @@ void SelectProject::checkPercent(QString name){
 
 
     // Отправляем сигнал в qml, на страничку с выводом процентов и в список всех проектов
-    emit sendPercent(col, yesP, notP, unknowP);
+    emit sendPercent(name, col, yesP, notP, unknowP, result);
 }
 
 void SelectProject::showReport(QString name){

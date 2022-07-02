@@ -215,6 +215,7 @@ debug\qrc_qml.cpp: ..\qml.qrc \
 		..\ReadReport.qml \
 		..\TopUser.qml \
 		..\NameProject.qml \
+		..\PercentPage.qml \
 		..\SelectProject.qml \
 		..\image\owasp.png \
 		..\image\home.png \
@@ -1069,6 +1070,8 @@ debug\autotesting.obj: ..\autotesting.cpp ..\autotesting.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfileinfo.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QXmlStreamReader \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qxmlstream.h \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QDirIterator \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qdiriterator.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtQml\QQmlContext \
 		C:\Qt\5.13.0\msvc2017_64\include\QtQml\qqmlcontext.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qurl.h \

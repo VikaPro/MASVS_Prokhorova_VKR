@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     AutoTesting auto_test;
 
-    UserTesting user_test;
+    UserTesting user_test(&select);
 
     context->setContextProperty("_select", &select);
 
@@ -68,6 +68,9 @@ int main(int argc, char *argv[])
     QObject::connect(engine.rootObjects().first(), SIGNAL(showReport(QString)),
             &select, SLOT(showReport(QString)));
 
+    QObject::connect(engine.rootObjects().first(), SIGNAL(checkPercent(QString)),
+            &select, SLOT(checkPercent(QString)));
+
     // другой класс
     QObject::connect(engine.rootObjects().first(), SIGNAL(autoTest(QString)),
             &auto_test, SLOT(autoTest(QString)));
@@ -84,6 +87,9 @@ int main(int argc, char *argv[])
 
     QObject::connect(engine.rootObjects().first(), SIGNAL(incompleteChecks(int)),
             &user_test, SLOT(incompleteChecks(int)));
+
+
+
 
     return app.exec();
 }

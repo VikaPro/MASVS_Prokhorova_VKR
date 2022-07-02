@@ -1,5 +1,3 @@
-import QtQuick 2.0
-
 import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
@@ -18,13 +16,14 @@ Page {
             number_label.text = "Требование MASVS № " + number;
             description_label.text = description;
             if (result == "ВЫПОЛНЕНО"){
+                result_label.text = "ВЫПОЛНЕНО"
                 result_label.color = "#02BB3D";
+
             }
             else{
                 result_label.color = "#BB0233";
                 result_label.text = "НЕ ВЫПОЛНЕНО"
             }
-            result_label.text = result;
             prog_bar.value++;           // после каждого теста значение увеличивается
         }
 

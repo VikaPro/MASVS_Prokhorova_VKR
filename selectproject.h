@@ -78,7 +78,7 @@ signals:
     void readReport();
     // в заголовке страницы с отчётом отображаем название проекта
     void sendName(QString name);
-    void sendPercent(int col, int yesP, int notP, int unknowP);
+    void sendPercent(QString name, int col, int yesP, int notP, int unknowP, int result);
 
 protected:
     QObject *viewer;  // связь функций C++ с qml-страничками

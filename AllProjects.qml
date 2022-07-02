@@ -169,8 +169,10 @@ Page {
                     }
 
                     Label{  // проценты
+                        id: percent_label
                         text: percent
                         Layout.row: 1
+                        font.weight: Font.Bold
                         Layout.column: 0
                         font.pointSize: 10
                         Layout.bottomMargin: 5
@@ -180,6 +182,8 @@ Page {
                         Layout.preferredWidth: 0.25 * parent.width
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
+
+
 
                     Label{  // путь к исходному файлу
                         text: "Путь к APK: " + path_apk

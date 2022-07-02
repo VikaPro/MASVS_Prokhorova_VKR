@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.12
 
 Page {
     anchors.fill: parent
+    visible: true
 
     header: TopEasy{
         Item {

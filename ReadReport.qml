@@ -6,12 +6,17 @@ import QtGraphicalEffects 1.12
 import QtQuick.Controls.Material 2.3
 
 Page {
+    Item {
+        id: varName
+        property string aName: ""
+    }
 
     Connections {
         target: _select     // все эти сигналы находятся в selectproject
 
         onSendName:{
             label_header.text = "ОТЧЁТ ПО ПРОЕКТУ: " + name
+            varName.aName = name
         }
 
         /*onEndExportCSV:{
@@ -55,20 +60,6 @@ Page {
 
 
     /***Цвета для всевозможных кнопок***/
-
-    // Серый цвет для кнопки КОД
-    // тёмный серый цвет
-    Gradient {
-        id: grey_normal_Gradient
-        GradientStop { position: 0.0; color: "#ffffff" }
-        GradientStop { position: 1.0; color: "#E6E6FA" }
-    }
-    // светлый серый цвет
-    Gradient {
-        id: grey_hovered_Gradient
-        GradientStop { position: 0.0; color: "#BFBFCF" }
-        GradientStop { position: 1.0; color: "#B1B1B9" }
-    }
 
     // Зелёный цвет для результата ВЫПОЛНЕНО
     // тёмный зелёный цвет
@@ -196,6 +187,7 @@ Page {
             font.weight: Font.DemiBold
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
+            font.capitalization: Font.AllUppercase
         }
 
         // кнопка "Домой"
@@ -245,7 +237,7 @@ Page {
     ColumnLayout{
         anchors.fill: parent
 
-        // список с карточками всех требованиц
+        // список с карточками всех требований
         ListView{
             id: listView
             Layout.alignment: Qt.AlignHCenter
@@ -259,7 +251,7 @@ Page {
             //карточка с параметрами
             delegate: Rectangle{
                 width: parent.width
-                height: 75
+                height: 60
                 radius: 5
                 opacity: 0.9
 
@@ -292,10 +284,8 @@ Page {
                         Layout.column: 1
                         font.pointSize: 9
                         wrapMode: Text.WordWrap
-                        //Layout.rightMargin: 0.005 * parent.width
                         verticalAlignment: Text.AlignVCenter
                         horizontalAlignment: Text.AlignHCenter
-                        //Layout.preferredWidth: 0.6 * parent.width
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
@@ -306,48 +296,6 @@ Page {
                         text: func
                         visible: false
                     }
-
-                    Button{ // кнопка с отображением кода проверки
-                        id: but_code
-                        text: "КОД"
-                        Layout.column: 2
-                        font.pointSize: 8
-                        //Layout.rightMargin: 0.005 * parent.width
-                        Layout.preferredWidth: 0.08 * parent.width
-                        //Material.foreground: "#ffffff"  // цвет текста
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                        // код можно посмотреть только для автоматизированных проверок
-                        enabled: {
-                            if (label_text.text == "Пользователь"){
-                                but_code.enabled = false
-                            }
-                            else{
-                                but_code.enabled = true
-                            }
-                        }
-
-                        background: Rectangle {
-                            implicitHeight: 40
-                            gradient: but_code.hovered ? grey_hovered_Gradient :
-                                      grey_normal_Gradient
-                            radius: 5
-                        }
-
-
-                        onClicked: {
-                            pushanimation.start()
-                            // здесь будет передача текста в функцию и получения странички с кодом (или popup с крестиком)
-                        }
-
-                        ScaleAnimator{
-                            id: pushanimation
-                            target: but_code
-                            from: 0.9
-                            to: 1.0
-                        }
-                    }
-
 
                     Button{ // кнопка с результатом проверки
                         id: but_result
@@ -421,6 +369,7 @@ Page {
 
         RowLayout{
             Layout.fillWidth: true
+            Layout.preferredHeight: 45
             Layout.alignment: Qt.AlignHCenter
 
             Button{
@@ -428,7 +377,7 @@ Page {
                 text: "Экспорт CSV"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                 background: Rectangle {
-                    implicitHeight: 35
+                    implicitHeight: 40
                     gradient: button_1.hovered ? blue_hovered_Gradient :
                               blue_normal_Gradient
                     radius: 5
@@ -451,7 +400,7 @@ Page {
                 text: "Экспорт PDF"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
                 background: Rectangle {
-                    implicitHeight: 35
+                    implicitHeight: 40
                     gradient: button_2.hovered ? blue_hovered_Gradient :
                               blue_normal_Gradient
                     radius: 5
@@ -475,14 +424,14 @@ Page {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter
             Layout.bottomMargin: 10
-
+            Layout.preferredHeight: 45
 
             Button{
                 id: button_3
                 text: "Сводная статистика"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 background: Rectangle {
-                    implicitHeight: 35
+                    implicitHeight: 40
                     implicitWidth: button_4.width
                     gradient: button_3.hovered ? blue_hovered_Gradient :
                               blue_normal_Gradient
@@ -491,6 +440,9 @@ Page {
 
                 onClicked: {
                     pushanimation_3.start()
+                    checkPercent(varName.aName)
+                    readReport.visible = false
+                    percentPage.visible = true
                 }
 
                 ScaleAnimator{
@@ -505,7 +457,7 @@ Page {
                 text: "Продолжить тестирование"
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
                 background: Rectangle {
-                    implicitHeight: 35
+                    implicitHeight: 40
                     gradient: button_4.hovered ? blue_hovered_Gradient :
                               blue_normal_Gradient
                     radius: 5

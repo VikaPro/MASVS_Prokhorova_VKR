@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SelectProject_t {
-    QByteArrayData data[37];
-    char stringdata0[390];
+    QByteArrayData data[38];
+    char stringdata0[397];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -55,20 +55,21 @@ QT_MOC_LITERAL(19, 212, 3), // "col"
 QT_MOC_LITERAL(20, 216, 4), // "yesP"
 QT_MOC_LITERAL(21, 221, 4), // "notP"
 QT_MOC_LITERAL(22, 226, 7), // "unknowP"
-QT_MOC_LITERAL(23, 234, 16), // "checkNameProject"
-QT_MOC_LITERAL(24, 251, 14), // "nameNewProject"
-QT_MOC_LITERAL(25, 266, 11), // "downloadApk"
-QT_MOC_LITERAL(26, 278, 3), // "apk"
-QT_MOC_LITERAL(27, 282, 14), // "downloadSource"
-QT_MOC_LITERAL(28, 297, 7), // "apk_dir"
-QT_MOC_LITERAL(29, 305, 3), // "src"
-QT_MOC_LITERAL(30, 309, 12), // "decompileApk"
-QT_MOC_LITERAL(31, 322, 10), // "writeLevel"
-QT_MOC_LITERAL(32, 333, 5), // "level"
-QT_MOC_LITERAL(33, 339, 14), // "setListProject"
-QT_MOC_LITERAL(34, 354, 11), // "readProject"
-QT_MOC_LITERAL(35, 366, 12), // "checkPercent"
-QT_MOC_LITERAL(36, 379, 10) // "showReport"
+QT_MOC_LITERAL(23, 234, 6), // "result"
+QT_MOC_LITERAL(24, 241, 16), // "checkNameProject"
+QT_MOC_LITERAL(25, 258, 14), // "nameNewProject"
+QT_MOC_LITERAL(26, 273, 11), // "downloadApk"
+QT_MOC_LITERAL(27, 285, 3), // "apk"
+QT_MOC_LITERAL(28, 289, 14), // "downloadSource"
+QT_MOC_LITERAL(29, 304, 7), // "apk_dir"
+QT_MOC_LITERAL(30, 312, 3), // "src"
+QT_MOC_LITERAL(31, 316, 12), // "decompileApk"
+QT_MOC_LITERAL(32, 329, 10), // "writeLevel"
+QT_MOC_LITERAL(33, 340, 5), // "level"
+QT_MOC_LITERAL(34, 346, 14), // "setListProject"
+QT_MOC_LITERAL(35, 361, 11), // "readProject"
+QT_MOC_LITERAL(36, 373, 12), // "checkPercent"
+QT_MOC_LITERAL(37, 386, 10) // "showReport"
 
     },
     "SelectProject\0projectExists\0\0name\0"
@@ -77,7 +78,7 @@ QT_MOC_LITERAL(36, 379, 10) // "showReport"
     "selectLevel\0typeFile\0startDecompile\0"
     "endDecompile\0errorDecompile\0showProjects\0"
     "readReport\0sendName\0sendPercent\0col\0"
-    "yesP\0notP\0unknowP\0checkNameProject\0"
+    "yesP\0notP\0unknowP\0result\0checkNameProject\0"
     "nameNewProject\0downloadApk\0apk\0"
     "downloadSource\0apk_dir\0src\0decompileApk\0"
     "writeLevel\0level\0setListProject\0"
@@ -112,19 +113,19 @@ static const uint qt_meta_data_SelectProject[] = {
       15,    0,  150,    2, 0x06 /* Public */,
       16,    0,  151,    2, 0x06 /* Public */,
       17,    1,  152,    2, 0x06 /* Public */,
-      18,    4,  155,    2, 0x06 /* Public */,
+      18,    6,  155,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      23,    1,  164,    2, 0x0a /* Public */,
-      24,    1,  167,    2, 0x0a /* Public */,
-      25,    1,  170,    2, 0x0a /* Public */,
-      27,    3,  173,    2, 0x0a /* Public */,
-      30,    0,  180,    2, 0x0a /* Public */,
-      31,    1,  181,    2, 0x0a /* Public */,
-      33,    0,  184,    2, 0x0a /* Public */,
-      34,    1,  185,    2, 0x0a /* Public */,
-      35,    1,  188,    2, 0x0a /* Public */,
-      36,    1,  191,    2, 0x0a /* Public */,
+      24,    1,  168,    2, 0x0a /* Public */,
+      25,    1,  171,    2, 0x0a /* Public */,
+      26,    1,  174,    2, 0x0a /* Public */,
+      28,    3,  177,    2, 0x0a /* Public */,
+      31,    0,  184,    2, 0x0a /* Public */,
+      32,    1,  185,    2, 0x0a /* Public */,
+      34,    0,  188,    2, 0x0a /* Public */,
+      35,    1,  189,    2, 0x0a /* Public */,
+      36,    1,  192,    2, 0x0a /* Public */,
+      37,    1,  195,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -140,15 +141,15 @@ static const uint qt_meta_data_SelectProject[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    3,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   19,   20,   21,   22,
+    QMetaType::Void, QMetaType::QString, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,    3,   19,   20,   21,   22,   23,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QString,    3,
-    QMetaType::Void, QMetaType::QString,   26,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,   26,   28,   29,
+    QMetaType::Void, QMetaType::QString,   27,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString,   27,   29,   30,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QString,   32,
+    QMetaType::Void, QMetaType::QString,   33,
     QMetaType::Void,
     QMetaType::Void, QMetaType::QString,    3,
     QMetaType::Void, QMetaType::QString,    3,
@@ -176,7 +177,7 @@ void SelectProject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 10: _t->showProjects(); break;
         case 11: _t->readReport(); break;
         case 12: _t->sendName((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 13: _t->sendPercent((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 13: _t->sendPercent((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< int(*)>(_a[5])),(*reinterpret_cast< int(*)>(_a[6]))); break;
         case 14: _t->checkNameProject((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 15: _t->nameNewProject((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 16: _t->downloadApk((*reinterpret_cast< QString(*)>(_a[1]))); break;
@@ -283,7 +284,7 @@ void SelectProject::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
             }
         }
         {
-            using _t = void (SelectProject::*)(int , int , int , int );
+            using _t = void (SelectProject::*)(QString , int , int , int , int , int );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&SelectProject::sendPercent)) {
                 *result = 13;
                 return;
@@ -415,9 +416,9 @@ void SelectProject::sendName(QString _t1)
 }
 
 // SIGNAL 13
-void SelectProject::sendPercent(int _t1, int _t2, int _t3, int _t4)
+void SelectProject::sendPercent(QString _t1, int _t2, int _t3, int _t4, int _t5, int _t6)
 {
-    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))) };
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))) };
     QMetaObject::activate(this, &staticMetaObject, 13, _a);
 }
 QT_WARNING_POP

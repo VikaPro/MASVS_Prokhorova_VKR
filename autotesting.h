@@ -35,6 +35,12 @@ public slots:
 
     void writeReportAuto(QString number, QString description, QString result, QString func);
 
+    // функция для рекурсивного поиска файлов в каталоге
+    QStringList readDir(QString nameDir);
+
+    // функция для поиска файла манифеста для текущего проекта
+    QString findManifest();
+
     // функция задержки отправки сигналов о завершении проверки
     void emitLater(const char *signalOrSlot);
 

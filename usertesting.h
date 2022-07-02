@@ -15,14 +15,13 @@ class UserTesting : public QObject
     Q_OBJECT
 
 public:
-    explicit UserTesting(QObject *parent = nullptr);
-
+    explicit UserTesting(SelectProject * p_select, QObject *parent = nullptr);
 
     QStringList numbers;
     QStringList descriptions;
     //QString result;
 
-    SelectProject select;
+    SelectProject * select = nullptr;
 
     // удалить
     //ReportsModel * reports_model;

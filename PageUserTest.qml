@@ -6,6 +6,11 @@ import QtGraphicalEffects 1.12
 
 Page {
 
+    Item {
+        id: varNumber
+        property string aNumber: ""
+    }
+
     Connections {
         target: _user;  // первые два сигнала находятся в usertesting
 
@@ -15,6 +20,7 @@ Page {
         onShowUserCard:{
             prog_bar.value = index;
             number_label.text = "Требование MASVS № " + number;
+            varNumber.aNumber = number;
             description_label.text = description;
         }
         onAllTestEnd:{     // когда сформируется отчёт, то отобразится страница с ним
@@ -89,8 +95,8 @@ Page {
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
             ColumnLayout{
-                width: 0.9 * parent.width
-                height: 0.9 * parent.height
+                width: 0.95 * parent.width
+                height: 0.95 * parent.height
                 anchors.centerIn: parent
                 spacing: 0
 
@@ -117,7 +123,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 0.2 * parent.height
+                    Layout.preferredHeight: 0.25 * parent.height
                 }
 
                 // сюда три кнопки
@@ -145,7 +151,7 @@ Page {
                         // результат можно менять только у пользовательских проверок
                         onClicked: {
                             pushanimation1.start()
-                            resultUser(number_label.text, description_label.text, "ВЫПОЛНЕНО", prog_bar.value)
+                            resultUser(varNumber.aNumber, description_label.text, "ВЫПОЛНЕНО", prog_bar.value)
                         }
 
                         ScaleAnimator{
@@ -173,7 +179,7 @@ Page {
                         // результат можно менять только у пользовательских проверок
                         onClicked: {
                             pushanimation2.start()
-                            resultUser(number_label.text, description_label.text, "НЕ_ВЫПОЛНЕНО", prog_bar.value)
+                            resultUser(varNumber.aNumber, description_label.text, "НЕ_ВЫПОЛНЕНО", prog_bar.value)
                         }
 
                         ScaleAnimator{
@@ -201,7 +207,7 @@ Page {
                         // результат можно менять только у пользовательских проверок
                         onClicked: {
                             pushanimation3.start()
-                            resultUser(number_label.text, description_label.text, "НЕИЗВЕСТНО", prog_bar.value)
+                            resultUser(varNumber.aNumber, description_label.text, "НЕИЗВЕСТНО", prog_bar.value)
                         }
 
                         ScaleAnimator{
@@ -228,7 +234,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 0.5 * parent.height
+                    Layout.preferredHeight: 0.45 * parent.height
                     // Не работает почему-то именно здесь, мб из-за переноса строк
                     //elide: Text.ElideMiddle // если описание слишком длинное, то в центре будет троеточие, нужно расширить окно
                 }

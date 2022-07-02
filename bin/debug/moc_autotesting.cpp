@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_AutoTesting_t {
-    QByteArrayData data[78];
-    char stringdata0[1334];
+    QByteArrayData data[81];
+    char stringdata0[1363];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -76,40 +76,43 @@ QT_MOC_LITERAL(40, 691, 19), // "endNet6CheckLibrary"
 QT_MOC_LITERAL(41, 711, 8), // "autoTest"
 QT_MOC_LITERAL(42, 720, 5), // "level"
 QT_MOC_LITERAL(43, 726, 15), // "writeReportAuto"
-QT_MOC_LITERAL(44, 742, 9), // "emitLater"
-QT_MOC_LITERAL(45, 752, 11), // "const char*"
-QT_MOC_LITERAL(46, 764, 12), // "signalOrSlot"
-QT_MOC_LITERAL(47, 777, 18), // "data2CheckInternal"
-QT_MOC_LITERAL(48, 796, 13), // "data3CheckLog"
-QT_MOC_LITERAL(49, 810, 18), // "data5KeyboardCache"
-QT_MOC_LITERAL(50, 829, 13), // "data6CheckIPC"
-QT_MOC_LITERAL(51, 843, 19), // "data7CheckInterface"
-QT_MOC_LITERAL(52, 863, 18), // "crypto1Symmetrical"
-QT_MOC_LITERAL(53, 882, 23), // "crypto2ProvenAlgorithms"
-QT_MOC_LITERAL(54, 906, 21), // "crypto4WeakAlgorithms"
-QT_MOC_LITERAL(55, 928, 22), // "crypto6RandomGenerator"
-QT_MOC_LITERAL(56, 951, 14), // "auth1LoginPass"
-QT_MOC_LITERAL(57, 966, 15), // "auth5PassPolicy"
-QT_MOC_LITERAL(58, 982, 13), // "net1CryptoTLS"
-QT_MOC_LITERAL(59, 996, 16), // "net3VerifiesX509"
-QT_MOC_LITERAL(60, 1013, 17), // "os1MinPermissions"
-QT_MOC_LITERAL(61, 1031, 20), // "resultMinPermissions"
-QT_MOC_LITERAL(62, 1052, 12), // "os3CustomURL"
-QT_MOC_LITERAL(63, 1065, 15), // "os5DisabledJava"
-QT_MOC_LITERAL(64, 1081, 12), // "os6OnlyHTTPS"
-QT_MOC_LITERAL(65, 1094, 14), // "code1ValidCert"
-QT_MOC_LITERAL(66, 1109, 17), // "code2BuildRelease"
-QT_MOC_LITERAL(67, 1127, 17), // "code3DebugSymbols"
-QT_MOC_LITERAL(68, 1145, 18), // "code4DeveloperCode"
-QT_MOC_LITERAL(69, 1164, 18), // "code5ThirdPartyLib"
-QT_MOC_LITERAL(70, 1183, 22), // "code6ExceptionHandling"
-QT_MOC_LITERAL(71, 1206, 18), // "code9SecurityTools"
-QT_MOC_LITERAL(72, 1225, 16), // "arch9CheckUpdate"
-QT_MOC_LITERAL(73, 1242, 16), // "data8CheckBackup"
-QT_MOC_LITERAL(74, 1259, 19), // "data9BackgroundMode"
-QT_MOC_LITERAL(75, 1279, 20), // "data11InstallPincode"
-QT_MOC_LITERAL(76, 1300, 16), // "net6CheckLibrary"
-QT_MOC_LITERAL(77, 1317, 16) // "os9ScreenOverlay"
+QT_MOC_LITERAL(44, 742, 7), // "readDir"
+QT_MOC_LITERAL(45, 750, 7), // "nameDir"
+QT_MOC_LITERAL(46, 758, 12), // "findManifest"
+QT_MOC_LITERAL(47, 771, 9), // "emitLater"
+QT_MOC_LITERAL(48, 781, 11), // "const char*"
+QT_MOC_LITERAL(49, 793, 12), // "signalOrSlot"
+QT_MOC_LITERAL(50, 806, 18), // "data2CheckInternal"
+QT_MOC_LITERAL(51, 825, 13), // "data3CheckLog"
+QT_MOC_LITERAL(52, 839, 18), // "data5KeyboardCache"
+QT_MOC_LITERAL(53, 858, 13), // "data6CheckIPC"
+QT_MOC_LITERAL(54, 872, 19), // "data7CheckInterface"
+QT_MOC_LITERAL(55, 892, 18), // "crypto1Symmetrical"
+QT_MOC_LITERAL(56, 911, 23), // "crypto2ProvenAlgorithms"
+QT_MOC_LITERAL(57, 935, 21), // "crypto4WeakAlgorithms"
+QT_MOC_LITERAL(58, 957, 22), // "crypto6RandomGenerator"
+QT_MOC_LITERAL(59, 980, 14), // "auth1LoginPass"
+QT_MOC_LITERAL(60, 995, 15), // "auth5PassPolicy"
+QT_MOC_LITERAL(61, 1011, 13), // "net1CryptoTLS"
+QT_MOC_LITERAL(62, 1025, 16), // "net3VerifiesX509"
+QT_MOC_LITERAL(63, 1042, 17), // "os1MinPermissions"
+QT_MOC_LITERAL(64, 1060, 20), // "resultMinPermissions"
+QT_MOC_LITERAL(65, 1081, 12), // "os3CustomURL"
+QT_MOC_LITERAL(66, 1094, 15), // "os5DisabledJava"
+QT_MOC_LITERAL(67, 1110, 12), // "os6OnlyHTTPS"
+QT_MOC_LITERAL(68, 1123, 14), // "code1ValidCert"
+QT_MOC_LITERAL(69, 1138, 17), // "code2BuildRelease"
+QT_MOC_LITERAL(70, 1156, 17), // "code3DebugSymbols"
+QT_MOC_LITERAL(71, 1174, 18), // "code4DeveloperCode"
+QT_MOC_LITERAL(72, 1193, 18), // "code5ThirdPartyLib"
+QT_MOC_LITERAL(73, 1212, 22), // "code6ExceptionHandling"
+QT_MOC_LITERAL(74, 1235, 18), // "code9SecurityTools"
+QT_MOC_LITERAL(75, 1254, 16), // "arch9CheckUpdate"
+QT_MOC_LITERAL(76, 1271, 16), // "data8CheckBackup"
+QT_MOC_LITERAL(77, 1288, 19), // "data9BackgroundMode"
+QT_MOC_LITERAL(78, 1308, 20), // "data11InstallPincode"
+QT_MOC_LITERAL(79, 1329, 16), // "net6CheckLibrary"
+QT_MOC_LITERAL(80, 1346, 16) // "os9ScreenOverlay"
 
     },
     "AutoTesting\0endOneTest\0\0number\0"
@@ -131,7 +134,8 @@ QT_MOC_LITERAL(77, 1317, 16) // "os9ScreenOverlay"
     "endCode6ExceptionHandling\0endArch9CheckUpdate\0"
     "endData8CheckBackup\0endData9BackgroundMode\0"
     "endData11InstallPincode\0endNet6CheckLibrary\0"
-    "autoTest\0level\0writeReportAuto\0emitLater\0"
+    "autoTest\0level\0writeReportAuto\0readDir\0"
+    "nameDir\0findManifest\0emitLater\0"
     "const char*\0signalOrSlot\0data2CheckInternal\0"
     "data3CheckLog\0data5KeyboardCache\0"
     "data6CheckIPC\0data7CheckInterface\0"
@@ -157,7 +161,7 @@ static const uint qt_meta_data_AutoTesting[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      68,   14, // methods
+      70,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -165,76 +169,78 @@ static const uint qt_meta_data_AutoTesting[] = {
       34,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,  354,    2, 0x06 /* Public */,
-       7,    0,  363,    2, 0x06 /* Public */,
-       8,    1,  364,    2, 0x06 /* Public */,
-      10,    0,  367,    2, 0x06 /* Public */,
-      11,    0,  368,    2, 0x06 /* Public */,
-      12,    0,  369,    2, 0x06 /* Public */,
-      13,    0,  370,    2, 0x06 /* Public */,
-      14,    0,  371,    2, 0x06 /* Public */,
-      15,    0,  372,    2, 0x06 /* Public */,
-      16,    0,  373,    2, 0x06 /* Public */,
-      17,    0,  374,    2, 0x06 /* Public */,
-      18,    0,  375,    2, 0x06 /* Public */,
-      19,    0,  376,    2, 0x06 /* Public */,
-      20,    0,  377,    2, 0x06 /* Public */,
-      21,    0,  378,    2, 0x06 /* Public */,
-      22,    0,  379,    2, 0x06 /* Public */,
-      23,    0,  380,    2, 0x06 /* Public */,
-      24,    0,  381,    2, 0x06 /* Public */,
-      25,    0,  382,    2, 0x06 /* Public */,
-      26,    0,  383,    2, 0x06 /* Public */,
-      27,    0,  384,    2, 0x06 /* Public */,
-      28,    0,  385,    2, 0x06 /* Public */,
-      29,    0,  386,    2, 0x06 /* Public */,
-      30,    0,  387,    2, 0x06 /* Public */,
-      31,    0,  388,    2, 0x06 /* Public */,
-      32,    0,  389,    2, 0x06 /* Public */,
-      33,    0,  390,    2, 0x06 /* Public */,
-      34,    0,  391,    2, 0x06 /* Public */,
-      35,    0,  392,    2, 0x06 /* Public */,
-      36,    0,  393,    2, 0x06 /* Public */,
-      37,    0,  394,    2, 0x06 /* Public */,
-      38,    0,  395,    2, 0x06 /* Public */,
-      39,    0,  396,    2, 0x06 /* Public */,
-      40,    0,  397,    2, 0x06 /* Public */,
+       1,    4,  364,    2, 0x06 /* Public */,
+       7,    0,  373,    2, 0x06 /* Public */,
+       8,    1,  374,    2, 0x06 /* Public */,
+      10,    0,  377,    2, 0x06 /* Public */,
+      11,    0,  378,    2, 0x06 /* Public */,
+      12,    0,  379,    2, 0x06 /* Public */,
+      13,    0,  380,    2, 0x06 /* Public */,
+      14,    0,  381,    2, 0x06 /* Public */,
+      15,    0,  382,    2, 0x06 /* Public */,
+      16,    0,  383,    2, 0x06 /* Public */,
+      17,    0,  384,    2, 0x06 /* Public */,
+      18,    0,  385,    2, 0x06 /* Public */,
+      19,    0,  386,    2, 0x06 /* Public */,
+      20,    0,  387,    2, 0x06 /* Public */,
+      21,    0,  388,    2, 0x06 /* Public */,
+      22,    0,  389,    2, 0x06 /* Public */,
+      23,    0,  390,    2, 0x06 /* Public */,
+      24,    0,  391,    2, 0x06 /* Public */,
+      25,    0,  392,    2, 0x06 /* Public */,
+      26,    0,  393,    2, 0x06 /* Public */,
+      27,    0,  394,    2, 0x06 /* Public */,
+      28,    0,  395,    2, 0x06 /* Public */,
+      29,    0,  396,    2, 0x06 /* Public */,
+      30,    0,  397,    2, 0x06 /* Public */,
+      31,    0,  398,    2, 0x06 /* Public */,
+      32,    0,  399,    2, 0x06 /* Public */,
+      33,    0,  400,    2, 0x06 /* Public */,
+      34,    0,  401,    2, 0x06 /* Public */,
+      35,    0,  402,    2, 0x06 /* Public */,
+      36,    0,  403,    2, 0x06 /* Public */,
+      37,    0,  404,    2, 0x06 /* Public */,
+      38,    0,  405,    2, 0x06 /* Public */,
+      39,    0,  406,    2, 0x06 /* Public */,
+      40,    0,  407,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      41,    1,  398,    2, 0x0a /* Public */,
-      43,    4,  401,    2, 0x0a /* Public */,
-      44,    1,  410,    2, 0x0a /* Public */,
-      47,    0,  413,    2, 0x0a /* Public */,
-      48,    0,  414,    2, 0x0a /* Public */,
-      49,    0,  415,    2, 0x0a /* Public */,
-      50,    0,  416,    2, 0x0a /* Public */,
-      51,    0,  417,    2, 0x0a /* Public */,
-      52,    0,  418,    2, 0x0a /* Public */,
-      53,    0,  419,    2, 0x0a /* Public */,
-      54,    0,  420,    2, 0x0a /* Public */,
-      55,    0,  421,    2, 0x0a /* Public */,
-      56,    0,  422,    2, 0x0a /* Public */,
-      57,    0,  423,    2, 0x0a /* Public */,
-      58,    0,  424,    2, 0x0a /* Public */,
-      59,    0,  425,    2, 0x0a /* Public */,
-      60,    0,  426,    2, 0x0a /* Public */,
-      61,    1,  427,    2, 0x0a /* Public */,
-      62,    0,  430,    2, 0x0a /* Public */,
-      63,    0,  431,    2, 0x0a /* Public */,
-      64,    0,  432,    2, 0x0a /* Public */,
-      65,    0,  433,    2, 0x0a /* Public */,
-      66,    0,  434,    2, 0x0a /* Public */,
-      67,    0,  435,    2, 0x0a /* Public */,
-      68,    0,  436,    2, 0x0a /* Public */,
-      69,    0,  437,    2, 0x0a /* Public */,
-      70,    0,  438,    2, 0x0a /* Public */,
-      71,    0,  439,    2, 0x0a /* Public */,
-      72,    0,  440,    2, 0x0a /* Public */,
-      73,    0,  441,    2, 0x0a /* Public */,
-      74,    0,  442,    2, 0x0a /* Public */,
-      75,    0,  443,    2, 0x0a /* Public */,
-      76,    0,  444,    2, 0x0a /* Public */,
-      77,    0,  445,    2, 0x0a /* Public */,
+      41,    1,  408,    2, 0x0a /* Public */,
+      43,    4,  411,    2, 0x0a /* Public */,
+      44,    1,  420,    2, 0x0a /* Public */,
+      46,    0,  423,    2, 0x0a /* Public */,
+      47,    1,  424,    2, 0x0a /* Public */,
+      50,    0,  427,    2, 0x0a /* Public */,
+      51,    0,  428,    2, 0x0a /* Public */,
+      52,    0,  429,    2, 0x0a /* Public */,
+      53,    0,  430,    2, 0x0a /* Public */,
+      54,    0,  431,    2, 0x0a /* Public */,
+      55,    0,  432,    2, 0x0a /* Public */,
+      56,    0,  433,    2, 0x0a /* Public */,
+      57,    0,  434,    2, 0x0a /* Public */,
+      58,    0,  435,    2, 0x0a /* Public */,
+      59,    0,  436,    2, 0x0a /* Public */,
+      60,    0,  437,    2, 0x0a /* Public */,
+      61,    0,  438,    2, 0x0a /* Public */,
+      62,    0,  439,    2, 0x0a /* Public */,
+      63,    0,  440,    2, 0x0a /* Public */,
+      64,    1,  441,    2, 0x0a /* Public */,
+      65,    0,  444,    2, 0x0a /* Public */,
+      66,    0,  445,    2, 0x0a /* Public */,
+      67,    0,  446,    2, 0x0a /* Public */,
+      68,    0,  447,    2, 0x0a /* Public */,
+      69,    0,  448,    2, 0x0a /* Public */,
+      70,    0,  449,    2, 0x0a /* Public */,
+      71,    0,  450,    2, 0x0a /* Public */,
+      72,    0,  451,    2, 0x0a /* Public */,
+      73,    0,  452,    2, 0x0a /* Public */,
+      74,    0,  453,    2, 0x0a /* Public */,
+      75,    0,  454,    2, 0x0a /* Public */,
+      76,    0,  455,    2, 0x0a /* Public */,
+      77,    0,  456,    2, 0x0a /* Public */,
+      78,    0,  457,    2, 0x0a /* Public */,
+      79,    0,  458,    2, 0x0a /* Public */,
+      80,    0,  459,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,    3,    4,    5,    6,
@@ -275,7 +281,9 @@ static const uint qt_meta_data_AutoTesting[] = {
  // slots: parameters
     QMetaType::Void, QMetaType::QString,   42,
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,    3,    4,    5,    6,
-    QMetaType::Void, 0x80000000 | 45,   46,
+    QMetaType::QStringList, QMetaType::QString,   45,
+    QMetaType::QString,
+    QMetaType::Void, 0x80000000 | 48,   49,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -353,38 +361,42 @@ void AutoTesting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 33: _t->endNet6CheckLibrary(); break;
         case 34: _t->autoTest((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 35: _t->writeReportAuto((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4]))); break;
-        case 36: _t->emitLater((*reinterpret_cast< const char*(*)>(_a[1]))); break;
-        case 37: _t->data2CheckInternal(); break;
-        case 38: _t->data3CheckLog(); break;
-        case 39: _t->data5KeyboardCache(); break;
-        case 40: _t->data6CheckIPC(); break;
-        case 41: _t->data7CheckInterface(); break;
-        case 42: _t->crypto1Symmetrical(); break;
-        case 43: _t->crypto2ProvenAlgorithms(); break;
-        case 44: _t->crypto4WeakAlgorithms(); break;
-        case 45: _t->crypto6RandomGenerator(); break;
-        case 46: _t->auth1LoginPass(); break;
-        case 47: _t->auth5PassPolicy(); break;
-        case 48: _t->net1CryptoTLS(); break;
-        case 49: _t->net3VerifiesX509(); break;
-        case 50: _t->os1MinPermissions(); break;
-        case 51: _t->resultMinPermissions((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 52: _t->os3CustomURL(); break;
-        case 53: _t->os5DisabledJava(); break;
-        case 54: _t->os6OnlyHTTPS(); break;
-        case 55: _t->code1ValidCert(); break;
-        case 56: _t->code2BuildRelease(); break;
-        case 57: _t->code3DebugSymbols(); break;
-        case 58: _t->code4DeveloperCode(); break;
-        case 59: _t->code5ThirdPartyLib(); break;
-        case 60: _t->code6ExceptionHandling(); break;
-        case 61: _t->code9SecurityTools(); break;
-        case 62: _t->arch9CheckUpdate(); break;
-        case 63: _t->data8CheckBackup(); break;
-        case 64: _t->data9BackgroundMode(); break;
-        case 65: _t->data11InstallPincode(); break;
-        case 66: _t->net6CheckLibrary(); break;
-        case 67: _t->os9ScreenOverlay(); break;
+        case 36: { QStringList _r = _t->readDir((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QStringList*>(_a[0]) = std::move(_r); }  break;
+        case 37: { QString _r = _t->findManifest();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 38: _t->emitLater((*reinterpret_cast< const char*(*)>(_a[1]))); break;
+        case 39: _t->data2CheckInternal(); break;
+        case 40: _t->data3CheckLog(); break;
+        case 41: _t->data5KeyboardCache(); break;
+        case 42: _t->data6CheckIPC(); break;
+        case 43: _t->data7CheckInterface(); break;
+        case 44: _t->crypto1Symmetrical(); break;
+        case 45: _t->crypto2ProvenAlgorithms(); break;
+        case 46: _t->crypto4WeakAlgorithms(); break;
+        case 47: _t->crypto6RandomGenerator(); break;
+        case 48: _t->auth1LoginPass(); break;
+        case 49: _t->auth5PassPolicy(); break;
+        case 50: _t->net1CryptoTLS(); break;
+        case 51: _t->net3VerifiesX509(); break;
+        case 52: _t->os1MinPermissions(); break;
+        case 53: _t->resultMinPermissions((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 54: _t->os3CustomURL(); break;
+        case 55: _t->os5DisabledJava(); break;
+        case 56: _t->os6OnlyHTTPS(); break;
+        case 57: _t->code1ValidCert(); break;
+        case 58: _t->code2BuildRelease(); break;
+        case 59: _t->code3DebugSymbols(); break;
+        case 60: _t->code4DeveloperCode(); break;
+        case 61: _t->code5ThirdPartyLib(); break;
+        case 62: _t->code6ExceptionHandling(); break;
+        case 63: _t->code9SecurityTools(); break;
+        case 64: _t->arch9CheckUpdate(); break;
+        case 65: _t->data8CheckBackup(); break;
+        case 66: _t->data9BackgroundMode(); break;
+        case 67: _t->data11InstallPincode(); break;
+        case 68: _t->net6CheckLibrary(); break;
+        case 69: _t->os9ScreenOverlay(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -659,13 +671,13 @@ int AutoTesting::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 68)
+        if (_id < 70)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 68;
+        _id -= 70;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 68)
+        if (_id < 70)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 68;
+        _id -= 70;
     }
     return _id;
 }

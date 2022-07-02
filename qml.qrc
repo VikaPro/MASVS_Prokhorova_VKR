@@ -17,6 +17,7 @@
         <file>PermissionPage.qml</file>
         <file>TopEasy.qml</file>
         <file>TopUser.qml</file>
+        <file>PercentPage.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>image/owasp.png</file>

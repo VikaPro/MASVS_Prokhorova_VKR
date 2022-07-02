@@ -19,6 +19,7 @@ ApplicationWindow {
     signal autoTest(string level);
     signal userTest();
     signal incompleteChecks(int index);
+    signal checkPercent(string name);
 
     signal resultUser(string number, string description, string result, int index)
 
@@ -75,9 +76,13 @@ ApplicationWindow {
         id: pageUserTest
     }
 
-    // страничка с шаблоном для каждой ручной проверки, проводимой пользователем
+    // страничка с разрешениями, которые требует анализируемое приложение
     PermissionPage{
         id: permissionPage
     }
 
+    // страничка с процентом соответствия приложения стандарту MASVS
+    PercentPage{
+        id: percentPage
+    }
 }

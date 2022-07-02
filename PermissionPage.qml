@@ -79,22 +79,13 @@ Page {
                 height: 40
                 radius: 5
                 opacity: 0.9
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.00;
-                        color: "#ffffff"
+                gradient:
+                    if(level == "обычное"){
+                        color: green_hovered_Gradient
                     }
-                    GradientStop {
-                        position: 1.00;
-                        color:
-                            if(level == "обычное"){
-                                color: "#B5E0B2"
-                            }
-                            else{
-                                color: "#E0B2BA"
-                            }
+                    else{
+                        color: red_hovered_Gradient
                     }
-                }
 
                 GridLayout{
                     anchors.fill: parent

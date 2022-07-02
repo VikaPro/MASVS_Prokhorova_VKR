@@ -4,8 +4,9 @@
 #include <QDateTime>
 #include <QDir>
 #include <QXmlStreamReader>
-
+#include <QDirIterator>
 #include <QQmlContext>
+#include <QProcess>
 
 QString levelProject;
 
@@ -189,6 +190,58 @@ void AutoTesting::writeReportAuto(QString number, QString description, QString r
 
 }
 
+// Функция для получения полного списка вложенных файлов в директории приложения
+QStringList AutoTesting::readDir(QString nameDir){
+    //QString pathDir = "C:/MASVS/" + nameProject + "/" + nameProject + "_" + nameDir;
+    QString pathDir = "C:/Users/vikiz/Desktop/helloworldjni/" + nameDir; // удалить, правильный сверху
+    qDebug() << "Название директории для поиска файлов" << nameDir;
+
+    QStringList allFiles; // список со всеми файлами для проверки, в т.ч. вложенными
+
+    // таким образом задается маска
+    //QDirIterator itR(pathDir, QStringList() << "*.xml", QDir::Files, QDirIterator::Subdirectories);
+
+    QDirIterator itR(pathDir, {"*.yml", "*.xml", "*.java", "*.kt"}, QDir::Files, QDirIterator::Subdirectories);
+    while (itR.hasNext()){   // пока существуют непросмотренные файлы
+        allFiles << itR.next();
+    }
+
+    return allFiles;
+}
+
+QString AutoTesting::findManifest(){
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    // в нашем случае пользователь обязательно должен положить манифест в эту папку,
+    // либо в неё будет распаковано приложение
+    QStringList allFiles = readDir("apk");
+
+    // Переменная, в которую помещается полный путь к файлу манифеста
+    QString pathManifest = "0";
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Считываем название каждого файла в списке
+        if(allFiles[i].contains("AndroidManifest.xml")){
+            pathManifest = allFiles[i];
+            break;
+        }
+    }
+
+    // если вдруг файл не найден, то ищем его в каталоге с исходниками
+    if(pathManifest == "0"){
+        QStringList allFiles = readDir("src");
+        for(int i = 0; i < allFiles.size(); i++){
+            // Считываем название каждого файла в списке
+            if(allFiles[i].contains("AndroidManifest.xml")){
+                pathManifest = allFiles[i];
+                break;
+            }
+        }
+    }
+
+    qDebug() << "Местонахождение манифеста: " << pathManifest;
+    return pathManifest;
+}
+
 // Требование 2.2
 void AutoTesting::data2CheckInternal(){
     number = "2.2";
@@ -278,8 +331,54 @@ void AutoTesting::crypto1Symmetrical(){
 void AutoTesting::crypto2ProvenAlgorithms(){
     number = "3.2";
     description = "Приложение использует проверенные реализации криптографических алгоритмов";
-    result = "ВЫПОЛНЕНО";
     func = "crypto2ProvenAlgorithms()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("Cipher.getInstance") ||
+               line.contains("KeyGenerator.getInstance") ||
+               line.contains("KeyPairGenerator.getInstance") ||
+               line.contains("MessageDigest.getInstance") ||
+               line.contains("Signature.getInstance") ||
+               line.contains("Mac.getInstance")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    qDebug() << "Найденные параметры: " << listWarning;
+
+    // определяем, есть ли ненадёжные шифры в найденном коде
+    if(listWarning.contains("DES") ||
+       listWarning.contains("3DES") ||
+       listWarning.contains("RC2") ||
+       listWarning.contains("RC4") ||
+       listWarning.contains("BLOWFISH") ||
+       listWarning.contains("MD4") ||
+       listWarning.contains("MD5") ||
+       listWarning.contains("SHA1")){
+          result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
 
     // записываем результат теста в файл с отчётом
     writeReportAuto(number, description, result, func);
@@ -374,7 +473,10 @@ void AutoTesting::net3VerifiesX509(){
 
 // Требование 6.1
 void AutoTesting::os1MinPermissions(){
-    QFile inputFile("C:/Users/vikiz/Desktop/AndroidManifest.xml");
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
     inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream inputStream(&inputFile);
     QXmlStreamReader xml(inputStream.readAll());
@@ -479,6 +581,28 @@ void AutoTesting::code1ValidCert(){
     result = "ВЫПОЛНЕНО";
     func = "code1ValidCert()";
 
+    QString pathApk = "C:\\MASVS\\" + nameProject + "\\" + nameProject + ".apk";;
+
+    QProcess *console=new QProcess();
+    // по умолчанию инструмент использует максимально возможный уровень API,
+    // поэтому проверяются все 3 уровня подписи
+    console->start("C:\\Windows\\System32\\cmd.exe",
+                   QStringList() << "/K" << "c: && cd C:\\Program Files\\Android\\Android Studio\\jre\\bin\\ "
+                                            "&& jarsigner -verify " + pathApk);
+
+    console->waitForReadyRead();
+    qDebug() << "*****РЕЗУЛЬТАТ ПОДПИСИ********";
+    //qDebug() << console->readAllStandardOutput();
+
+    QString verified = console->readAllStandardOutput();
+
+    if(verified.contains("jar verified.")){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
     // записываем результат теста в файл с отчётом
     writeReportAuto(number, description, result, func);
 
@@ -492,7 +616,10 @@ void AutoTesting::code2BuildRelease(){
     description = "Приложение было собрано в release режиме с настройками, подходящими для релизной сборки (например, без атрибута debuggable)";
     func = "code2BuildRelease()";
 
-    QFile inputFile("C:/Users/vikiz/Desktop/AndroidManifest.xml");
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
     inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream inputStream(&inputFile);
     QXmlStreamReader xml(inputStream.readAll());
@@ -616,7 +743,10 @@ void AutoTesting::data8CheckBackup(){
     description = "Никакие чувствительные данные не попадают в бэкапы, создаваемые операционной системой";
     func = "data8CheckBackup()";
 
-    QFile inputFile("C:/Users/vikiz/Desktop/AndroidManifest.xml");
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
     inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream inputStream(&inputFile);
     QXmlStreamReader xml(inputStream.readAll());
@@ -719,9 +849,51 @@ void AutoTesting::net6CheckLibrary(){
 // Требование 6.9
 void AutoTesting::os9ScreenOverlay(){
     number = "6.9";
-    description = "Приложение защищает себя от атак наложения экрана";
-    result = "ВЫПОЛНЕНО";
+    description = "Приложение защищает себя от атак наложения экрана (overlay)";
     func = "os9ScreenOverlay()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми необходимыми строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("FLAG_WINDOW_IS_OBSCURED") ||
+               line.contains("FLAG_WINDOW_IS_PARTIALLY_OBSCURED") ||
+               line.contains("setFilterTouchesWhenObscured") ||
+               line.contains("onFilterTouchEventForSecurity") ||
+               line.contains("android:filterTouchesWhenObscured")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    qDebug() << "Найденные параметры для overlay: " << listWarning;
+
+    // если не было найдено ни одного параметра
+    if (listWarning.size() == 0){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else if(listWarning.contains("android:filterTouchesWhenObscured(false)") ||
+            listWarning.contains("setFilterTouchesWhenObscured(false)")){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
 
     // записываем результат теста в файл с отчётом
     writeReportAuto(number, description, result, func);
@@ -729,3 +901,4 @@ void AutoTesting::os9ScreenOverlay(){
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endAutoLevel2()));
 }
+

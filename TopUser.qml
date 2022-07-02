@@ -28,6 +28,7 @@ Rectangle{
         font.weight: Font.DemiBold
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
+        font.capitalization: Font.AllUppercase
     }
 
     // ОБЯЗАТЕЛЬНО СДЕЛАТЬ ПОДСКАЗКУ ДЛЯ КНОПКИ

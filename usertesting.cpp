@@ -1,11 +1,12 @@
 #include "usertesting.h"
 
-UserTesting::UserTesting(QObject *QMLObject) : viewer(QMLObject)
+UserTesting::UserTesting(SelectProject * p_select, QObject *parent)
+    : viewer(parent)
 {
     //reports_model = new ReportsModel();         // модель для отчёта по проекту
-
+    select = p_select;
     // если отчёт успешно сформирован, то говорим qml о завершении всех тестов
-    connect(&select, SIGNAL(readReport()), this, SIGNAL(allTestEnd()));
+    QObject::connect(select, SIGNAL(readReport()), this, SIGNAL(allTestEnd()));
 }
 
 void UserTesting::userTest(){
@@ -169,8 +170,8 @@ void UserTesting::resultUser(QString number, QString description, QString result
 
     // Если требование было последним, то запускаем функцию для формирования отчёта
     else{
-        select.checkPercent(nameProject); // функция из класса selectproject
-        select.showReport(nameProject); // функция из класса selectproject
+        select->checkPercent(nameProject); // функция из класса selectproject
+        select->showReport(nameProject); // функция из класса selectproject
         // Далее ждём сигнал, см. connect выше
     }
 }
@@ -205,8 +206,8 @@ void UserTesting::incompleteChecks(int index){
     qDebug() << "Все проверки записаны";
 
     // Если требование было последним, то запускаем функцию для формирования отчёта
-    select.checkPercent(nameProject); // функция из класса selectproject
-    select.showReport(nameProject); // функция из класса selectproject
+    select->checkPercent(nameProject); // функция из класса selectproject
+    select->showReport(nameProject); // функция из класса selectproject
     qDebug() << "Имя отображаемого отчёта по проекту" << nameProject;
 
     // Далее ждём сигнал, см. connect выше
