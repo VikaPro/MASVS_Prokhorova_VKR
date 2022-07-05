@@ -3,10 +3,9 @@
 UserTesting::UserTesting(SelectProject * p_select, QObject *parent)
     : viewer(parent)
 {
-    //reports_model = new ReportsModel();         // модель для отчёта по проекту
     select = p_select;
     // если отчёт успешно сформирован, то говорим qml о завершении всех тестов
-    QObject::connect(select, SIGNAL(readReport()), this, SIGNAL(allTestEnd()));
+    //QObject::connect(select, SIGNAL(readReport()), this, SLOT(sortReport()));
 }
 
 void UserTesting::userTest(){
@@ -168,11 +167,9 @@ void UserTesting::resultUser(QString number, QString description, QString result
         oneCard(index+1);
     }
 
-    // Если требование было последним, то запускаем функцию для формирования отчёта
+    // Если требование было последним, то запускаем функцию для сортировки отчёта
     else{
-        select->checkPercent(nameProject); // функция из класса selectproject
-        select->showReport(nameProject); // функция из класса selectproject
-        // Далее ждём сигнал, см. connect выше
+        sortReport();
     }
 }
 
@@ -205,12 +202,52 @@ void UserTesting::incompleteChecks(int index){
 
     qDebug() << "Все проверки записаны";
 
-    // Если требование было последним, то запускаем функцию для формирования отчёта
-    select->checkPercent(nameProject); // функция из класса selectproject
-    select->showReport(nameProject); // функция из класса selectproject
-    qDebug() << "Имя отображаемого отчёта по проекту" << nameProject;
-
-    // Далее ждём сигнал, см. connect выше
-
+    // Если требование было последним, то запускаем функцию для сортировки отчёта
+    sortReport();
 }
 
+void UserTesting::sortReport(){
+
+    // Сортируем файл отчёта с именем «название_проекта.report»
+    QFile file_report("C:/MASVS/" + nameProject + "/" + nameProject + ".report");
+    file_report.open(QIODevice::ReadWrite | QIODevice::Text);
+    QTextStream stream(&file_report);
+    stream.setCodec("UTF-8");
+
+    // Записываем в файл проекта, какой стиль входных данных был выбран
+    // Если ранее стоял другой тип, значит перезаписываем это значение на текущее
+    QStringList all_number = {"1.1 ***", "1.2 ***", "1.3 ***", "1.4 ***", "1.5 ***", "1.6 ***", "1.7 ***", "1.8 ***", "1.9 ***", "1.10 ***", "1.11 ***", "1.12 ***",
+                             "2.1 ***", "2.2 ***", "2.3 ***", "2.4 ***", "2.5 ***", "2.6 ***", "2.7 ***", "2.8 ***", "2.9 ***", "2.10 ***", "2.11 ***", "2.12 ***", "2.13 ***", "2.14 ***", "2.15 ***",
+                             "3.1 ***", "3.2 ***", "3.3 ***", "3.4 ***", "3.5 ***", "3.6 ***",
+                             "4.1 ***", "4.2 ***", "4.3 ***", "4.4 ***", "4.5 ***", "4.6 ***", "4.7 ***", "4.8 ***", "4.9 ***", "4.10 ***", "4.11 ***", "4.12 ***",
+                             "5.1 ***", "5.2 ***", "5.3 ***", "5.4 ***", "5.5 ***", "5.6 ***",
+                             "6.1 ***", "6.2 ***", "6.3 ***", "6.4 ***", "6.5 ***", "6.6 ***", "6.7 ***", "6.8 ***", "6.9 ***", "6.10 ***", "6.11 ***",
+                             "7.1 ***", "7.2 ***", "7.3 ***", "7.4 ***", "7.5 ***", "7.6 ***", "7.7 ***", "7.8 ***", "7.9 ***",
+                             "8.1 ***", "8.2 ***", "8.3 ***", "8.4 ***", "8.5 ***", "8.6 ***", "8.7 ***", "8.8 ***", "8.9 ***", "8.10 ***", "8.11 ***", "8.12 ***", "8.13 ***"};
+
+    // Сначала считываем все строки из отчёта в QStringList
+    QStringList strAll;
+    while(!stream.atEnd()){
+        strAll << stream.readLine();
+    }
+
+    QString newList;
+    // цикл по количеству всех требований
+    for(int i = 0; i < all_number.size(); i++){
+        // цикл по количеству протестированных требований
+        for(int a = 0; a < strAll.size(); a++){
+            if(strAll[a].contains(all_number[i])){
+                newList.append(strAll[a] + "\n");
+                break;
+            }
+        }
+    }
+
+    file_report.resize(0);
+    stream << newList;
+    file_report.close();
+
+    // после сортировки отправляем сигнал, что можно посчитат проценты и выводить отчёт
+    select->checkPercent(nameProject); // функция из класса selectproject
+    select->showReport(nameProject); // функция из класса selectproject
+}

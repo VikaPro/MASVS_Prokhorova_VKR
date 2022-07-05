@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<RCC>
+    <qresource prefix="/">
+        <file alias="qtquickcontrols2.conf">../qtquickcontrols2.conf</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file alias="image/owasp.png">../image/owasp.png</file>
+        <file alias="image/list_project.png">../image/list_project.png</file>
+        <file alias="image/new_project.png">../image/new_project.png</file>
+        <file alias="image/end.png">../image/end.png</file>
+        <file alias="image/end_light.png">../image/end_light.png</file>
+        <file alias="image/home.png">../image/home.png</file>
+        <file alias="image/home_light.png">../image/home_light.png</file>
+        <file alias="image/undo.png">../image/undo.png</file>
+        <file alias="image/undo_light.png">../image/undo_light.png</file>
+        <file alias="image/apk_src.png">../image/apk_src.png</file>
+        <file alias="image/only_apk.png">../image/only_apk.png</file>
+        <file alias="image/open_folder.png">../image/open_folder.png</file>
+        <file alias="image/dir_code.png">../image/dir_code.png</file>
+        <file alias="image/dir_project.png">../image/dir_project.png</file>
+        <file alias="image/file_apk.png">../image/file_apk.png</file>
+    </qresource>
+</RCC>

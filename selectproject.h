@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QTimer>
+#include <QProcess>
 
 #include "projectsmodel.h"
 #include "reportsmodel.h"
@@ -20,12 +21,8 @@ public:
 
     ProjectsModel * projects_model;
     ReportsModel * reports_model;
+    QProcess *console;
 
-    // Если декомпиляция будет долгой, то вернём этот метод
-    // переменные необходимы для возможности удаления файлов из проекта
-    // если пользователь передумает с выбором входных данных
-    //QString new_apk;
-    //QString old_apk;
 
 public slots:
     // Проверяем, что проекта с таким именем не существует
@@ -48,7 +45,14 @@ public slots:
     void checkPercent(QString name);
     // Выводим отчёт по существующему проекту
     void showReport(QString name);
-
+    // перезаписываем значение требования в отчёт после изменения
+    void changeRes(QString nameProd, QString numberReq, QString nameReq, QString resultReq);
+    // Функция для изменения результата ручной проверки
+    void changeResult(QString nameProd, QString numberReq, QString resultReq);
+    // узнаем результат декомпиляции
+    void proc_finish();    
+    // функция рекурсовного копирования
+    void copyDirectoryFiles(QString src, QString dst);
 
 signals:
     // просим пользователя изменить имя, т.к. проект с таким именем уже существует
@@ -79,6 +83,10 @@ signals:
     // в заголовке страницы с отчётом отображаем название проекта
     void sendName(QString name);
     void sendPercent(QString name, int col, int yesP, int notP, int unknowP, int result);
+    // показываем пользователю то требование, которое он выбрал
+    void showOneTest(QString nameProd, QString numberReq, QString nameReq, QString resultReq);
+
+
 
 protected:
     QObject *viewer;  // связь функций C++ с qml-страничками

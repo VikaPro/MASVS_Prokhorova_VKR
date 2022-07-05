@@ -8,7 +8,7 @@ ApplicationWindow {
     height: 480
     minimumWidth: 520
     minimumHeight: 390
-    title: qsTr("MASVS")
+    title: qsTr("MASVS Security Check")
 
     signal checkNameProject(string name);
     signal downloadApk(string apk);
@@ -24,6 +24,10 @@ ApplicationWindow {
     signal resultUser(string number, string description, string result, int index)
 
     signal resultMinPermissions(string result);
+
+    signal changeResult(string nameProd, string numberReq, string resultReq)
+
+    signal changeRes(string nameProd, string numberReq, string nameReq, string resultReq)
 
     // главгная страница с выбором проекта (новый или существующий)
     SelectProject{
@@ -84,5 +88,10 @@ ApplicationWindow {
     // страничка с процентом соответствия приложения стандарту MASVS
     PercentPage{
         id: percentPage
+    }
+
+    // страничка с одной проверкой для изменения результата
+    OneUserTest{
+        id: oneUserTest
     }
 }

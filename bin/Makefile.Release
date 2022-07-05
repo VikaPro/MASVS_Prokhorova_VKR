@@ -19,13 +19,13 @@ CXXFLAGS      = -nologo -Zc:wchar_t -FS -Zc:rvalueCast -Zc:inline -Zc:strictStri
 INCPATH       = -I..\..\MASVS_Test -I. -IC:\Qt\5.13.0\msvc2017_64\include -IC:\Qt\5.13.0\msvc2017_64\include\QtQuick -IC:\Qt\5.13.0\msvc2017_64\include\QtPrintSupport -IC:\Qt\5.13.0\msvc2017_64\include\QtWidgets -IC:\Qt\5.13.0\msvc2017_64\include\QtGui -IC:\Qt\5.13.0\msvc2017_64\include\QtANGLE -IC:\Qt\5.13.0\msvc2017_64\include\QtQml -IC:\Qt\5.13.0\msvc2017_64\include\QtNetwork -IC:\Qt\5.13.0\msvc2017_64\include\QtCore -Irelease -IC:\VulkanSDK\1.0.51.0\include -IC:\Qt\5.13.0\msvc2017_64\mkspecs\win32-msvc 
 LINKER        = link
 LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'"
-LIBS          = /LIBPATH:C:\Qt\5.13.0\msvc2017_64\lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Quick.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5PrintSupport.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Qml.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Network.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Core.lib  C:\Qt\5.13.0\msvc2017_64\lib\qtmain.lib /LIBPATH:C:\openssl\lib /LIBPATH:C:\Utils\my_sql\mysql-5.6.11-winx64\lib /LIBPATH:C:\Utils\postgresql\pgsql\lib shell32.lib /LIBPATH:C:\Qt\5.13.0\msvc2017_64\lib Qt5Core.lib 
+LIBS          = /LIBPATH:C:\Qt\5.13.0\msvc2017_64\lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Quick.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5PrintSupport.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Widgets.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Gui.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Qml.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Network.lib C:\Qt\5.13.0\msvc2017_64\lib\Qt5Core.lib release\myapp.res  C:\Qt\5.13.0\msvc2017_64\lib\qtmain.lib /LIBPATH:C:\openssl\lib /LIBPATH:C:\Utils\my_sql\mysql-5.6.11-winx64\lib /LIBPATH:C:\Utils\postgresql\pgsql\lib shell32.lib /LIBPATH:C:\Qt\5.13.0\msvc2017_64\lib Qt5Core.lib 
 QMAKE         = C:\Qt\5.13.0\msvc2017_64\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = release\myapp.res
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -161,11 +161,14 @@ DESTDIR_TARGET = release\MASVS_Test.exe
 first: all
 all: Makefile.Release  release\MASVS_Test.exe
 
-release\MASVS_Test.exe:  $(OBJECTS) 
+release\MASVS_Test.exe:  $(OBJECTS) release\myapp.res
 	$(LINKER) $(LFLAGS) /MANIFEST:embed /OUT:$(DESTDIR_TARGET) @<<
 release\main.obj release\selectproject.obj release\projectsmodel.obj release\autotesting.obj release\permissionmodel.obj release\reportsmodel.obj release\usertesting.obj release\qrc_qml.obj release\moc_selectproject.obj release\moc_projectsmodel.obj release\moc_autotesting.obj release\moc_permissionmodel.obj release\moc_reportsmodel.obj release\moc_usertesting.obj
 $(LIBS)
 <<
+
+release\myapp.res: ..\myapp.rc
+	rc /NOLOGO $(DEFINES) -fo release\myapp.res ..\myapp.rc
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Release ..\MASVS_Test.pro -spec win32-msvc "CONFIG+=debug" "CONFIG+=qml_debug"
@@ -178,6 +181,7 @@ dist:
 clean: compiler_clean 
 	-$(DEL_FILE) release\main.obj release\selectproject.obj release\projectsmodel.obj release\autotesting.obj release\permissionmodel.obj release\reportsmodel.obj release\usertesting.obj release\qrc_qml.obj release\moc_selectproject.obj release\moc_projectsmodel.obj release\moc_autotesting.obj release\moc_permissionmodel.obj release\moc_reportsmodel.obj release\moc_usertesting.obj
 	-$(DEL_FILE) release\MASVS_Test.exp
+	-$(DEL_FILE) release\myapp.res
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash release\MASVS_Test.lib
@@ -204,6 +208,7 @@ release\qrc_qml.cpp: ..\qml.qrc \
 		..\Top.qml \
 		..\PageAutoTest.qml \
 		..\qtquickcontrols2.conf \
+		..\OneUserTest.qml \
 		..\Download.qml \
 		..\AllProjects.qml \
 		..\PermissionPage.qml \
@@ -231,7 +236,9 @@ release\qrc_qml.cpp: ..\qml.qrc \
 		..\image\apk_src.png \
 		..\image\only_apk.png \
 		..\image\file_apk.png \
-		..\image\end.png
+		..\image\end.png \
+		..\tools\apkx-libs.jar \
+		..\tools\apkx.py
 	C:\Qt\5.13.0\msvc2017_64\bin\rcc.exe -name qml ..\qml.qrc -o release\qrc_qml.cpp
 
 compiler_moc_predefs_make_all: release\moc_predefs.h
@@ -910,7 +917,9 @@ release\selectproject.obj: ..\selectproject.cpp ..\selectproject.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfiledevice.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QDir \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qdir.h \
-		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfileinfo.h
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qfileinfo.h \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QProcess \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qprocess.h
 
 release\projectsmodel.obj: ..\projectsmodel.cpp ..\projectsmodel.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QObject \
@@ -1080,7 +1089,9 @@ release\autotesting.obj: ..\autotesting.cpp ..\autotesting.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtQml\qtqmlglobal.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtQml\qtqml-config.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtNetwork\qtnetworkglobal.h \
-		C:\Qt\5.13.0\msvc2017_64\include\QtNetwork\qtnetwork-config.h
+		C:\Qt\5.13.0\msvc2017_64\include\QtNetwork\qtnetwork-config.h \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QProcess \
+		C:\Qt\5.13.0\msvc2017_64\include\QtCore\qprocess.h
 
 release\permissionmodel.obj: ..\permissionmodel.cpp ..\permissionmodel.h \
 		C:\Qt\5.13.0\msvc2017_64\include\QtCore\QObject \

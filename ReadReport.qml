@@ -352,7 +352,7 @@ Page {
                         onClicked: {
                             if (label_text.text == "Пользователь"){
                                 pushanimation2.start()
-                                // здесь будет передача текста в функцию и получения странички с кодом (или popup с крестиком)
+                                changeResult(varName.aName, label_number.text, result)
                             }
                         }
 

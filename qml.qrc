@@ -18,6 +18,7 @@
         <file>TopEasy.qml</file>
         <file>TopUser.qml</file>
         <file>PercentPage.qml</file>
+        <file>OneUserTest.qml</file>
     </qresource>
     <qresource prefix="/image">
         <file>image/owasp.png</file>
@@ -35,5 +36,9 @@
         <file>image/dir_code.png</file>
         <file>image/dir_project.png</file>
         <file>image/file_apk.png</file>
+    </qresource>
+    <qresource prefix="/tools">
+        <file>tools/apkx.py</file>
+        <file>tools/apkx-libs.jar</file>
     </qresource>
 </RCC>

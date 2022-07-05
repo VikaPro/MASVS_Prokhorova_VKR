@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_UserTesting_t {
-    QByteArrayData data[14];
-    char stringdata0[130];
+    QByteArrayData data[15];
+    char stringdata0[141];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,13 +45,14 @@ QT_MOC_LITERAL(9, 78, 8), // "userTest"
 QT_MOC_LITERAL(10, 87, 7), // "oneCard"
 QT_MOC_LITERAL(11, 95, 10), // "resultUser"
 QT_MOC_LITERAL(12, 106, 6), // "result"
-QT_MOC_LITERAL(13, 113, 16) // "incompleteChecks"
+QT_MOC_LITERAL(13, 113, 16), // "incompleteChecks"
+QT_MOC_LITERAL(14, 130, 10) // "sortReport"
 
     },
     "UserTesting\0showUserCard\0\0number\0"
     "description\0index\0colUserTest\0col\0"
     "allTestEnd\0userTest\0oneCard\0resultUser\0"
-    "result\0incompleteChecks"
+    "result\0incompleteChecks\0sortReport"
 };
 #undef QT_MOC_LITERAL
 
@@ -61,7 +62,7 @@ static const uint qt_meta_data_UserTesting[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -69,15 +70,16 @@ static const uint qt_meta_data_UserTesting[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   49,    2, 0x06 /* Public */,
-       6,    1,   56,    2, 0x06 /* Public */,
-       8,    0,   59,    2, 0x06 /* Public */,
+       1,    3,   54,    2, 0x06 /* Public */,
+       6,    1,   61,    2, 0x06 /* Public */,
+       8,    0,   64,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    0,   60,    2, 0x0a /* Public */,
-      10,    1,   61,    2, 0x0a /* Public */,
-      11,    4,   64,    2, 0x0a /* Public */,
-      13,    1,   73,    2, 0x0a /* Public */,
+       9,    0,   65,    2, 0x0a /* Public */,
+      10,    1,   66,    2, 0x0a /* Public */,
+      11,    4,   69,    2, 0x0a /* Public */,
+      13,    1,   78,    2, 0x0a /* Public */,
+      14,    0,   81,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,    5,
@@ -89,6 +91,7 @@ static const uint qt_meta_data_UserTesting[] = {
     QMetaType::Void, QMetaType::Int,    5,
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::Int,    3,    4,   12,    5,
     QMetaType::Void, QMetaType::Int,    5,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -106,6 +109,7 @@ void UserTesting::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         case 4: _t->oneCard((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 5: _t->resultUser((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
         case 6: _t->incompleteChecks((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->sortReport(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -163,13 +167,13 @@ int UserTesting::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 8;
     }
     return _id;
 }

@@ -14,17 +14,6 @@ AutoTesting::AutoTesting(QObject *QMLObject) : viewer(QMLObject)
 {
     permission_model = new PermissionModel();       // модель для разрешений
 
-    // Файл, в котором будет храниться отчёт о тестировании
-    /*QString path = "C:/MASVS/" + nameProject + "/" + nameProject + "_report.txt";
-    QFile file("C:/MASVS/" + nameProject + "/" + nameProject + "_report.txt");
-    file.open(QIODevice::WriteOnly | QIODevice::Text
-              | QIODevice::Append );
-
-    QTextStream str_file(&file);
-    str_file.setCodec("UTF-8");*/
-
-    // закроем мы файл в самом конце тестирования
-
     // Вызов функций для 1 уровня тестирования:
     // Требование 2.3
     connect(this, SIGNAL(endData2CheckInternal()), this, SLOT(data3CheckLog()));
@@ -192,8 +181,7 @@ void AutoTesting::writeReportAuto(QString number, QString description, QString r
 
 // Функция для получения полного списка вложенных файлов в директории приложения
 QStringList AutoTesting::readDir(QString nameDir){
-    //QString pathDir = "C:/MASVS/" + nameProject + "/" + nameProject + "_" + nameDir;
-    QString pathDir = "C:/Users/vikiz/Desktop/helloworldjni/" + nameDir; // удалить, правильный сверху
+    QString pathDir = "C:/MASVS/" + nameProject + "/" + nameProject + "_" + nameDir;
     qDebug() << "Название директории для поиска файлов" << nameDir;
 
     QStringList allFiles; // список со всеми файлами для проверки, в т.ч. вложенными
@@ -242,235 +230,6 @@ QString AutoTesting::findManifest(){
     return pathManifest;
 }
 
-// Требование 2.2
-void AutoTesting::data2CheckInternal(){
-    number = "2.2";
-    description = "Чувствительные данные хранятся только во внутреннем хранилище приложения, либо в системном хранилище авторизационных данных";
-    result = "ВЫПОЛНЕНО";
-    func = "data2CheckInternal()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData2CheckInternal()));
-}
-
-// Требование 2.3
-void AutoTesting::data3CheckLog(){
-    number = "2.3";
-    description = "Чувствительные данные не попадают в логи приложения";
-    result = "ВЫПОЛНЕНО";
-    func = "data3CheckLog()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData3CheckLog()));
-}
-
-
-// Требование 2.5
-void AutoTesting::data5KeyboardCache(){
-    number = "2.5";
-    description = "Кэш клавиатуры выключен для полей ввода чувствительных данных";
-    result = "ВЫПОЛНЕНО";
-    func = "data5KeyboardCache()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData5KeyboardCache()));
-}
-
-// Требование 2.6
-void AutoTesting::data6CheckIPC(){
-    number = "2.6";
-    description = "Чувствительные данные недоступны для механизмов межпроцессного взаимодействия (IPC)";
-    result = "ВЫПОЛНЕНО";
-    func = "data6CheckIPC()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData6CheckIPC()));
-}
-
-// Требование 2.7
-void AutoTesting::data7CheckInterface(){
-    number = "2.7";
-    description = "Никакие чувствительные данные, такие как пароли или пин-коды, не видны через пользовательский интерфейс";
-    result = "ВЫПОЛНЕНО";
-    func = "data7CheckInterface()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData7CheckInterface()));
-}
-
-// Требование 3.1
-void AutoTesting::crypto1Symmetrical(){
-    number = "3.1";
-    description = "Приложение не использует симметричное шифрование с жестко закодированными ключами в качестве единственного метода шифрования";
-    result = "ВЫПОЛНЕНО";
-    func = "crypto1Symmetrical()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endCrypto1Symmetrical()));
-}
-
-// Требование 3.2
-void AutoTesting::crypto2ProvenAlgorithms(){
-    number = "3.2";
-    description = "Приложение использует проверенные реализации криптографических алгоритмов";
-    func = "crypto2ProvenAlgorithms()";
-
-    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
-    QStringList allFiles = readDir("src");
-
-    // список со всеми "опасными" строками кода, которые подошли под фильтр
-    QStringList listWarning;
-
-    for(int i = 0; i < allFiles.size(); i++){
-        // Открываем каждый файл для считывания по строкам
-        QFile file(allFiles[i]);
-        file.open(QIODevice::ReadOnly);
-
-        while(!file.atEnd())
-        {
-            QString line = file.readLine();
-
-            // если ключевое слово найдено, то записываем всю найденную строку
-            // в список, который подом будем проверять подробнее
-            if(line.contains("Cipher.getInstance") ||
-               line.contains("KeyGenerator.getInstance") ||
-               line.contains("KeyPairGenerator.getInstance") ||
-               line.contains("MessageDigest.getInstance") ||
-               line.contains("Signature.getInstance") ||
-               line.contains("Mac.getInstance")){
-                    listWarning << line;
-            }
-        }
-        // обязательно закрываем каждый файл
-        file.close();
-    }
-
-    qDebug() << "Найденные параметры: " << listWarning;
-
-    // определяем, есть ли ненадёжные шифры в найденном коде
-    if(listWarning.contains("DES") ||
-       listWarning.contains("3DES") ||
-       listWarning.contains("RC2") ||
-       listWarning.contains("RC4") ||
-       listWarning.contains("BLOWFISH") ||
-       listWarning.contains("MD4") ||
-       listWarning.contains("MD5") ||
-       listWarning.contains("SHA1")){
-          result = "НЕ_ВЫПОЛНЕНО";
-    }
-    else{
-        result = "ВЫПОЛНЕНО";
-    }
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endCrypto2ProvenAlgorithms()));
-}
-
-// Требование 3.4
-void AutoTesting::crypto4WeakAlgorithms(){
-    number = "3.4";
-    description = "Приложение не использует устаревшие и слабые криптографические протоколы и алгоритмы";
-    result = "ВЫПОЛНЕНО";
-    func = "crypto4WeakAlgorithms()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endCrypto4WeakAlgorithms()));
-}
-
-// Требование 3.6
-void AutoTesting::crypto6RandomGenerator(){
-    number = "3.6";
-    description = "Все случайные значения генерируются с использованием безопасного генератора случайных чисел";
-    result = "ВЫПОЛНЕНО";
-    func = "crypto6RandomGenerator()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endCrypto6RandomGenerator()));
-}
-
-// Требование 4.1
-void AutoTesting::auth1LoginPass(){
-    number = "4.1";
-    description = "Если приложение предоставляет пользователям доступ к удалённым сервисам, на бэкенде должна быть реализована аутентификация, например, по логину и паролю";
-    result = "ВЫПОЛНЕНО";
-    func = "auth1LoginPass()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endAuth1LoginPass()));
-}
-
-// Требование 4.5
-void AutoTesting::auth5PassPolicy(){
-    number = "4.5";
-    description = "На сервере реализована парольная политика";
-    result = "ВЫПОЛНЕНО";
-    func = "auth5PassPolicy()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endAuth5PassPolicy()));
-}
-
-// Требование 5.1
-void AutoTesting::net1CryptoTLS(){
-    number = "5.1";
-    description = "Данные, передаваемые по сети, шифруются с использованием TLS. Безопасный канал используется для всех сервисов приложения";
-    result = "ВЫПОЛНЕНО";
-    func = "net1CryptoTLS()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endNet1CryptoTLS()));
-}
-
-// Требование 5.3
-void AutoTesting::net3VerifiesX509(){
-    number = "5.3";
-    description = "Приложение верифицирует X.509 сертификаты сервера во время установления защищённого канала. Принимаются только сертификаты, подписанные доверенным удостоверяющим центром (CA)";
-    result = "ВЫПОЛНЕНО";
-    func = "net3VerifiesX509()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endNet3VerifiesX509()));
-}
-
 // Требование 6.1
 void AutoTesting::os1MinPermissions(){
     // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
@@ -516,7 +275,6 @@ void AutoTesting::os1MinPermissions(){
 
     // посылаем сигнал в графику, чтобы пользователь выбрал ответ
     emit checkPermission();
-
 }
 
 void AutoTesting::resultMinPermissions(QString result){
@@ -532,53 +290,66 @@ void AutoTesting::resultMinPermissions(QString result){
     emitLater(SIGNAL(endOs1MinPermissions()));
 }
 
-// Требование 6.3
-void AutoTesting::os3CustomURL(){
-    number = "6.3";
-    description = "Приложение не экспортирует чувствительные данные через кастомные URL-схемы, если эти механизмы не защищены должным образом";
-    result = "ВЫПОЛНЕНО";
-    func = "os3CustomURL()";
+// Требование 6.9
+void AutoTesting::os9ScreenOverlay(){
+    number = "6.9";
+    description = "Приложение защищает себя от атак наложения экрана (overlay)";
+    func = "os9ScreenOverlay()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми необходимыми строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("FLAG_WINDOW_IS_OBSCURED") ||
+               line.contains("FLAG_WINDOW_IS_PARTIALLY_OBSCURED") ||
+               line.contains("setFilterTouchesWhenObscured") ||
+               line.contains("onFilterTouchEventForSecurity") ||
+               line.contains("android:filterTouchesWhenObscured")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    qDebug() << "Найденные параметры для overlay: " << listWarning;
+
+    // если не было найдено ни одного параметра
+    if (listWarning.size() == 0){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else if(listWarning.contains("android:filterTouchesWhenObscured(false)") ||
+            listWarning.contains("setFilterTouchesWhenObscured(false)")){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
 
     // записываем результат теста в файл с отчётом
     writeReportAuto(number, description, result, func);
 
     // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endOs3CustomURL()));
-}
-
-// Требование 6.5
-void AutoTesting::os5DisabledJava(){
-    number = "6.5";
-    description = "JavaScript отключен в компонентах WebView, если в нём нет необходимости";
-    result = "ВЫПОЛНЕНО";
-    func = "os5DisabledJava()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endOs5DisabledJava()));
-}
-
-// Требование 6.6
-void AutoTesting::os6OnlyHTTPS(){
-    number = "6.6";
-    description = "WebViews сконфигурирован с поддержкой минимального набора протоколов (в идеале только https). Поддержка потенциально опасных URL-схем (таких как: file, tel и app-id) отключена";
-    result = "ВЫПОЛНЕНО";
-    func = "os6OnlyHTTPS()";
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endOs6OnlyHTTPS()));
+    emitLater(SIGNAL(endAutoLevel2()));
 }
 
 // Требование 7.1
 void AutoTesting::code1ValidCert(){
     number = "7.1";
     description = "Приложение подписано валидным сертификатом";
-    result = "ВЫПОЛНЕНО";
     func = "code1ValidCert()";
 
     QString pathApk = "C:\\MASVS\\" + nameProject + "\\" + nameProject + ".apk";;
@@ -649,6 +420,751 @@ void AutoTesting::code2BuildRelease(){
     // Отправляем сигнал о завершении проверки с задержкой
     emitLater(SIGNAL(endCode2BuildRelease()));
 }
+
+// Требование 2.8
+void AutoTesting::data8CheckBackup(){
+    number = "2.8";
+    description = "Никакие чувствительные данные не попадают в бэкапы, создаваемые операционной системой";
+    func = "data8CheckBackup()";
+
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
+    inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream inputStream(&inputFile);
+    QXmlStreamReader xml(inputStream.readAll());
+
+    qDebug() << "*** Разрешены ли резервные копии ***";
+
+    while (!xml.atEnd()) {
+        if (xml.isStartElement() && xml.name() == "application") {
+            QStringRef backup = xml.attributes().value("android:allowBackup");
+            QString str_backup = backup.toString();
+            qDebug() << "Обычный Backup: " << str_backup;
+            QString backup_result;
+
+            QStringRef agent_backup = xml.attributes().value("android:fullBackupOnly");
+            QString str_agent_backup = agent_backup.toString();
+            qDebug() << "Агентный Backup: " << str_agent_backup;
+            QString agent_result;
+
+            // сначала проверяем первый параметр
+            if (str_backup == "false"){
+                backup_result = "ВЫПОЛНЕНО";
+            }
+            // если стоит true или вообще ничего (потому что по умолчанию включено)
+            else{
+                backup_result = "НЕ_ВЫПОЛНЕНО";
+            }
+
+            // затем проверяем второй параметр
+            if (str_agent_backup == "true"){
+                agent_result = "НЕ_ВЫПОЛНЕНО";
+            }
+            // если стоит false или вообще ничего (потому что по умолчанию отключено)
+            else{
+                agent_result = "ВЫПОЛНЕНО";
+            }
+            xml.readNext();
+
+            // требование выполнено, только если оба условия выполнены
+            if ((backup_result == "ВЫПОЛНЕНО") && (agent_result == "ВЫПОЛНЕНО")){
+                result = "ВЫПОЛНЕНО";
+            }
+            else{
+                result = "НЕ_ВЫПОЛНЕНО";
+            }
+            qDebug() << "Тест на бэкап: " << result;
+        }
+
+        xml.readNext();
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData8CheckBackup()));
+}
+
+// Требование 3.2
+void AutoTesting::crypto2ProvenAlgorithms(){
+    number = "3.2";
+    description = "Приложение использует проверенные реализации криптографических алгоритмов";
+    func = "crypto2ProvenAlgorithms()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("Cipher.getInstance") ||
+               line.contains("KeyGenerator.getInstance") ||
+               line.contains("KeyPairGenerator.getInstance") ||
+               line.contains("MessageDigest.getInstance") ||
+               line.contains("Signature.getInstance") ||
+               line.contains("Mac.getInstance")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    qDebug() << "Найденные параметры: " << listWarning;
+
+    // определяем, есть ли ненадёжные шифры в найденном коде
+    if(listWarning.contains("DES") ||
+       listWarning.contains("3DES") ||
+       listWarning.contains("RC2") ||
+       listWarning.contains("RC4") ||
+       listWarning.contains("BLOWFISH") ||
+       listWarning.contains("MD4") ||
+       listWarning.contains("MD5") ||
+       listWarning.contains("SHA1")){
+          result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endCrypto2ProvenAlgorithms()));
+}
+
+// Требование 2.2
+void AutoTesting::data2CheckInternal(){
+    number = "2.2";
+    description = "Чувствительные данные хранятся только во внутреннем хранилище приложения, либо в системном хранилище авторизационных данных";
+    func = "data2CheckInternal()";
+
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
+    inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream inputStream(&inputFile);
+    QXmlStreamReader xml(inputStream.readAll());
+
+    qDebug() << "*** Список разрешений из манифеста ***";
+
+    QStringList dangerPermission = {"WRITE_EXTERNAL_STORAGE"};
+    QString level;
+
+    QString result1;
+    QString result2;
+
+    while (!xml.atEnd()) {
+        if (xml.isStartElement() && xml.name() == "uses-permission") {
+            QStringRef permission = xml.attributes().value("android:name");
+            QString name = permission.toString();
+            name.remove("android.permission.");
+            qDebug() << name;
+            if (dangerPermission.indexOf(QRegExp(name)) != -1){
+                result1 = "НЕ_ВЫПОЛНЕНО";
+            }
+            else{
+                result1 = "ВЫПОЛНЕНО";
+            }
+            xml.readNext();
+        }
+        xml.readNext();
+    }
+
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("MODE_WORLD_READABLE") ||
+               line.contains("MODE_WORLD_WRITABLE") ||
+               line.contains("SharedPreferences") ||
+               line.contains("FileOutPutStream") ||
+               line.contains("getExternal") ||
+               line.contains("-	getWritableDatabase")){
+                    result2 = "НЕ_ВЫПОЛНЕНО";
+            }
+            else{
+                result2 = "ВЫПОЛНЕНО";
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    if((result1 == "ВЫПОЛНЕНО") && (result2 == "ВЫПОЛНЕНО")){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData2CheckInternal()));
+}
+
+// Требование 2.3
+void AutoTesting::data3CheckLog(){
+    number = "2.3";
+    description = "Чувствительные данные не попадают в логи приложения";
+    func = "data3CheckLog()";
+
+    QString pathApk = "C:\\MASVS\\" + nameProject + "\\" + nameProject + ".apk";;
+
+    QProcess *console=new QProcess();
+    // по умолчанию инструмент использует максимально возможный уровень API,
+    // поэтому проверяются все 3 уровня подписи
+    console->start("C:\\Windows\\System32\\cmd.exe",
+                   QStringList() << "/K" << "c: && cd C:\\Program Files\\Android\\Android Studio\\tools\\proguard "
+                                            "proguard.config=${sdk.dir}/tools/proguard/proguard-android-optimize.txt:proguard-project.txt" + pathApk);
+
+    console->waitForReadyRead();
+    qDebug() << "*****РЕЗУЛЬТАТ ПРОВЕРКИ********";
+
+    QString verified = console->readAllStandardOutput();
+
+    if(verified.contains("android.util.Log")){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData3CheckLog()));
+}
+
+
+// Требование 2.5
+void AutoTesting::data5KeyboardCache(){
+    number = "2.5";
+    description = "Кэш клавиатуры выключен для полей ввода чувствительных данных";
+    func = "data5KeyboardCache()";
+    result = "ВЫПОЛНЕНО";
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData5KeyboardCache()));
+}
+
+// Требование 2.6
+void AutoTesting::data6CheckIPC(){
+    number = "2.6";
+    description = "Чувствительные данные недоступны для механизмов межпроцессного взаимодействия (IPC)";
+    func = "data6CheckIPC()";
+
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
+    inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream inputStream(&inputFile);
+    QXmlStreamReader xml(inputStream.readAll());
+
+    while (!xml.atEnd()) {
+        if (xml.isStartElement() && xml.name() == "provider") {
+            QStringRef permission = xml.attributes().value("android:name");
+            QString name = permission.toString();
+            if (xml.isStartElement() && xml.name() == "path-permission"){
+                QStringRef permission = xml.attributes().value("android:writePermission");
+                QString name = permission.toString();
+                if(name.contains("WRITE_KEYS")){
+                    result = "НЕ_ВЫПОЛНЕНО";
+                }
+                else{
+                    result = "ВЫПОЛНЕНО";
+                }
+            }
+            xml.readNext();
+        }
+        xml.readNext();
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData6CheckIPC()));
+}
+
+// Требование 2.7
+void AutoTesting::data7CheckInterface(){
+    number = "2.7";
+    description = "Никакие чувствительные данные, такие как пароли или пин-коды, не видны через пользовательский интерфейс";
+    func = "data7CheckInterface()";
+
+    QString result1;
+    QString result2;
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми необходимыми строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("android:inputType=\"textPassword\"")){
+                result1 = "ВЫПОЛНЕНО";
+            }
+            else{
+                result1 = "НЕ_ВЫПОЛНЕНО";
+            }
+
+            if(line.contains("NotificationManager")){
+                result2 = "НЕ_ВЫПОЛНЕНО";
+            }
+            else{
+                result2 = "ВЫПОЛНЕНО";
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    if((result1 == "ВЫПОЛНЕНО") && (result2 == "ВЫПОЛНЕНО")){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endData7CheckInterface()));
+}
+
+// Требование 3.1
+void AutoTesting::crypto1Symmetrical(){
+    number = "3.1";
+    description = "Приложение не использует симметричное шифрование с жестко закодированными ключами в качестве единственного метода шифрования";
+    result = "ВЫПОЛНЕНО";
+
+    QString pathApk = "C:\\MASVS\\" + nameProject + "\\" + nameProject + ".apk";;
+
+    QProcess *console=new QProcess();
+    // по умолчанию инструмент использует максимально возможный уровень API,
+    // поэтому проверяются все 3 уровня подписи
+    console->start("C:\\Windows\\System32\\cmd.exe",
+                   QStringList() << "/K" << "c: && cd C:\\MASVS\\jadx "
+                                            "grep -r «SecretKeySpec» " + pathApk);
+
+    console->waitForReadyRead();
+    qDebug() << "*****РЕЗУЛЬТАТ ПРОВЕРКИ********";
+
+    QString verified = console->readAllStandardOutput();
+
+    if(verified.contains("new byte[]")){
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
+
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endCrypto1Symmetrical()));
+}
+
+
+// Требование 3.4
+void AutoTesting::crypto4WeakAlgorithms(){
+    number = "3.4";
+    description = "Приложение не использует устаревшие и слабые криптографические протоколы и алгоритмы";
+    func = "crypto4WeakAlgorithms()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("Cipher.getInstance") ||
+               line.contains("KeyGenerator.getInstance") ||
+               line.contains("KeyPairGenerator.getInstance") ||
+               line.contains("MessageDigest.getInstance") ||
+               line.contains("Signature.getInstance") ||
+               line.contains("Mac.getInstance")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    qDebug() << "Найденные параметры: " << listWarning;
+
+    // определяем, есть ли ненадёжные шифры в найденном коде
+    if(listWarning.contains("DES") ||
+       listWarning.contains("3DES") ||
+       listWarning.contains("RC2") ||
+       listWarning.contains("RC4") ||
+       listWarning.contains("BLOWFISH") ||
+       listWarning.contains("MD4") ||
+       listWarning.contains("MD5") ||
+       listWarning.contains("SHA1")){
+          result = "НЕ_ВЫПОЛНЕНО";
+    }
+    else{
+        result = "ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endCrypto4WeakAlgorithms()));
+}
+
+// Требование 3.6
+void AutoTesting::crypto6RandomGenerator(){
+    number = "3.6";
+    description = "Все случайные значения генерируются с использованием безопасного генератора случайных чисел";
+    func = "crypto6RandomGenerator()";
+
+    QString result1;
+    QString result2;
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("KeyGenerator.getInstance") ||
+               line.contains("KeyPairGenerator.getInstance")){
+                    listWarning << line;
+            }
+
+            if (line.contains("java.util.Random")){
+                result2 = "НЕ_ВЫПОЛНЕНО";
+            }
+            else{
+                result2 = "ВЫПОЛНЕНО";
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    if(listWarning.size() != 0){
+        result1 = "ВЫПОЛНЕНО";
+    }
+    else{
+        result1 = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    if((result1 == "ВЫПОЛНЕНО") && (result2 == "ВЫПОЛНЕНО")){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endCrypto6RandomGenerator()));
+}
+
+// Требование 4.1
+void AutoTesting::auth1LoginPass(){
+    number = "4.1";
+    description = "Если приложение предоставляет пользователям доступ к удалённым сервисам, на бэкенде должна быть реализована аутентификация, например, по логину и паролю";
+    func = "auth1LoginPass()";  
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("setUserAuthenticationRequired(true)")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    if (listWarning.size() != 0){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endAuth1LoginPass()));
+}
+
+// Требование 5.1
+void AutoTesting::net1CryptoTLS(){
+    number = "5.1";
+    result = "ВЫПОЛНЕНО";
+    description = "Данные, передаваемые по сети, шифруются с использованием TLS. Безопасный канал используется для всех сервисов приложения";
+    func = "net1CryptoTLS()";
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endNet1CryptoTLS()));
+}
+
+// Требование 5.3
+void AutoTesting::net3VerifiesX509(){
+    number = "5.3";
+    description = "Приложение верифицирует X.509 сертификаты сервера во время установления защищённого канала. Принимаются только сертификаты, подписанные доверенным удостоверяющим центром (CA)";
+    func = "net3VerifiesX509()";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("java.security.cert.X509Certificate[]")){
+                    result = "ВЫПОЛНЕНО";
+            }
+            else{
+                result = "НЕ_ВЫПОЛНЕНО";
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endNet3VerifiesX509()));
+}
+
+
+// Требование 6.3
+void AutoTesting::os3CustomURL(){
+    number = "6.3";
+    description = "Приложение не экспортирует чувствительные данные через кастомные URL-схемы, если эти механизмы не защищены должным образом";
+    func = "os3CustomURL()";
+
+    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
+    QString pathManifest = findManifest();
+
+    QFile inputFile(pathManifest);
+    inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream inputStream(&inputFile);
+    QXmlStreamReader xml(inputStream.readAll());
+
+    while (!xml.atEnd()) {
+        if (xml.isStartElement() && xml.name() == "intent-filter") {
+            if (xml.isStartElement() && xml.name() == "data") {
+                QStringRef permission = xml.attributes().value("android:scheme");
+                QString name = permission.toString();
+                if (name != "https"){
+                    result = "НЕ_ВЫПОЛНЕНО";
+                }
+                else{
+                    result = "ВЫПОЛНЕНО";
+                }
+            }
+            xml.readNext();
+        }
+        xml.readNext();
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endOs3CustomURL()));
+}
+
+// Требование 6.5
+void AutoTesting::os5DisabledJava(){
+    number = "6.5";
+    description = "JavaScript отключен в компонентах WebView, если в нём нет необходимости";
+    func = "os5DisabledJava()";
+    result = "ВЫПОЛНЕНО";
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("getSettings().setJavaScriptEnabled(true)")){
+                result = "НЕ_ВЫПОЛНЕНО";
+                break;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endOs5DisabledJava()));
+}
+
+// Требование 6.6
+void AutoTesting::os6OnlyHTTPS(){
+    number = "6.6";
+    description = "WebViews сконфигурирован с поддержкой минимального набора протоколов (в идеале только https). Поддержка потенциально опасных URL-схем (таких как: file, tel и app-id) отключена";
+    func = "os6OnlyHTTPS()";
+
+
+    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
+    QStringList allFiles = readDir("src");
+
+    // список со всеми "опасными" строками кода, которые подошли под фильтр
+    QStringList listWarning;
+
+    for(int i = 0; i < allFiles.size(); i++){
+        // Открываем каждый файл для считывания по строкам
+        QFile file(allFiles[i]);
+        file.open(QIODevice::ReadOnly);
+
+        while(!file.atEnd())
+        {
+            QString line = file.readLine();
+
+            // если ключевое слово найдено, то записываем всю найденную строку
+            // в список, который подом будем проверять подробнее
+            if(line.contains("SSLSocket") ||
+               line.contains("HttpsURLConnection")){
+                    listWarning << line;
+            }
+        }
+        // обязательно закрываем каждый файл
+        file.close();
+    }
+
+    if (listWarning.size() != 0){
+        result = "ВЫПОЛНЕНО";
+    }
+    else{
+        result = "НЕ_ВЫПОЛНЕНО";
+    }
+
+    // записываем результат теста в файл с отчётом
+    writeReportAuto(number, description, result, func);
+
+    // Отправляем сигнал о завершении проверки с задержкой
+    emitLater(SIGNAL(endOs6OnlyHTTPS()));
+}
+
 
 // Требование 7.3
 void AutoTesting::code3DebugSymbols(){
@@ -737,72 +1253,6 @@ void AutoTesting::arch9CheckUpdate(){
     emitLater(SIGNAL(endArch9CheckUpdate()));
 }
 
-// Требование 2.8
-void AutoTesting::data8CheckBackup(){
-    number = "2.8";
-    description = "Никакие чувствительные данные не попадают в бэкапы, создаваемые операционной системой";
-    func = "data8CheckBackup()";
-
-    // вызываем функцию для определения полного пути к файлу манифеста в нашем проекте
-    QString pathManifest = findManifest();
-
-    QFile inputFile(pathManifest);
-    inputFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream inputStream(&inputFile);
-    QXmlStreamReader xml(inputStream.readAll());
-
-    qDebug() << "*** Разрешены ли резервные копии ***";
-
-    while (!xml.atEnd()) {
-        if (xml.isStartElement() && xml.name() == "application") {
-            QStringRef backup = xml.attributes().value("android:allowBackup");
-            QString str_backup = backup.toString();
-            qDebug() << "Обычный Backup: " << str_backup;
-            QString backup_result;
-
-            QStringRef agent_backup = xml.attributes().value("android:fullBackupOnly");
-            QString str_agent_backup = agent_backup.toString();
-            qDebug() << "Агентный Backup: " << str_agent_backup;
-            QString agent_result;
-
-            // сначала проверяем первый параметр
-            if (str_backup == "false"){
-                backup_result = "ВЫПОЛНЕНО";
-            }
-            // если стоит true или вообще ничего (потому что по умолчанию включено)
-            else{
-                backup_result = "НЕ_ВЫПОЛНЕНО";
-            }
-
-            // затем проверяем второй параметр
-            if (str_agent_backup == "true"){
-                agent_result = "НЕ_ВЫПОЛНЕНО";
-            }
-            // если стоит false или вообще ничего (потому что по умолчанию отключено)
-            else{
-                agent_result = "ВЫПОЛНЕНО";
-            }
-            xml.readNext();
-
-            // требование выполнено, только если оба условия выполнены
-            if ((backup_result == "ВЫПОЛНЕНО") && (agent_result == "ВЫПОЛНЕНО")){
-                result = "ВЫПОЛНЕНО";
-            }
-            else{
-                result = "НЕ_ВЫПОЛНЕНО";
-            }
-            qDebug() << "Тест на бэкап: " << result;
-        }
-
-        xml.readNext();
-    }
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endData8CheckBackup()));
-}
 
 // Требование 2.9
 void AutoTesting::data9BackgroundMode(){
@@ -846,59 +1296,5 @@ void AutoTesting::net6CheckLibrary(){
     emitLater(SIGNAL(endNet6CheckLibrary()));
 }
 
-// Требование 6.9
-void AutoTesting::os9ScreenOverlay(){
-    number = "6.9";
-    description = "Приложение защищает себя от атак наложения экрана (overlay)";
-    func = "os9ScreenOverlay()";
 
-    // вызываем функцию для рекурсивного определения названий всех файлов конкретного каталога
-    QStringList allFiles = readDir("src");
-
-    // список со всеми необходимыми строками кода, которые подошли под фильтр
-    QStringList listWarning;
-
-    for(int i = 0; i < allFiles.size(); i++){
-        // Открываем каждый файл для считывания по строкам
-        QFile file(allFiles[i]);
-        file.open(QIODevice::ReadOnly);
-
-        while(!file.atEnd())
-        {
-            QString line = file.readLine();
-
-            // если ключевое слово найдено, то записываем всю найденную строку
-            // в список, который подом будем проверять подробнее
-            if(line.contains("FLAG_WINDOW_IS_OBSCURED") ||
-               line.contains("FLAG_WINDOW_IS_PARTIALLY_OBSCURED") ||
-               line.contains("setFilterTouchesWhenObscured") ||
-               line.contains("onFilterTouchEventForSecurity") ||
-               line.contains("android:filterTouchesWhenObscured")){
-                    listWarning << line;
-            }
-        }
-        // обязательно закрываем каждый файл
-        file.close();
-    }
-
-    qDebug() << "Найденные параметры для overlay: " << listWarning;
-
-    // если не было найдено ни одного параметра
-    if (listWarning.size() == 0){
-        result = "НЕ_ВЫПОЛНЕНО";
-    }
-    else if(listWarning.contains("android:filterTouchesWhenObscured(false)") ||
-            listWarning.contains("setFilterTouchesWhenObscured(false)")){
-        result = "НЕ_ВЫПОЛНЕНО";
-    }
-    else{
-        result = "ВЫПОЛНЕНО";
-    }
-
-    // записываем результат теста в файл с отчётом
-    writeReportAuto(number, description, result, func);
-
-    // Отправляем сигнал о завершении проверки с задержкой
-    emitLater(SIGNAL(endAutoLevel2()));
-}
 

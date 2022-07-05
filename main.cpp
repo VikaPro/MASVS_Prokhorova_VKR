@@ -71,6 +71,14 @@ int main(int argc, char *argv[])
     QObject::connect(engine.rootObjects().first(), SIGNAL(checkPercent(QString)),
             &select, SLOT(checkPercent(QString)));
 
+    // отобрааем одну карточку с ручной проверкой
+    QObject::connect(engine.rootObjects().first(), SIGNAL(changeResult(QString, QString, QString)),
+            &select, SLOT(changeResult(QString, QString, QString)));
+
+    // непосредственно записываем изменение в файл
+    QObject::connect(engine.rootObjects().first(), SIGNAL(changeRes(QString, QString, QString, QString)),
+            &select, SLOT(changeRes(QString, QString, QString, QString)));
+
     // другой класс
     QObject::connect(engine.rootObjects().first(), SIGNAL(autoTest(QString)),
             &auto_test, SLOT(autoTest(QString)));
@@ -87,9 +95,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(engine.rootObjects().first(), SIGNAL(incompleteChecks(int)),
             &user_test, SLOT(incompleteChecks(int)));
-
-
-
 
     return app.exec();
 }

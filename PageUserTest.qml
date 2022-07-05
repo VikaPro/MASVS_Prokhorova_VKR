@@ -22,6 +22,21 @@ Page {
             number_label.text = "Требование MASVS № " + number;
             varNumber.aNumber = number;
             description_label.text = description;
+            if (number == "1.1"){
+                note_label.text = req_1_1.text
+            }
+            else if (number == "1.2"){
+                note_label.text = req_1_2.text
+            }
+            else if (number == "1.3"){
+                note_label.text = req_1_3.text
+            }
+            else if (number == "1.4"){
+                note_label.text = req_1_4.text
+            }
+            else{
+                note_label.text = req_1_6.text
+            }
         }
         onAllTestEnd:{     // когда сформируется отчёт, то отобразится страница с ним
             pageUserTest.visible = false
@@ -123,7 +138,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 0.25 * parent.height
+                    Layout.preferredHeight: 0.2 * parent.height
                 }
 
                 // сюда три кнопки
@@ -224,8 +239,6 @@ Page {
                     id: note_label
                     lineHeight: 1.1
                     font.pointSize: 10
-                    text: "Стандарт MASVS предлагает свой подход к моделированию угроз, описанный в документе <a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">OWASP Threat modelling</a> -
-Для соответствия данному требованию Вы можете воспользоваться отечественным аналогом - проектом методического документа ФСТЭК «Методика моделирования угроз безопасности информации» от 2020г."
                     textFormat: Text.RichText
                     //TextBrowserInteraction
                     //textInteraction
@@ -234,7 +247,7 @@ Page {
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     Layout.preferredWidth: parent.width
-                    Layout.preferredHeight: 0.45 * parent.height
+                    Layout.preferredHeight: 0.5 * parent.height
                     // Не работает почему-то именно здесь, мб из-за переноса строк
                     //elide: Text.ElideMiddle // если описание слишком длинное, то в центре будет троеточие, нужно расширить окно
                 }
@@ -282,4 +295,47 @@ Page {
             }
         }
     }
+    Text {
+        id: req_1_1
+        text: "Каждый компонент приложения имеет свой уникальный ID, который позволяет идентифицировать его среди других различных компонентов в одном и том же приложении.
+Компонент приложения будет создан при первом обращении к нему. Любые дальнейшие обращения будут возвращать тот же экземпляр компонента.
+<br>Подробности см. здесь: <a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">Тестирование мобильных приложений"
+        visible: false
+    }
+
+    Text {
+        id: req_1_2
+        visible: false
+        text: "Данная проверка выполняется в нескольких плоскостях. При тестировании аутентификации и авторизации следует выполнить следующие шаги:<br>
+- Определить дополнительные факторы аутентификации в приложении.<br>
+- Найти все конечные точки, обеспечивающие важные функции.<br>
+- Убедиться, что дополнительные факторы строго соблюдаются на сервере.<br>
+Подробности можно узнать в следующих разделах MSTG:<br>
+<a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">Архитектура аутентификации мобильных приложений (MSTG-ARCH-2 и MSTG)</a><br>
+<a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">Угроза инъекции (MSTG-ARCH-2 и MSTG-PLATFORM-2)</a>"
+    }
+
+    Text {
+        id: req_1_3
+        visible: false
+        text: "Данное требование частично связано с Требованием 1.2.
+Наиважнейшим условием построение стрессоустойчивой архитектуры является отделение ядра системы от GUI, настолько, что б одно, могло успешно функционировать без другого.
+Все возможные инструменты и методы безопасности должны быть заложены ещё на этапе проектирования мобильного приложения."
+    }
+
+    Text {
+        id: req_1_4
+        visible: false
+        text: "Поиск различной чувствительной информации необходимо вести в достаточно большом количестве источников и форматов. Но основной интерес представляет собой не сам первоначальный поиск данных, который вполне понятен и очевиден, а валидация того, что они больше нигде не хранятся.
+<br>Подробнее см. здесь:
+<a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">Поиск чувствительной информации в мобильных приложениях</a>"
+    }
+
+    Text {
+        id: req_1_6
+        visible: false
+        text: "Стандарт MASVS предлагает свой подход к моделированию угроз, описанный в документе <a href=\"https://owasp.org/www-community/Application_Threat_Modeling\">OWASP Threat modelling</a> -
+Для соответствия данному требованию Вы можете воспользоваться отечественным аналогом - проектом методического документа ФСТЭК «Методика моделирования угроз безопасности информации» от 2020г."
+    }
 }
+
